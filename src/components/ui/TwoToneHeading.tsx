@@ -56,7 +56,7 @@ export function TwoToneHeading({
       {emphasis ? (
         <>
           {' '}
-          <span className={tone === 'onPhoto' ? 'text-accent' : 'text-headline-emphasis'}>
+          <span className={tone === 'onPhoto' ? 'text-on-photo-accent' : 'text-headline-emphasis'}>
             {emphasis}
           </span>
         </>

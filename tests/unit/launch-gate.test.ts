@@ -114,3 +114,43 @@ describe('non-production environments', () => {
     expect(proxy(request('/')).headers.get('x-middleware-rewrite')).toBeNull();
   });
 });
+
+describe('an unconfigured deployment', () => {
+  /*
+    The gate used to default to 'development' when the environment said
+    nothing, which meant a host with no variables set would have published the
+    full, unapproved site. These cover the fail-closed behaviour that replaced
+    it, including the empty-string case a hosting platform actually produces.
+  */
+
+  it.each([
+    ['absent', undefined],
+    ['empty', ''],
+    ['whitespace', '   '],
+  ])('serves Coming Soon when the environment is %s in a production build', (_label, value) => {
+    setEnv({
+      NODE_ENV: 'production',
+      NEXT_PUBLIC_APP_ENV: value,
+      SITE_LAUNCHED: undefined,
+    });
+
+    expect(proxy(request('/')).headers.get('x-middleware-rewrite')).toContain('/coming-soon');
+  });
+
+  it('keeps a local development build open', () => {
+    setEnv({ NODE_ENV: 'development', NEXT_PUBLIC_APP_ENV: undefined });
+    expect(proxy(request('/')).headers.get('x-middleware-rewrite')).toBeNull();
+  });
+
+  it('still opens on an explicit non-production environment', () => {
+    for (const appEnv of ['development', 'staging']) {
+      setEnv({ NODE_ENV: 'production', NEXT_PUBLIC_APP_ENV: appEnv });
+      expect(proxy(request('/')).headers.get('x-middleware-rewrite'), appEnv).toBeNull();
+    }
+  });
+
+  it('opens a production build only once launch is explicitly confirmed', () => {
+    setEnv({ NODE_ENV: 'production', NEXT_PUBLIC_APP_ENV: undefined, SITE_LAUNCHED: 'true' });
+    expect(proxy(request('/')).headers.get('x-middleware-rewrite')).toBeNull();
+  });
+});

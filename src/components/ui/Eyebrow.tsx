@@ -15,7 +15,7 @@ export function Eyebrow({
     <p
       className={cn(
         'mb-3 text-sm font-semibold tracking-[0.14em] uppercase',
-        tone === 'onPhoto' ? 'text-accent' : 'text-accent-ink',
+        tone === 'onPhoto' ? 'text-on-photo' : 'text-accent-ink',
         className,
       )}
     >

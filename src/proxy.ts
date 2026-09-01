@@ -4,7 +4,9 @@ import { NextResponse, type NextRequest } from 'next/server';
  * Launch gate (README rule 3).
  *
  * On production, every route is rewritten to the Coming Soon page until
- * SITE_LAUNCHED is true. Development and staging always serve the full site;
+ * SITE_LAUNCHED is true. An unset environment is treated as production, so a
+ * deployment nobody configured stays behind the gate rather than publishing
+ * the site. Development and staging always serve the full site;
  * staging is protected at the hosting layer instead, which handles credentials
  * far more safely than middleware can.
  *
@@ -17,7 +19,15 @@ import { NextResponse, type NextRequest } from 'next/server';
 const ALLOWED_PREFIXES = ['/_next', '/api', '/favicon', '/logo.png', '/robots.txt', '/sitemap.xml'];
 
 export function proxy(request: NextRequest): NextResponse {
-  const appEnv = process.env.NEXT_PUBLIC_APP_ENV ?? 'development';
+  /*
+    Fail-closed. A blank or missing value used to leave `appEnv` as
+    'development', which opened the gate and would have published an
+    unapproved site on any host where the variable was not set. Anything other
+    than an explicit non-production value is now treated as production.
+  */
+  const declaredEnv = process.env.NEXT_PUBLIC_APP_ENV?.trim();
+  const appEnv =
+    declaredEnv || (process.env.NODE_ENV === 'production' ? 'production' : 'development');
   const launched = (process.env.SITE_LAUNCHED ?? '').trim().toLowerCase() === 'true';
 
   if (appEnv !== 'production' || launched) {

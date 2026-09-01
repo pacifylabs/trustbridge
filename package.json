@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=20.9.0 <25"
   },
   "scripts": {
     "dev": "next dev",
@@ -49,5 +49,10 @@
     "typescript": "^5.9.3",
     "vitest": "^4.1.11",
     "@eslint/eslintrc": "^3.3.6"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "unrs-resolver"
+    ]
   }
 }

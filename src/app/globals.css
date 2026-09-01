@@ -240,21 +240,33 @@
   The ground behind hero copy set over photography.
 
   The full-bleed scrim was removed so the photograph reads at full strength,
-  which makes this panel the only thing carrying text contrast. The tint is
-  declared here as explicit channels and a floor alpha so there is one source
-  of truth: the weakest stop is what the contrast test measures against, and
-  lowering it is what would break legibility.
+  which makes this panel the only thing carrying text contrast. Two things keep
+  it from reading as a slab pasted over the image:
+
+  - The tint is taken down to the lowest value that still clears AA against the
+    brightest frame of the rotation, measured rather than guessed. The blur is
+    doing the rest of the work, so the photograph's colour still comes through.
+  - The outer rim is feathered, so the panel melts into the image instead of
+    ending on a hard rectangle. The feather is narrow and the text never
+    reaches it, so the contrast floor below applies everywhere type sits.
+
+  --tb-panel-alpha-min is the tint where the text sits. It is the single value
+  the contrast test measures against; lowering it is what would break
+  legibility.
 */
 @utility hero-copy-panel {
   --tb-panel-rgb: 10 27 48;
-  --tb-panel-alpha-min: 0.74;
+  --tb-panel-alpha-min: 0.66;
 
-  background-image: linear-gradient(
-    to bottom right,
-    rgb(var(--tb-panel-rgb) / 0.88),
-    rgb(var(--tb-panel-rgb) / 0.82),
-    rgb(var(--tb-panel-rgb) / var(--tb-panel-alpha-min))
+  background-image: radial-gradient(
+    130% 120% at 28% 32%,
+    rgb(var(--tb-panel-rgb) / 0.76) 0%,
+    rgb(var(--tb-panel-rgb) / var(--tb-panel-alpha-min)) 65%,
+    rgb(var(--tb-panel-rgb) / 0.54) 100%
   );
+
+  /* Feathers the last few percent of the box only. */
+  mask-image: radial-gradient(125% 118% at 28% 32%, black 0%, black 82%, transparent 100%);
 }
 
 @utility text-on-photo {
@@ -262,7 +274,22 @@
 }
 
 @utility text-on-photo-muted {
-  color: rgb(247 245 241 / 0.82);
+  /*
+    Solid rather than translucent. Fading it was costing contrast that the
+    panel then had to pay for in extra tint, which is what made the panel read
+    as a slab over the photograph.
+  */
+  color: var(--tb-cream-100);
+}
+
+/*
+  The accent as text over photography. The brand gold is a fill colour and
+  reaches only about 3:1 here, which is enough for a display headline and not
+  enough for anything smaller. This lighter step clears the body threshold, so
+  the panel does not have to be darkened to carry it.
+*/
+@utility text-on-photo-accent {
+  color: var(--tb-gold-300);
 }
 
 @utility bg-navy-scrim {

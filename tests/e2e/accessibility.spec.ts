@@ -104,16 +104,25 @@ test('the hero copy stays legible over every photograph in the rotation', async 
       p.textContent?.startsWith('TrustBridge advises'),
     )!;
 
+    // The eyebrow is included because it is 14px, so it is held to the body
+    // threshold rather than the large-text one, and it was the element most
+    // at risk of being missed.
+    const eyebrow = panel.querySelector('p')!;
+
     const text = {
       headline: parseColour(getComputedStyle(heading).color),
       emphasis: parseColour(getComputedStyle(heading.querySelector('span')!).color),
       standfirst: parseColour(getComputedStyle(standfirst).color),
+      eyebrow: parseColour(getComputedStyle(eyebrow).color),
     };
 
     // The panel declares its tint as channels plus a floor alpha, so the worst
     // stop is read directly rather than parsed back out of a computed
-    // gradient, which the browser may serialise in any colour space.
-    const panelStyle = getComputedStyle(panel);
+    // gradient, which the browser may serialise in any colour space. The tint
+    // lives on its own layer behind the copy, not on the column itself.
+    const panelLayer = panel.querySelector('[data-testid="hero-copy-panel"]');
+    if (!panelLayer) return [];
+    const panelStyle = getComputedStyle(panelLayer);
     const panelRgb = panelStyle
       .getPropertyValue('--tb-panel-rgb')
       .trim()
@@ -126,7 +135,13 @@ test('the hero copy stays legible over every photograph in the rotation', async 
       '[data-testid="hero-backdrop"] img',
     )];
 
-    const out: { frame: number; headline: number; emphasis: number; standfirst: number }[] = [];
+    const out: {
+      frame: number;
+      headline: number;
+      emphasis: number;
+      standfirst: number;
+      eyebrow: number;
+    }[] = [];
 
     for (const [index, img] of frames.entries()) {
       await img.decode().catch(() => undefined);
@@ -177,13 +192,15 @@ test('the hero copy stays legible over every photograph in the rotation', async 
         headline: contrast(effective(text.headline), ground),
         emphasis: contrast(effective(text.emphasis), ground),
         standfirst: contrast(effective(text.standfirst), ground),
+        eyebrow: contrast(effective(text.eyebrow), ground),
       });
     }
 
     return out;
   });
 
-  expect(results.length).toBeGreaterThan(0);
+  // A returned empty array would mean the panel layer was not found, which is
+  // itself the failure this test exists to catch.
   expect(results.length, 'every frame measured').toBe(5);
 
   for (const frame of results) {
@@ -191,6 +208,8 @@ test('the hero copy stays legible over every photograph in the rotation', async 
     // anyway; the gold emphasis is large text, so 3:1 applies to it.
     expect(frame.headline, `frame ${frame.frame} headline`).toBeGreaterThanOrEqual(4.5);
     expect(frame.standfirst, `frame ${frame.frame} standfirst`).toBeGreaterThanOrEqual(4.5);
+    expect(frame.eyebrow, `frame ${frame.frame} eyebrow`).toBeGreaterThanOrEqual(4.5);
+    // Display size, so the large-text threshold applies to this one only.
     expect(frame.emphasis, `frame ${frame.frame} gold emphasis`).toBeGreaterThanOrEqual(3);
   }
 });

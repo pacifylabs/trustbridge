@@ -97,9 +97,17 @@ export function Hero({
                 rather than ending as a flat block.
               */
               onPhoto &&
-                'hero-copy-panel relative rounded-2xl border border-white/12 p-6 shadow-xl backdrop-blur-md sm:p-8 lg:p-10',
+                'relative p-6 sm:p-8 lg:p-10',
             )}
           >
+            {onPhoto ? (
+              <div
+                aria-hidden="true"
+                data-testid="hero-copy-panel"
+                className="hero-copy-panel absolute inset-0 -z-10 rounded-[2rem] backdrop-blur-xl"
+              />
+            ) : null}
+
             {eyebrow ? (
               <Eyebrow tone={onPhoto ? 'onPhoto' : 'default'}>{eyebrow}</Eyebrow>
             ) : null}
