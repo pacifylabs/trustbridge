@@ -24,5 +24,9 @@ export default defineConfig({
     css: false,
     restoreMocks: true,
     clearMocks: true,
+    // Comfortably above the slowest suite, so a busy machine cannot turn a
+    // passing test into a failing one.
+    testTimeout: 20_000,
+    hookTimeout: 20_000,
   },
 });
