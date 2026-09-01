@@ -1,0 +1,306 @@
+/* ==========================================================================
+   TrustBridge design tokens
+   --------------------------------------------------------------------------
+   Every colour, radius, shadow and type step used anywhere in the site is
+   declared here as a CSS custom property. Components reference the semantic
+   layer only, never a raw palette value, so a theme swap is a change to this
+   file rather than a change to the components.
+
+   Layers, in order:
+     1. Palette      raw brand values, theme-independent
+     2. Semantic     role-based aliases, redefined per theme
+     3. Scale        spacing, radii, type, shadows, motion
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Palette
+   Source: docs/03_DESIGN_SYSTEM.md §1. The "cream" ramp is the stone ramp
+   under the name used in the brief; the hex values are unchanged from the
+   design system. The "mist" pair is additive and used for atmosphere only.
+   -------------------------------------------------------------------------- */
+:root {
+  /* Navy */
+  --tb-navy-950: #0a1b30;
+  --tb-navy-900: #0f2a4a;
+  --tb-navy-800: #13315c;
+  --tb-navy-700: #183c6b;
+  --tb-navy-600: #1e466f;
+  --tb-navy-500: #2b5a89;
+  --tb-navy-400: #4a7aa8;
+  --tb-navy-300: #7ba1c4;
+
+  /* Cream (the stone ramp of the design system) */
+  --tb-cream-50: #fbfaf8;
+  --tb-cream-100: #f7f5f1;
+  --tb-cream-200: #ede9e2;
+  --tb-cream-300: #d6cfc4;
+  --tb-cream-400: #b8afa1;
+
+  /* Ink */
+  --tb-ink-900: #1c1f24;
+  --tb-ink-700: #33383f;
+  --tb-ink-500: #5c636d;
+  --tb-ink-300: #8b929c;
+
+  /* Gold */
+  --tb-gold-300: #e0c993;
+  --tb-gold-400: #d4b477;
+  --tb-gold-500: #c6a15b;
+  --tb-gold-600: #a9873f;
+  --tb-gold-700: #8a6d31;
+  /*
+    gold-800 exists for one reason: gold as TEXT on a light surface. The brand
+    gold reaches only 2.4:1 on white, which fails WCAG AA for body copy. This
+    step holds the same hue (38 deg) and clears 4.5:1 against every light
+    surface in the system. It is never used as a fill.
+  */
+  --tb-gold-800: #87601d;
+
+  /* Mist (additive, atmosphere only) */
+  --tb-mist-blue: #eaf0fa;
+  --tb-mist-lavender: #f0edf9;
+
+  /* Semantic support */
+  --tb-white: #ffffff;
+  --tb-success: #2e7d5b;
+  --tb-error: #b23b3b;
+  --tb-focus: #2e8b8b;
+}
+
+/* --------------------------------------------------------------------------
+   2. Semantic layer: light (default)
+   -------------------------------------------------------------------------- */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+
+  --tb-c-canvas: var(--tb-cream-100);
+  --tb-c-surface: var(--tb-white);
+  --tb-c-surface-raised: var(--tb-white);
+  --tb-c-surface-sunken: var(--tb-cream-200);
+  --tb-c-surface-inverse: var(--tb-navy-900);
+
+  --tb-c-border: var(--tb-cream-300);
+  --tb-c-border-strong: var(--tb-cream-400);
+  --tb-c-border-inverse: rgb(255 255 255 / 0.14);
+
+  --tb-c-text: var(--tb-ink-700);
+  --tb-c-text-strong: var(--tb-navy-900);
+  --tb-c-text-muted: var(--tb-ink-500);
+  --tb-c-text-inverse: var(--tb-cream-100);
+  --tb-c-text-inverse-muted: rgb(247 245 241 / 0.72);
+
+  --tb-c-accent: var(--tb-gold-500);
+  --tb-c-accent-hover: var(--tb-gold-600);
+  --tb-c-accent-contrast: var(--tb-navy-900);
+  --tb-c-accent-soft: rgb(198 161 91 / 0.14);
+  /*
+    The accent as text on a light surface. Split from --tb-c-accent because
+    the brand gold is a fill colour: legible as a block, illegible as type.
+  */
+  --tb-c-accent-ink: var(--tb-gold-800);
+
+  --tb-c-primary: var(--tb-navy-800);
+  --tb-c-primary-hover: var(--tb-navy-600);
+  --tb-c-primary-contrast: var(--tb-cream-50);
+
+  --tb-c-link: var(--tb-navy-600);
+  --tb-c-link-hover: var(--tb-navy-800);
+
+  --tb-c-success: var(--tb-success);
+  --tb-c-error: var(--tb-error);
+  --tb-c-focus: var(--tb-focus);
+
+  /* Headline two-tone: navy lead, gold emphasis */
+  --tb-c-headline: var(--tb-navy-900);
+  --tb-c-headline-emphasis: var(--tb-gold-800);
+
+  /* Atmosphere. Never used behind body text at full strength. */
+  --mist-start: var(--tb-mist-blue);
+  --mist-end: var(--tb-mist-lavender);
+  --mist-opacity: 1;
+  --gradient-mist: linear-gradient(135deg, var(--mist-start) 0%, var(--mist-end) 100%);
+  --gradient-mist-soft: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--mist-start) 55%, transparent) 0%,
+    transparent 100%
+  );
+
+  /* The logo's wordmark is navy, which is legible on light grounds as supplied. */
+  --logo-filter: none;
+
+  --tb-shadow-sm: 0 1px 2px rgb(15 42 74 / 0.06), 0 1px 3px rgb(15 42 74 / 0.04);
+  --tb-shadow-md: 0 4px 12px rgb(15 42 74 / 0.07), 0 2px 4px rgb(15 42 74 / 0.04);
+  --tb-shadow-lg: 0 12px 32px rgb(15 42 74 / 0.1), 0 4px 8px rgb(15 42 74 / 0.05);
+}
+
+/* --------------------------------------------------------------------------
+   2b. Semantic layer: dark
+   Authored as its own palette rather than an inversion: the ground is a deep
+   navy rather than neutral black, surfaces step upward in lightness, and the
+   gold is lifted to gold-400 so it holds AA contrast against dark surfaces.
+   -------------------------------------------------------------------------- */
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --tb-c-canvas: var(--tb-navy-950);
+  --tb-c-surface: #102337;
+  --tb-c-surface-raised: #142b42;
+  --tb-c-surface-sunken: #081625;
+  /*
+    The "inverse" surface is the navy brand band used by the footer, the CTA
+    band and the stat band. It is a brand element, not a contrast inversion,
+    so it stays navy in dark mode rather than flipping to cream. It sits one
+    step lighter than the canvas so the band still reads as a distinct block.
+  */
+  --tb-c-surface-inverse: var(--tb-navy-900);
+
+  --tb-c-border: rgb(255 255 255 / 0.1);
+  --tb-c-border-strong: rgb(255 255 255 / 0.18);
+  --tb-c-border-inverse: rgb(255 255 255 / 0.14);
+
+  --tb-c-text: #c9d3de;
+  --tb-c-text-strong: var(--tb-cream-100);
+  --tb-c-text-muted: #94a3b3;
+  --tb-c-text-inverse: var(--tb-cream-100);
+  --tb-c-text-inverse-muted: rgb(247 245 241 / 0.72);
+
+  --tb-c-accent: var(--tb-gold-400);
+  --tb-c-accent-hover: var(--tb-gold-300);
+  --tb-c-accent-contrast: var(--tb-navy-950);
+  --tb-c-accent-soft: rgb(212 180 119 / 0.16);
+  /* On navy, gold-400 reaches 7.9:1, so text and fill can share one value. */
+  --tb-c-accent-ink: var(--tb-gold-400);
+
+  --tb-c-primary: var(--tb-gold-400);
+  --tb-c-primary-hover: var(--tb-gold-300);
+  --tb-c-primary-contrast: var(--tb-navy-950);
+
+  --tb-c-link: var(--tb-gold-400);
+  --tb-c-link-hover: var(--tb-gold-300);
+
+  --tb-c-success: #4caf87;
+  --tb-c-error: #e07272;
+  --tb-c-focus: #56c2c2;
+
+  --tb-c-headline: var(--tb-cream-100);
+  --tb-c-headline-emphasis: var(--tb-gold-400);
+
+  --mist-start: #1b3350;
+  --mist-end: #241f3f;
+  --mist-opacity: 0.55;
+  --gradient-mist: linear-gradient(135deg, var(--mist-start) 0%, var(--mist-end) 100%);
+  --gradient-mist-soft: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--mist-start) 70%, transparent) 0%,
+    transparent 100%
+  );
+
+  /*
+   * On the dark ground the navy wordmark disappears, so the logo is rendered
+   * as a single-tone cream lockup. Replace this with a proper dark-mode SVG
+   * once the client supplies vector artwork.
+   */
+  --logo-filter: brightness(0) invert(0.94);
+
+  --tb-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --tb-shadow-md: 0 4px 12px rgb(0 0 0 / 0.45);
+  --tb-shadow-lg: 0 12px 32px rgb(0 0 0 / 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   2c. Alternate theme: "slate"
+   Ships as proof that a full restyle is a token change. Selecting it swaps the
+   brand hues across the entire site without touching a single component.
+   -------------------------------------------------------------------------- */
+[data-theme='slate'] {
+  color-scheme: light;
+
+  --tb-c-canvas: #f4f5f7;
+  --tb-c-surface: var(--tb-white);
+  --tb-c-surface-raised: var(--tb-white);
+  --tb-c-surface-sunken: #e8eaee;
+  --tb-c-surface-inverse: #1f2933;
+
+  --tb-c-border: #d3d7dd;
+  --tb-c-border-strong: #b7bdc6;
+  --tb-c-border-inverse: rgb(255 255 255 / 0.14);
+
+  --tb-c-text: #3a424c;
+  --tb-c-text-strong: #1f2933;
+  --tb-c-text-muted: #626c78;
+  --tb-c-text-inverse: #f4f5f7;
+  --tb-c-text-inverse-muted: rgb(244 245 247 / 0.72);
+
+  --tb-c-accent: #2f7d6d;
+  --tb-c-accent-hover: #25655a;
+  --tb-c-accent-contrast: #ffffff;
+  --tb-c-accent-soft: rgb(47 125 109 / 0.12);
+  /* Darkened for type: the fill value sits at 4.5:1, with no headroom. */
+  --tb-c-accent-ink: #256457;
+
+  --tb-c-primary: #1f2933;
+  --tb-c-primary-hover: #333f4c;
+  --tb-c-primary-contrast: #f4f5f7;
+
+  --tb-c-link: #25655a;
+  --tb-c-link-hover: #1b4c44;
+
+  --tb-c-headline: #1f2933;
+  --tb-c-headline-emphasis: #256457;
+
+  --mist-start: #e6eeec;
+  --mist-end: #eaeef2;
+  --mist-opacity: 1;
+
+  --logo-filter: none;
+}
+
+/* --------------------------------------------------------------------------
+   3. Scale
+   -------------------------------------------------------------------------- */
+:root {
+  /* Spacing, 4px base (design system §3) */
+  --tb-space-1: 0.25rem;
+  --tb-space-2: 0.5rem;
+  --tb-space-3: 0.75rem;
+  --tb-space-4: 1rem;
+  --tb-space-6: 1.5rem;
+  --tb-space-8: 2rem;
+  --tb-space-12: 3rem;
+  --tb-space-16: 4rem;
+  --tb-space-24: 6rem;
+
+  /* Layout */
+  --container-max: 75rem; /* 1200px */
+  --content-max: 50rem; /* 800px */
+  --measure: 68ch;
+
+  /* Radii (design system §4: rounded-md 6-8px, with larger cards) */
+  --tb-radius-sm: 0.25rem;
+  --tb-radius-md: 0.5rem;
+  --tb-radius-lg: 0.75rem;
+  --tb-radius-xl: 1rem;
+  --tb-radius-2xl: 1.25rem;
+  --tb-radius-full: 9999px;
+
+  /* Type scale (design system §2) */
+  --tb-text-display: 3rem;
+  --tb-text-h1: 2.25rem;
+  --tb-text-h2: 1.75rem;
+  --tb-text-h3: 1.375rem;
+  --tb-text-body-lg: 1.125rem;
+  --tb-text-body: 1rem;
+  --tb-text-small: 0.875rem;
+
+  --leading-heading: 1.2;
+  --leading-body: 1.6;
+
+  /* Motion (design system §8: subtle and purposeful only) */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 500ms;
+  /* Used by the one-phase theme wipe, which needs to outlast a normal fade. */
+  --duration-slower: 620ms;
+}

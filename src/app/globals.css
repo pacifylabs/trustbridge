@@ -1,0 +1,439 @@
+@import 'tailwindcss';
+@import '../styles/tokens.css';
+
+/* ==========================================================================
+   Tailwind theme mapping
+   --------------------------------------------------------------------------
+   `@theme inline` publishes the semantic tokens as Tailwind utilities while
+   emitting `var(--tb-c-*)` at the point of use. That indirection is what makes
+   the themes swappable: changing `data-theme` on <html> restyles every
+   utility on the page without regenerating any CSS.
+   ========================================================================== */
+@theme inline {
+  --color-canvas: var(--tb-c-canvas);
+  --color-surface: var(--tb-c-surface);
+  --color-surface-raised: var(--tb-c-surface-raised);
+  --color-surface-sunken: var(--tb-c-surface-sunken);
+  --color-surface-inverse: var(--tb-c-surface-inverse);
+
+  --color-border-subtle: var(--tb-c-border);
+  --color-border-strong: var(--tb-c-border-strong);
+  --color-border-inverse: var(--tb-c-border-inverse);
+
+  --color-body: var(--tb-c-text);
+  --color-strong: var(--tb-c-text-strong);
+  --color-muted: var(--tb-c-text-muted);
+  --color-inverse: var(--tb-c-text-inverse);
+  --color-inverse-muted: var(--tb-c-text-inverse-muted);
+
+  --color-accent: var(--tb-c-accent);
+  --color-accent-hover: var(--tb-c-accent-hover);
+  --color-accent-contrast: var(--tb-c-accent-contrast);
+  --color-accent-soft: var(--tb-c-accent-soft);
+  --color-accent-ink: var(--tb-c-accent-ink);
+  /* Fixed ground behind hero photography, in every theme. */
+  --color-navy-950: var(--tb-navy-950);
+
+  --color-primary: var(--tb-c-primary);
+  --color-primary-hover: var(--tb-c-primary-hover);
+  --color-primary-contrast: var(--tb-c-primary-contrast);
+
+  --color-link: var(--tb-c-link);
+  --color-link-hover: var(--tb-c-link-hover);
+
+  --color-headline: var(--tb-c-headline);
+  --color-headline-emphasis: var(--tb-c-headline-emphasis);
+
+  --color-success: var(--tb-c-success);
+  --color-error: var(--tb-c-error);
+  --color-focus: var(--tb-c-focus);
+
+  --font-serif: var(--font-fraunces), Georgia, 'Times New Roman', serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --text-display: var(--tb-text-display);
+  --text-display--line-height: 1.08;
+  --text-h1: var(--tb-text-h1);
+  --text-h1--line-height: 1.15;
+  --text-h2: var(--tb-text-h2);
+  --text-h2--line-height: 1.2;
+  --text-h3: var(--tb-text-h3);
+  --text-h3--line-height: 1.3;
+  --text-body-lg: var(--tb-text-body-lg);
+  --text-body-lg--line-height: 1.6;
+
+  --radius-md: var(--tb-radius-md);
+  --radius-lg: var(--tb-radius-lg);
+  --radius-xl: var(--tb-radius-xl);
+  --radius-2xl: var(--tb-radius-2xl);
+
+  --shadow-sm: var(--tb-shadow-sm);
+  --shadow-md: var(--tb-shadow-md);
+  --shadow-lg: var(--tb-shadow-lg);
+
+  --container-site: var(--container-max);
+}
+
+/* ==========================================================================
+   Layout metrics
+   --------------------------------------------------------------------------
+   The header is sticky, so anything sized against the viewport has to subtract
+   it or the section sits taller than the space actually visible.
+   ========================================================================== */
+:root {
+  --tb-header-h: 4rem;
+}
+
+@media (width >= 64rem) {
+  :root {
+    --tb-header-h: 5rem;
+  }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+@layer base {
+  * {
+    border-color: var(--tb-c-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--tb-c-canvas);
+    color: var(--tb-c-text);
+    font-family: var(--font-sans);
+    font-size: var(--tb-text-body);
+    line-height: var(--leading-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    /* Fraunces pinned to a restrained cut: no softening, no wonk. */
+    font-variation-settings:
+      'SOFT' 0,
+      'WONK' 0;
+    color: var(--tb-c-headline);
+    line-height: var(--leading-heading);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* A single visible focus treatment for every interactive element (§7). */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--tb-c-focus);
+    outline-offset: 2px;
+    border-radius: var(--tb-radius-sm);
+  }
+
+  ::selection {
+    background-color: var(--tb-c-accent-soft);
+    color: var(--tb-c-text-strong);
+  }
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+@utility container-site {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
+
+  @media (width >= 64rem) {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* Vertical rhythm for page sections. One utility keeps section padding
+   identical everywhere, which is what stops the layout drifting. */
+@utility section-y {
+  padding-block: 2.5rem;
+
+  @media (width >= 48rem) {
+    padding-block: 4rem;
+  }
+
+  @media (width >= 64rem) {
+    padding-block: 6rem;
+  }
+}
+
+@utility section-y-sm {
+  padding-block: 2rem;
+
+  @media (width >= 48rem) {
+    padding-block: 3rem;
+  }
+
+  @media (width >= 64rem) {
+    padding-block: 4rem;
+  }
+}
+
+@utility measure {
+  max-width: var(--measure);
+}
+
+/* Theme-aware logo treatment. See --logo-filter in tokens.css. */
+@utility site-logo {
+  filter: var(--logo-filter);
+}
+
+/*
+  The logo on the navy footer, which is navy in every theme. The supplied
+  artwork has a navy wordmark, so it is knocked out to near-white here rather
+  than tinted: a filter cannot preserve the gold bridge while lifting the text,
+  and an illegible mark is worse than a monochrome one. Replace this with the
+  client's own reversed artwork when vector files arrive.
+*/
+@utility site-logo-inverse {
+  filter: brightness(0) invert(0.96);
+}
+
+@utility bg-mist {
+  background-image: var(--gradient-mist);
+  opacity: var(--mist-opacity);
+}
+
+@utility bg-mist-soft {
+  background-image: var(--gradient-mist-soft);
+}
+
+/* --------------------------------------------------------------------------
+   Surface texture
+   A very low-contrast dot field. It gives a large flat area something to catch
+   the eye without competing with content, and it is drawn rather than loaded
+   so it costs no request and inherits the theme.
+   -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   Hero scrim
+   Fixed navy, not a theme token: the hero photography sits behind it in both
+   themes, and the copy on top is always light. Tying it to the theme would
+   make the text illegible in one of them.
+   -------------------------------------------------------------------------- */
+/*
+  Text set over the hero photography. Fixed rather than theme-derived: the
+  scrim beneath it is the same navy in every theme, so the type on top has to
+  be light in every theme too.
+*/
+/*
+  The ground behind hero copy set over photography.
+
+  The full-bleed scrim was removed so the photograph reads at full strength,
+  which makes this panel the only thing carrying text contrast. The tint is
+  declared here as explicit channels and a floor alpha so there is one source
+  of truth: the weakest stop is what the contrast test measures against, and
+  lowering it is what would break legibility.
+*/
+@utility hero-copy-panel {
+  --tb-panel-rgb: 10 27 48;
+  --tb-panel-alpha-min: 0.74;
+
+  background-image: linear-gradient(
+    to bottom right,
+    rgb(var(--tb-panel-rgb) / 0.88),
+    rgb(var(--tb-panel-rgb) / 0.82),
+    rgb(var(--tb-panel-rgb) / var(--tb-panel-alpha-min))
+  );
+}
+
+@utility text-on-photo {
+  color: var(--tb-cream-100);
+}
+
+@utility text-on-photo-muted {
+  color: rgb(247 245 241 / 0.82);
+}
+
+@utility bg-navy-scrim {
+  background-color: rgb(10 27 48 / 0.72);
+}
+
+@utility from-navy-scrim-strong {
+  --tw-gradient-from: rgb(10 27 48 / 0.82);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via, transparent), var(--tw-gradient-to, transparent);
+}
+
+@utility via-navy-scrim-mid {
+  --tw-gradient-via: rgb(10 27 48 / 0.45);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to, transparent);
+}
+
+@utility bg-dotfield {
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--tb-c-text-strong) 12%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+@utility bg-gridfield {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--tb-c-text-strong) 7%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--tb-c-text-strong) 7%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 56px 56px;
+}
+
+/* Fills the viewport below the sticky header. */
+@utility min-h-screen-nav {
+  min-height: calc(100svh - var(--tb-header-h));
+}
+
+@utility h-screen-nav {
+  height: calc(100svh - var(--tb-header-h));
+}
+
+/* ==========================================================================
+   Motion: CSS only, honouring prefers-reduced-motion (§8)
+   ========================================================================== */
+@layer components {
+  /*
+   * Scoped to `.js`, which the head script adds. Without JavaScript the
+   * starting state never applies, so content is visible rather than stranded
+   * at opacity zero.
+   */
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity var(--duration-slow) var(--ease-out),
+      transform var(--duration-slow) var(--ease-out);
+  }
+
+  .js .reveal[data-revealed='true'] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@layer components {
+  /* Ribbon band. Two copies of the track sit side by side and the pair is
+     translated by exactly half its width, so the loop has no visible seam. */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: tb-marquee var(--marquee-duration, 40s) linear infinite;
+  }
+
+  .marquee-track[data-direction='reverse'] {
+    animation-direction: reverse;
+  }
+
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes tb-marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  .stamp-rotate {
+    animation: tb-spin 26s linear infinite;
+  }
+
+  @keyframes tb-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track,
+  .stamp-rotate {
+    animation: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   Theme change: one transition phase
+   --------------------------------------------------------------------------
+   The toggle drives a single View Transition. The outgoing theme is held
+   still and the incoming one is revealed beneath a growing circle centred on
+   the button, so the whole page changes in one pass rather than each colour
+   animating on its own schedule.
+
+   Browsers without View Transitions get the same instant swap they always
+   had; nothing here is required for the toggle to work.
+   ========================================================================== */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+  animation: tb-theme-wipe var(--duration-slower, 620ms) var(--ease-out) forwards;
+  clip-path: circle(0% at var(--tb-theme-origin-x, 50%) var(--tb-theme-origin-y, 50%));
+}
+
+@keyframes tb-theme-wipe {
+  to {
+    clip-path: circle(var(--tb-theme-radius, 150%) at var(--tb-theme-origin-x, 50%) var(--tb-theme-origin-y, 50%));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-new(root) {
+    animation: none;
+    clip-path: none;
+  }
+}
