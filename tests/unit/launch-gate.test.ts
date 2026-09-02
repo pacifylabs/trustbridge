@@ -9,7 +9,7 @@ import { NextRequest } from 'next/server';
  * application. The environment is read per request, so no module reset is
  * needed between cases.
  */
-import { proxy } from '@/proxy';
+import { middleware } from '@/middleware';
 
 const ORIGINAL_ENV = { ...process.env };
 
@@ -40,21 +40,21 @@ describe('production, before launch', () => {
     '/legal/privacy-policy',
   ])('rewrites %s to the Coming Soon page', (path) => {
     setEnv(env);
-    const response = proxy(request(path));
+    const response = middleware(request(path));
 
     expect(response.headers.get('x-middleware-rewrite')).toContain('/coming-soon');
   });
 
   it('marks the rewritten response as not indexable', () => {
     setEnv(env);
-    const response = proxy(request('/'));
+    const response = middleware(request('/'));
 
     expect(response.headers.get('x-robots-tag')).toBe('noindex, nofollow');
   });
 
   it('drops the query string, so no parameter reaches the gated page', () => {
     setEnv(env);
-    const response = proxy(request('/services?utm_source=email&id=42'));
+    const response = middleware(request('/services?utm_source=email&id=42'));
     const rewrite = response.headers.get('x-middleware-rewrite') ?? '';
 
     expect(rewrite).toContain('/coming-soon');
@@ -64,27 +64,27 @@ describe('production, before launch', () => {
 
   it('serves the Coming Soon page itself without rewriting', () => {
     setEnv(env);
-    expect(proxy(request('/coming-soon')).headers.get('x-middleware-rewrite')).toBeNull();
+    expect(middleware(request('/coming-soon')).headers.get('x-middleware-rewrite')).toBeNull();
   });
 
   it.each(['/_next/static/chunk.js', '/api/enquiry', '/favicon.ico', '/logo.png', '/robots.txt'])(
     'lets %s through so the gated page still renders',
     (path) => {
       setEnv(env);
-      expect(proxy(request(path)).headers.get('x-middleware-rewrite')).toBeNull();
+      expect(middleware(request(path)).headers.get('x-middleware-rewrite')).toBeNull();
     },
   );
 
   it('keeps the gate shut when SITE_LAUNCHED is missing', () => {
     setEnv({ NEXT_PUBLIC_APP_ENV: 'production', SITE_LAUNCHED: undefined });
-    expect(proxy(request('/')).headers.get('x-middleware-rewrite')).toContain('/coming-soon');
+    expect(middleware(request('/')).headers.get('x-middleware-rewrite')).toContain('/coming-soon');
   });
 
   it.each(['True', 'yes', '1', 'on', 'launched', ''])(
     'keeps the gate shut for the near-miss value %o',
     (value) => {
       setEnv({ NEXT_PUBLIC_APP_ENV: 'production', SITE_LAUNCHED: value });
-      const rewritten = proxy(request('/')).headers.get('x-middleware-rewrite');
+      const rewritten = middleware(request('/')).headers.get('x-middleware-rewrite');
 
       // Only the exact string 'true', case-insensitively and trimmed, opens it.
       const shouldOpen = value.trim().toLowerCase() === 'true';
@@ -98,7 +98,7 @@ describe('production, after launch', () => {
     setEnv({ NEXT_PUBLIC_APP_ENV: 'production', SITE_LAUNCHED: 'true' });
 
     for (const path of ['/', '/services', '/contact']) {
-      expect(proxy(request(path)).headers.get('x-middleware-rewrite')).toBeNull();
+      expect(middleware(request(path)).headers.get('x-middleware-rewrite')).toBeNull();
     }
   });
 });
@@ -106,12 +106,12 @@ describe('production, after launch', () => {
 describe('non-production environments', () => {
   it.each(['development', 'staging'])('serves the full site on %s', (appEnv) => {
     setEnv({ NEXT_PUBLIC_APP_ENV: appEnv, SITE_LAUNCHED: 'false' });
-    expect(proxy(request('/')).headers.get('x-middleware-rewrite')).toBeNull();
+    expect(middleware(request('/')).headers.get('x-middleware-rewrite')).toBeNull();
   });
 
   it('defaults to development when the environment is unset', () => {
     setEnv({ NEXT_PUBLIC_APP_ENV: undefined, SITE_LAUNCHED: undefined });
-    expect(proxy(request('/')).headers.get('x-middleware-rewrite')).toBeNull();
+    expect(middleware(request('/')).headers.get('x-middleware-rewrite')).toBeNull();
   });
 });
 
@@ -134,23 +134,23 @@ describe('an unconfigured deployment', () => {
       SITE_LAUNCHED: undefined,
     });
 
-    expect(proxy(request('/')).headers.get('x-middleware-rewrite')).toContain('/coming-soon');
+    expect(middleware(request('/')).headers.get('x-middleware-rewrite')).toContain('/coming-soon');
   });
 
   it('keeps a local development build open', () => {
     setEnv({ NODE_ENV: 'development', NEXT_PUBLIC_APP_ENV: undefined });
-    expect(proxy(request('/')).headers.get('x-middleware-rewrite')).toBeNull();
+    expect(middleware(request('/')).headers.get('x-middleware-rewrite')).toBeNull();
   });
 
   it('still opens on an explicit non-production environment', () => {
     for (const appEnv of ['development', 'staging']) {
       setEnv({ NODE_ENV: 'production', NEXT_PUBLIC_APP_ENV: appEnv });
-      expect(proxy(request('/')).headers.get('x-middleware-rewrite'), appEnv).toBeNull();
+      expect(middleware(request('/')).headers.get('x-middleware-rewrite'), appEnv).toBeNull();
     }
   });
 
   it('opens a production build only once launch is explicitly confirmed', () => {
     setEnv({ NODE_ENV: 'production', NEXT_PUBLIC_APP_ENV: undefined, SITE_LAUNCHED: 'true' });
-    expect(proxy(request('/')).headers.get('x-middleware-rewrite')).toBeNull();
+    expect(middleware(request('/')).headers.get('x-middleware-rewrite')).toBeNull();
   });
 });

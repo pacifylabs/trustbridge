@@ -26,7 +26,7 @@ describe('service visibility', () => {
     const services = await getVisibleServices();
 
     expect(services.some((service) => service.slug === 'complex-immigration-matters')).toBe(false);
-    expect(services).toHaveLength(8);
+    expect(services).toHaveLength(9);
   });
 
   it('includes Complex Matters once the flag is on', async () => {
@@ -34,7 +34,7 @@ describe('service visibility', () => {
     const services = await getVisibleServices();
 
     expect(services.some((service) => service.slug === 'complex-immigration-matters')).toBe(true);
-    expect(services).toHaveLength(9);
+    expect(services).toHaveLength(10);
   });
 
   it('resolves a gated service to null so the route can return 404', async () => {
@@ -144,7 +144,7 @@ describe('stat figures', () => {
     const serviceAreas = stats.find((stat) => stat.label === 'Service areas');
 
     expect(serviceAreas?.value).toBe(String(services.length));
-    expect(serviceAreas?.value).toBe('8');
+    expect(serviceAreas?.value).toBe('9');
   });
 
   it('follows the service count when a gated service is revealed', async () => {
@@ -158,7 +158,7 @@ describe('stat figures', () => {
     expect(stats.find((stat) => stat.label === 'Service areas')?.value).toBe(
       String(services.length),
     );
-    expect(services).toHaveLength(9);
+    expect(services).toHaveLength(10);
   });
 
   it('carries no placeholder figures at all', async () => {

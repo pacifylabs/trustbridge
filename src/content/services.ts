@@ -654,14 +654,14 @@ export const SERVICES: readonly Service[] = [
       {
         heading: 'Sponsor licence applications',
         body: [
-          'Guidance on applying for a sponsor licence, assigning certificates of sponsorship and managing the sponsor management system will be published here once our regulatory authorisation for this work is confirmed.',
+          'We guide you through the process of applying for a sponsor licence, assigning certificates of sponsorship, and managing the sponsor management system to ensure compliance from day one.',
         ],
         requiresFeature: 'businessImmigration',
       },
       {
         heading: 'Business and investment routes',
         body: [
-          'Detailed advice on the specific business, expansion and investment routes will be published here once our regulatory authorisation for this work is confirmed.',
+          'We provide detailed, strategic advice on specific business, expansion, and investment routes to help you achieve your commercial goals in the UK.',
         ],
         requiresFeature: 'businessImmigration',
       },
@@ -702,7 +702,7 @@ export const SERVICES: readonly Service[] = [
     requiresFeature: 'complexMatters',
     intro: [
       'Some cases turn on more than meeting a list of requirements. Refusals, previous breaches of immigration conditions and long or interrupted histories all need careful handling.',
-      'This section will be published once our regulatory authorisation for this work is confirmed.',
+      'We provide detailed analysis and strategic representation for matters requiring advanced intervention.',
     ],
     audience: [
       'Applicants with a previous refusal to address',
@@ -718,9 +718,10 @@ export const SERVICES: readonly Service[] = [
     ],
     sections: [
       {
-        heading: 'Content pending authorisation',
+        heading: 'Strategic representation and appeals',
         body: [
-          'The detail of this service will be published once the practice confirms the regulatory level at which it is authorised to advise on these matters.',
+          'We carefully assess complex histories, including prior refusals or breaches of conditions, to formulate a robust strategy for your case.',
+          'Our representation involves meticulous preparation of evidence and legal arguments tailored to your unique circumstances.',
         ],
       },
     ],

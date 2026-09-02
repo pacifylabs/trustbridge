@@ -216,7 +216,7 @@ export const ABOUT = {
     lead: 'The advisers',
     emphasis: 'behind the practice',
     standfirst:
-      'Adviser profiles, including professional titles and regulatory details, will be published here before the site goes live.',
+      'Adviser profiles, including professional titles and regulatory details, will be published here shortly.',
   },
 } as const;
 
@@ -251,7 +251,7 @@ export const BOOK_PAGE = {
     lead: 'Book a consultation',
     emphasis: 'with an adviser',
     standfirst:
-      'Online booking will open when the site goes live. Until then, please get in touch by email or telephone and we will arrange a time with you directly.',
+      'Online booking will be available shortly. Until then, please get in touch by email or telephone and we will arrange a time with you directly.',
   },
 } as const;
 
@@ -264,8 +264,8 @@ export const TEAM_PAGE = {
       'Each profile will set out the adviser’s professional title, the level at which they are authorised to advise, and their registration number.',
   },
   emptyState: {
-    heading: 'Profiles to be published',
-    body: 'Adviser profiles will appear here once the practice has confirmed professional titles, regulatory levels and registration numbers. We publish nothing about regulatory status until it is confirmed.',
+    heading: 'Profiles coming soon',
+    body: 'Adviser profiles will appear here once the practice has confirmed professional titles, regulatory levels and registration numbers.',
   },
 } as const;
 
