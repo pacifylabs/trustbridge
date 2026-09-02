@@ -103,7 +103,7 @@ export default async function HomePage() {
           standfirst={HOME.services.standfirst}
         />
         <Reveal className="mt-10">
-          <ServiceGrid services={services} featureFirst />
+          <ServiceGrid services={services} />
         </Reveal>
         <div className="mt-10">
           <DisclaimerBlock />

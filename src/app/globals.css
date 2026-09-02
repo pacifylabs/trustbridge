@@ -167,18 +167,6 @@
 /* Vertical rhythm for page sections. One utility keeps section padding
    identical everywhere, which is what stops the layout drifting. */
 @utility section-y {
-  padding-block: 2.5rem;
-
-  @media (width >= 48rem) {
-    padding-block: 4rem;
-  }
-
-  @media (width >= 64rem) {
-    padding-block: 6rem;
-  }
-}
-
-@utility section-y-sm {
   padding-block: 2rem;
 
   @media (width >= 48rem) {
@@ -187,6 +175,18 @@
 
   @media (width >= 64rem) {
     padding-block: 4rem;
+  }
+}
+
+@utility section-y-sm {
+  padding-block: 1.5rem;
+
+  @media (width >= 48rem) {
+    padding-block: 2rem;
+  }
+
+  @media (width >= 64rem) {
+    padding-block: 3rem;
   }
 }
 
