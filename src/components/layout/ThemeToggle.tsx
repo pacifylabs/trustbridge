@@ -65,7 +65,14 @@ function prefersReducedMotion(): boolean {
   );
 }
 
-export function FloatingThemeToggle({ className }: { className?: string }) {
+export function ThemeToggle({
+  className,
+  floating = false,
+}: {
+  className?: string;
+  /** Pins the control to the right edge of the viewport, for large screens. */
+  floating?: boolean;
+}) {
   const theme = useSyncExternalStore(subscribe, getAppliedTheme, getServerTheme);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const isDark = theme === 'dark';
@@ -145,11 +152,11 @@ export function FloatingThemeToggle({ className }: { className?: string }) {
       aria-label={`Switch to ${next} mode`}
       title={`Switch to ${next} mode`}
       className={cn(
-        'fixed right-4 bottom-4 z-[60] inline-grid h-12 w-12 place-items-center rounded-full',
-        'border border-border-strong bg-surface/85 text-strong shadow-lg backdrop-blur-md',
-        'transition-[transform,background-color,border-color] duration-200 ease-out',
-        'hover:-translate-y-0.5 hover:border-accent focus-visible:-translate-y-0.5',
-        'sm:right-6 sm:bottom-6 sm:h-14 sm:w-14',
+        'inline-grid shrink-0 place-items-center border border-border-subtle bg-surface text-strong',
+        'transition-colors duration-200 ease-out hover:border-accent hover:text-accent-ink',
+        floating
+          ? 'fixed top-1/2 right-4 z-50 h-12 w-12 -translate-y-1/2 rounded-full shadow-lg backdrop-blur-md sm:right-6'
+          : 'h-10 w-10 rounded-md',
         className,
       )}
     >

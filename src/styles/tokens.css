@@ -74,10 +74,15 @@
 [data-theme='light'] {
   color-scheme: light;
 
-  --tb-c-canvas: var(--tb-cream-100);
+  /*
+    White ground. The page reads brighter and cleaner than the cream it
+    replaced, and sections are separated by the sunken and inverse surfaces
+    rather than by a tint across everything.
+  */
+  --tb-c-canvas: var(--tb-white);
   --tb-c-surface: var(--tb-white);
   --tb-c-surface-raised: var(--tb-white);
-  --tb-c-surface-sunken: var(--tb-cream-200);
+  --tb-c-surface-sunken: var(--tb-cream-100);
   --tb-c-surface-inverse: var(--tb-navy-900);
 
   --tb-c-border: var(--tb-cream-300);
@@ -99,6 +104,10 @@
     the brand gold is a fill colour: legible as a block, illegible as type.
   */
   --tb-c-accent-ink: var(--tb-gold-800);
+
+  /* Hero copy panel: a light frosted ground so the section reads bright. */
+  --tb-panel-rgb: 255 255 255;
+  --tb-panel-alpha-min: 0.94;
 
   --tb-c-primary: var(--tb-navy-800);
   --tb-c-primary-hover: var(--tb-navy-600);
@@ -171,6 +180,9 @@
   --tb-c-accent-soft: rgb(212 180 119 / 0.16);
   /* On navy, gold-400 reaches 7.9:1, so text and fill can share one value. */
   --tb-c-accent-ink: var(--tb-gold-400);
+
+  --tb-panel-rgb: 16 35 55;
+  --tb-panel-alpha-min: 0.9;
 
   --tb-c-primary: var(--tb-gold-400);
   --tb-c-primary-hover: var(--tb-gold-300);
@@ -293,8 +305,9 @@
   --tb-text-body: 1rem;
   --tb-text-small: 0.875rem;
 
-  --leading-heading: 1.2;
-  --leading-body: 1.6;
+  --leading-heading: 1.25;
+  /* Opened up for readability: this is a site people read closely. */
+  --leading-body: 1.75;
 
   /* Motion (design system §8: subtle and purposeful only) */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);

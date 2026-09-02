@@ -54,6 +54,21 @@ test('no element spills beyond the viewport width', async ({ page }) => {
       // ancestor with overflow-hidden, so their unclipped rect is not a spill.
       // The authoritative overflow assertion is the scrollWidth check above.
       if (element.closest('[aria-hidden="true"]')) continue;
+
+      // Content inside a horizontal scroller is meant to extend past the
+      // viewport: that is what makes it scrollable. It cannot widen the page,
+      // because the scroller itself is bounded.
+      let scroller: Element | null = element.parentElement;
+      let insideScroller = false;
+      while (scroller && scroller !== document.body) {
+        const overflowX = getComputedStyle(scroller).overflowX;
+        if (overflowX === 'auto' || overflowX === 'scroll') {
+          insideScroller = true;
+          break;
+        }
+        scroller = scroller.parentElement;
+      }
+      if (insideScroller) continue;
       if (rect.right > width + 1 || rect.left < -1) {
         offenders.push(`${element.tagName.toLowerCase()}.${element.className}`.slice(0, 120));
       }
@@ -163,7 +178,11 @@ test('interactive targets meet the minimum touch size', async ({ page }) => {
   expect(undersized).toStrictEqual([]);
 });
 
-test('the floating toggle never covers an interactive element', async ({ page }) => {
+test('the floating toggle never covers an interactive element', async ({ page }, testInfo) => {
+  // Only pinned to the viewport from lg up. Below that it sits in the bar,
+  // where it is laid out like any other control and cannot occlude anything.
+  test.skip((testInfo.project.use.viewport?.width ?? 0) < 1280, 'Not floating below xl.');
+
   // A control fixed to the bottom-right corner is the classic way to bury a
   // form's submit button or the last link in a footer, so every page is
   // checked scrolled to the bottom, where the risk is highest.
@@ -174,7 +193,10 @@ test('the floating toggle never covers an interactive element', async ({ page })
     await page.waitForTimeout(200);
 
     const occluded = await page.evaluate(() => {
-      const toggle = document.querySelector('[data-theme-toggle]')?.getBoundingClientRect();
+      const floating = [...document.querySelectorAll('[data-theme-toggle]')].find(
+        (element) => getComputedStyle(element).position === 'fixed',
+      );
+      const toggle = floating?.getBoundingClientRect();
       if (!toggle) return ['no toggle found'];
 
       const gap = 6;

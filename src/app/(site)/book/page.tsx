@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { buildMetadata } from '@/lib/seo';
 import { CalendarClock, Mail, Phone } from 'lucide-react';
 import { Hero } from '@/components/blocks/Hero';
 import { Section } from '@/components/layout/Section';
@@ -11,11 +12,12 @@ import { Button } from '@/components/ui/Button';
 import { CONTACT } from '@/content/site';
 import { BOOK_PAGE, HOME } from '@/content/pages';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Book a consultation',
   description:
     'Arrange a consultation with a TrustBridge immigration adviser by email or telephone. Online booking opens when the site goes live.',
-};
+  path: '/book',
+});
 
 /**
  * Booking page.

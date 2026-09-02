@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { Hero } from '@/components/blocks/Hero';
+import { BreadcrumbSchema, ServiceSchema } from '@/components/seo/StructuredData';
+import { buildMetadata } from '@/lib/seo';
 import { Section } from '@/components/layout/Section';
 import { SectionHeading } from '@/components/layout/SectionHeading';
 import { FeatureList } from '@/components/blocks/FeatureList';
@@ -40,10 +42,14 @@ export async function generateMetadata({
 
   if (!service) return { title: 'Not found' };
 
-  return {
+  return buildMetadata({
     title: service.seo.title,
     description: service.seo.description,
-  };
+    path: `/services/${service.slug}`,
+    // The route's own photograph makes a more useful share card than the site
+    // one, because the link is to a specific service.
+    image: { src: `/og/${service.slug}.jpg`, alt: service.image?.alt ?? service.title },
+  });
 }
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -80,6 +86,15 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </nav>
 
+      <ServiceSchema service={service} faqs={service.faqs} />
+      <BreadcrumbSchema
+        trail={[
+          { name: 'Home', path: '/' },
+          { name: 'Services', path: '/services' },
+          { name: service.shortTitle, path: `/services/${service.slug}` },
+        ]}
+      />
+
       <Hero
         eyebrow="Service"
         lead={service.title}
@@ -96,7 +111,14 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         }
         aside={
           service.image ? (
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border-subtle shadow-lg lg:aspect-[5/4]">
+            /*
+              From `lg` the image fills its column instead of carrying its own
+              ratio, so it finishes level with the copy beside it. The floor is
+              deliberately below a typical copy height: a larger one would set
+              the row height itself and the image would again be the taller of
+              the two.
+            */
+            <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border-subtle shadow-lg lg:aspect-auto lg:h-full lg:min-h-[13rem]">
               <Image
                 src={service.image.src}
                 alt={service.image.alt}
@@ -131,6 +153,8 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                 </div>
               ))}
             </div>
+
+            <DisclaimerBlock className="mt-12" />
           </div>
 
           <aside className="lg:col-span-5">
@@ -148,9 +172,6 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           </aside>
         </div>
 
-        <div className="mt-12">
-          <DisclaimerBlock />
-        </div>
       </Section>
 
       {service.faqs.length > 0 ? (

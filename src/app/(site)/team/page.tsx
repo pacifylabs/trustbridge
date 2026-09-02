@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { buildMetadata } from '@/lib/seo';
 import { UsersRound } from 'lucide-react';
 import { Hero } from '@/components/blocks/Hero';
 import { Section } from '@/components/layout/Section';
@@ -9,11 +10,12 @@ import { getAdvisers } from '@/lib/content';
 import { TEAM_PAGE } from '@/content/pages';
 import { CTA_LABELS } from '@/content/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Our team',
   description:
     'Adviser profiles for TrustBridge Immigration Services Ltd, including professional titles and regulatory details.',
-};
+  path: '/team',
+});
 
 export default async function TeamPage() {
   const advisers = await getAdvisers();

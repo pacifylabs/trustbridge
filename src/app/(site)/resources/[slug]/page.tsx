@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { ArticleSchema, BreadcrumbSchema } from '@/components/seo/StructuredData';
+import { buildMetadata } from '@/lib/seo';
 import { ChevronRight } from 'lucide-react';
 import { Section } from '@/components/layout/Section';
 import { CtaBand } from '@/components/blocks/CtaBand';
@@ -24,15 +26,15 @@ export async function generateMetadata({
 
   if (!article) return { title: 'Not found' };
 
-  return {
+  return buildMetadata({
     title: article.seo.title,
     description: article.seo.description,
-    openGraph: {
-      type: 'article',
-      publishedTime: toIsoDate(article.publishedAt),
-      authors: [article.author],
-    },
-  };
+    path: `/resources/${article.slug}`,
+    type: 'article',
+    publishedTime: toIsoDate(article.publishedAt),
+    modifiedTime: toIsoDate(article.updatedAt ?? article.publishedAt),
+    image: { src: `/og/${article.slug}.jpg`, alt: article.image?.alt ?? article.title },
+  });
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -43,6 +45,15 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
+      <ArticleSchema article={article} />
+      <BreadcrumbSchema
+        trail={[
+          { name: 'Home', path: '/' },
+          { name: 'Resources', path: '/resources' },
+          { name: article.title, path: `/resources/${article.slug}` },
+        ]}
+      />
+
       <nav aria-label="Breadcrumb" className="border-b border-border-subtle bg-canvas">
         <div className="container-site py-3">
           <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted">

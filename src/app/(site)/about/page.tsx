@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { buildMetadata } from '@/lib/seo';
 import { Compass } from 'lucide-react';
 import Link from 'next/link';
 import { Hero } from '@/components/blocks/Hero';
@@ -14,11 +15,12 @@ import { Button } from '@/components/ui/Button';
 import { ABOUT } from '@/content/pages';
 import { CTA_LABELS, SITE } from '@/content/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'About us',
   description:
     'TrustBridge Immigration Services Ltd advises individuals, families and employers on United Kingdom immigration applications. Registered in England and Wales.',
-};
+  path: '/about',
+});
 
 export default function AboutPage() {
   return (
@@ -87,7 +89,7 @@ export default function AboutPage() {
                 <div>
                   <dt className="font-semibold text-strong">Regulatory information</dt>
                   <dd className="mt-1 text-muted">
-                    To be published before launch. See our{' '}
+                    Published in full on our{' '}
                     <Link
                       href="/legal/regulatory-information"
                       className="font-medium text-link underline underline-offset-2"

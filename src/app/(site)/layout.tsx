@@ -1,6 +1,7 @@
 import { SiteHeader } from '@/components/layout/SiteHeader';
 import { SiteFooter } from '@/components/layout/SiteFooter';
-import { FloatingThemeToggle } from '@/components/layout/FloatingThemeToggle';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
+import { OrganisationSchema, WebSiteSchema } from '@/components/seo/StructuredData';
 import { getVisibleServices } from '@/lib/content';
 
 /**
@@ -21,10 +22,17 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       >
         Skip to content
       </a>
+      <OrganisationSchema />
+      <WebSiteSchema />
       <SiteHeader services={services} />
       <main id="main">{children}</main>
       <SiteFooter services={services} />
-      <FloatingThemeToggle />
+      {/*
+        Pinned to the right edge only from xl, where the container leaves a
+        clear margin. At 1024 the content runs close to the viewport edge and
+        a fixed control there sits on top of it.
+      */}
+      <ThemeToggle floating className="hidden xl:inline-grid" />
     </>
   );
 }

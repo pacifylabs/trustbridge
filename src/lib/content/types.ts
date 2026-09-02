@@ -135,7 +135,6 @@ export interface LegalPage {
   readonly summary: string;
   /** Sections are structural until the client supplies final wording. */
   readonly sections: readonly { readonly heading: string; readonly body: string }[];
-  readonly awaitingFinalWording: boolean;
 }
 
 /**

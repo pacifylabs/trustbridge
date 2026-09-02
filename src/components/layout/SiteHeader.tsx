@@ -4,9 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useId, useRef, useState } from 'react';
-import { ChevronDown, Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, Phone, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { CTA_LABELS, PRIMARY_NAV, SITE } from '@/content/site';
+import { ThemeToggle } from './ThemeToggle';
+import { CTA_LABELS, CONTACT, PRIMARY_NAV, SITE } from '@/content/site';
 import { cn } from '@/lib/utils';
 
 export interface HeaderService {
@@ -167,9 +168,27 @@ export function SiteHeader({ services }: { services: readonly HeaderService[] })
           </nav>
 
           <div className="flex items-center gap-2">
+            {/*
+              The telephone number sits next to the booking button because it is
+              what someone anxious about their status reaches for first. It is
+              hidden below `xl` rather than wrapped: the bar already carries the
+              button and the theme control, and three items crowd at that width.
+            */}
+            <a
+              href={`tel:${CONTACT.phoneHref}`}
+              className="hidden items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-strong transition-colors hover:text-accent-ink xl:inline-flex"
+            >
+              <Phone className="h-4 w-4 shrink-0 text-accent-ink" aria-hidden="true" />
+              <span className="sr-only">Telephone </span>
+              {CONTACT.phone}
+            </a>
+
             <Button href="/book" variant="accent" size="sm" className="hidden lg:inline-flex">
               {CTA_LABELS.book}
             </Button>
+
+            {/* Below xl only. From xl it floats at the right of the viewport. */}
+            <ThemeToggle className="xl:hidden" />
             <button
               type="button"
               onClick={() => setMobileOpen((open) => !open)}

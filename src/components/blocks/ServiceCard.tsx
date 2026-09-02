@@ -50,25 +50,26 @@ export function ServiceCard({
       as="li"
       interactive
       className={cn(
-        'group overflow-hidden p-0 sm:p-0',
-        // The featured card spans two columns and carries a tinted ground and
-        // a drawn motif. It is the same shell, so it still shares its row's
-        // height, padding and radius with the cards beside it.
-        featured && 'relative overflow-hidden sm:col-span-2',
+        // `isolate` gives the card its own stacking context, so the featured
+        // card's decoration can sit behind its content without any descendant
+        // needing `relative`. That matters: a positioned descendant would
+        // capture the heading link's overlay and shrink the clickable area
+        // from the whole card down to the heading alone.
+        'group isolate overflow-hidden p-0 sm:p-0',
+        featured && 'sm:col-span-2',
       )}
     >
       {/*
         The photograph sits above the icon rather than replacing it: the icon
         is what distinguishes the routes at a glance once a visitor is
         scanning, and it stays legible where a photograph does not.
+
+        The media has a fixed height, not an aspect ratio. The featured card is
+        twice as wide as its neighbours, so a shared ratio would make its image
+        proportionally taller and the row would no longer line up.
       */}
       {service.image ? (
-        <div
-          className={cn(
-            'relative w-full shrink-0 overflow-hidden border-b border-border-subtle',
-            featured ? 'aspect-[16/7]' : 'aspect-[3/2]',
-          )}
-        >
+        <div className="relative h-52 w-full shrink-0 overflow-hidden border-b border-border-subtle sm:h-56 lg:h-60">
           <Image
             src={service.image.src}
             alt={service.image.alt}
@@ -93,17 +94,18 @@ export function ServiceCard({
         </div>
       ) : null}
 
-      <div className={cn('flex flex-1 flex-col p-6 sm:p-7', featured && 'relative')}>
-        {featured && !service.image ? (
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-            <div className="bg-mist absolute inset-0 opacity-70" />
-          </div>
-        ) : null}
+      {featured && !service.image ? (
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+          <div className="bg-mist absolute inset-0 opacity-70" />
+        </div>
+      ) : null}
+
+      <div className="flex flex-1 flex-col p-6 sm:p-7">
 
         {!service.image ? (
           <span
             className={cn(
-              'relative mb-5 inline-flex items-center justify-center rounded-lg bg-accent-soft text-accent-ink',
+              'mb-5 inline-flex items-center justify-center rounded-lg bg-accent-soft text-accent-ink',
               featured ? 'h-13 w-13' : 'h-11 w-11',
             )}
             aria-hidden="true"
@@ -112,18 +114,21 @@ export function ServiceCard({
           </span>
         ) : null}
 
-        <h3 className={cn('relative text-strong', featured ? 'text-h2' : 'text-h3')}>
-          <Link href={`/services/${service.slug}`} className="after:absolute after:inset-0">
+        <h3 className="text-h2 text-strong">
+          {/*
+            The overlay is lifted above the media, which is positioned so the
+            photograph can fill it. Without this the card was clickable over
+            its text but not over its image.
+          */}
+          <Link
+            href={`/services/${service.slug}`}
+            className="after:absolute after:inset-0 after:z-10"
+          >
             {service.shortTitle}
           </Link>
         </h3>
 
-        <p
-          className={cn(
-            'relative mt-3 leading-relaxed text-muted',
-            featured ? 'measure text-body-lg' : 'text-sm',
-          )}
-        >
+        <p className="mt-3 text-body-lg leading-relaxed text-muted">
           {service.summary}
         </p>
 

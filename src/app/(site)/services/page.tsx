@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { buildMetadata } from '@/lib/seo';
 import { Hero } from '@/components/blocks/Hero';
 import { Section } from '@/components/layout/Section';
 import { ServiceGrid } from '@/components/blocks/ServiceCard';
@@ -9,11 +10,12 @@ import { getVisibleServices } from '@/lib/content';
 import { SERVICES_PAGE } from '@/content/pages';
 import { CTA_LABELS } from '@/content/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Services',
   description:
     'UK immigration advice across partner, visitor, work, settlement, citizenship, EU Settlement Scheme and business immigration routes.',
-};
+  path: '/services',
+});
 
 /**
  * Services index.

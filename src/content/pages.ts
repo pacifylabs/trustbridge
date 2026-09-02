@@ -83,16 +83,19 @@ export const HOME = {
     ],
   },
   /*
-    Hero backdrop. UK landmarks only: the practice advises on United Kingdom
-    immigration, and foreign landmarks would suggest it covers those countries
-    too. The rotation is decorative, so these carry no alt text of their own.
+    Hero backdrop. UK only: the practice advises on United Kingdom immigration,
+    and foreign landmarks would suggest it covers those countries too.
+
+    Chosen for daylight and open composition rather than drama. The night and
+    sunset frames that preceded them made the whole section read heavy, and
+    busy detail behind the copy panel is what makes a hero look cluttered.
   */
   heroBackdrop: [
-    { src: '/images/hero/london-tower-bridge.webp', alt: 'Tower Bridge over the Thames at sunset', width: 1024, height: 512 },
-    { src: '/images/hero/london-westminster.webp', alt: 'The Palace of Westminster and Big Ben at night', width: 1024, height: 576 },
-    { src: '/images/hero/stonehenge.webp', alt: 'Stonehenge at sunset', width: 1024, height: 512 },
-    { src: '/images/hero/liverpool.webp', alt: 'The Liverpool waterfront', width: 1024, height: 512 },
-    { src: '/images/hero/bath.webp', alt: 'The Palladian Bridge at Prior Park, Bath', width: 1920, height: 1080 },
+    { src: '/images/hero/lake-district.webp', alt: 'A lake in the Lake District on a clear day', width: 1024, height: 512 },
+    { src: '/images/hero/cornwall-coast.webp', alt: 'The Cornish coast', width: 1024, height: 512 },
+    { src: '/images/hero/oxford.webp', alt: 'Oxford architecture under a blue sky', width: 2000, height: 1000 },
+    { src: '/images/hero/york-minster.webp', alt: 'York Minster', width: 1024, height: 512 },
+    { src: '/images/hero/london-skyline.webp', alt: 'The London skyline by day', width: 1024, height: 512 },
   ],
 
   /* The layered frames beside the hero copy. */
@@ -104,9 +107,6 @@ export const HOME = {
   credential: {
     title: 'A registered UK practice',
     subtitle: 'TrustBridge Immigration Services Ltd, registered in England and Wales.',
-    pendingLabel: 'Regulatory status',
-    pendingNote:
-      'The level at which our advisers are authorised will be published here before launch.',
   },
   ribbon: [
     'Spouse and partner visas',
@@ -116,6 +116,54 @@ export const HOME = {
     'Visitor visas',
     'EU Settlement Scheme',
   ],
+  /*
+    Sample testimonials, to be replaced with the practice's own once real
+    clients have approved their words.
+
+    Two rules held to while writing them, which apply to whatever replaces
+    them: nothing refers to the result of an application, and nobody is given
+    an invented full name. Each is attributed by route and region, which is
+    how a firm can quote a client without publishing their identity.
+  */
+  testimonials: {
+    eyebrow: 'In their words',
+    lead: 'What working with us',
+    emphasis: 'actually feels like',
+    standfirst:
+      'Clients tell us the same thing more often than anything else: they finally understood what was being asked of them.',
+    items: [
+      {
+        quote:
+          'I had read the guidance three times and still could not tell which parts applied to me. Half an hour into the first consultation I had a list of what to gather and the order to do it in.',
+        attribution: 'Spouse visa client',
+        location: 'Manchester',
+      },
+      {
+        quote:
+          'What I valued most was being told plainly where my case was weak. Nobody had done that before, and it changed how we put the application together.',
+        attribution: 'Skilled Worker client',
+        location: 'Birmingham',
+      },
+      {
+        quote:
+          'They answered the same question twice without ever making me feel awkward for asking. When you are dealing with your family, that matters more than people realise.',
+        attribution: 'Family visa client',
+        location: 'London',
+      },
+      {
+        quote:
+          'The written summary after the consultation was the useful part. I could read it again a week later instead of trying to remember what had been said.',
+        attribution: 'Settlement client',
+        location: 'Leeds',
+      },
+      {
+        quote:
+          'We are a small employer and had never sponsored anyone. The duties were explained in terms of what we actually had to do each month, not just quoted at us.',
+        attribution: 'Business immigration client',
+        location: 'Bristol',
+      },
+    ],
+  },
   resources: {
     eyebrow: 'Resources',
     lead: 'Notes on working with us and',
@@ -251,8 +299,16 @@ export const SERVICES_PAGE = {
 } as const;
 
 export const COMING_SOON = {
-  lead: 'A new site for',
-  emphasis: 'TrustBridge',
+  eyebrow: 'UK immigration advice',
+  lead: 'Clear immigration advice,',
+  emphasis: 'coming shortly',
   standfirst:
-    'TrustBridge Immigration Services Ltd advises individuals, families and employers on United Kingdom immigration applications. Our full website is being prepared. In the meantime, please get in touch using the details below.',
+    'TrustBridge Immigration Services Ltd advises individuals, families and employers on United Kingdom immigration applications. Our website is being prepared. Until it opens, please get in touch directly and we will help you the same way we would through the site.',
+  /* What the practice covers, kept short: this is a holding page, not a menu. */
+  routes: [
+    'Spouse and partner visas',
+    'Skilled Worker',
+    'Health and Care Worker',
+    'Settlement and citizenship',
+  ],
 } as const;

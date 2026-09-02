@@ -25,11 +25,11 @@ All images were retrieved through Openverse (`api.openverse.org`), filtered to
 
 | File | Licence |
 | --- | --- |
-| `hero/london-tower-bridge.webp` | Public Domain Mark |
-| `hero/london-westminster.webp` | CC0 |
-| `hero/stonehenge.webp` | CC0 |
-| `hero/liverpool.webp` | Public Domain Mark |
-| `hero/bath.webp` | CC0 |
+| `hero/lake-district.webp` | Public Domain Mark |
+| `hero/cornwall-coast.webp` | CC0 |
+| `hero/oxford.webp` | CC0 |
+| `hero/york-minster.webp` | CC0 |
+| `hero/london-skyline.webp` | Public Domain Mark |
 | `cluster/consultation.webp` | Public Domain Mark |
 | `cluster/london-street.webp` | CC0 |
 | `cluster/family.webp` | CC0 |

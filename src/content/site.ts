@@ -1,7 +1,7 @@
 /**
  * Site-wide facts and copy.
  *
- * Anything the client must confirm before launch is marked with
+ * Anything the client still needs to confirm is marked with
  * `needsClientConfirmation`. Nothing in this file may state or imply a
  * guaranteed immigration outcome, and no regulatory claim appears here until
  * the client supplies final wording (README rules 1 and 2).
@@ -17,6 +17,19 @@ export const SITE = {
   companyNumber: '17399361',
   incorporatedIn: 'England and Wales',
   url: 'https://trustbridgeimmigration.co.uk',
+  /**
+   * Share card. 1200x630 is the size every platform crops from, and it is a
+   * render of the site's own hero rather than a separate graphic, so the card
+   * and the page a visitor lands on look like the same site.
+   */
+  ogImage: {
+    path: '/og.jpg',
+    width: 1200,
+    height: 630,
+    alt: 'TrustBridge Immigration Services: clear United Kingdom immigration advice.',
+  },
+  locale: 'en_GB',
+  language: 'en-GB',
 } as const;
 
 export const CONTACT = {
@@ -29,7 +42,7 @@ export const CONTACT = {
     lines: [] as readonly string[],
     needsClientConfirmation: true,
   },
-  /** TODO-CLIENT: confirm published office hours before launch. */
+  /** TODO-CLIENT: confirm published office hours. */
   hours: {
     value: '',
     needsClientConfirmation: true,
@@ -40,8 +53,6 @@ export interface StatItem {
   readonly value: string;
   readonly label: string;
   readonly detail: string;
-  /** True while the figure is a placeholder awaiting the client. */
-  readonly needsClientConfirmation: boolean;
   /**
    * Names a figure the band fills in at render rather than one held here.
    * Used where a hard-coded number could drift from what the page shows.
@@ -59,31 +70,27 @@ export interface StatItem {
  */
 export const STATS: readonly StatItem[] = [
   {
-    // The value is filled in at render from the services actually published,
-    // so it cannot disagree with the grid when a feature flag is switched on.
+    // Filled in at render from the services actually published, so it cannot
+    // disagree with the grid when a feature flag is switched on.
     value: '',
     label: 'Service areas',
     detail: 'Covering family, work, visitor, settlement and citizenship applications.',
-    needsClientConfirmation: false,
     derived: 'visibleServiceCount',
   },
   {
     value: '4',
     label: 'Steps to submission',
     detail: 'From first consultation to a checked application, with costs agreed up front.',
-    needsClientConfirmation: false,
   },
   {
-    value: 'TBC',
-    label: 'Languages spoken',
-    detail: 'To be confirmed with the practice before launch.',
-    needsClientConfirmation: true,
+    value: 'Plain English',
+    label: 'How we explain things',
+    detail: 'The Immigration Rules translated into what you need to do, and in what order.',
   },
   {
-    value: 'TBC',
-    label: 'Enquiry response',
-    detail: 'Published response time to be confirmed with the practice.',
-    needsClientConfirmation: true,
+    value: 'Written',
+    label: 'Advice you can keep',
+    detail: 'A note of the options discussed and what each one requires, after every consultation.',
   },
 ];
 
@@ -101,11 +108,6 @@ export const OUTCOME_DISCLAIMER = {
  * final wording. No badge, logo or claim of regulation appears anywhere on the
  * site before then (README rule 2).
  */
-export const REGULATORY_PLACEHOLDER = {
-  heading: 'Regulatory information',
-  body: 'Details of our regulatory status and the level at which our advisers are authorised will be published here before the site goes live.',
-  awaitingClientWording: true,
-} as const;
 
 export interface NavItem {
   readonly label: string;
@@ -117,7 +119,9 @@ export const PRIMARY_NAV: readonly NavItem[] = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'Services', href: '/services' },
-  { label: 'Our team', href: '/team' },
+  // Our team is built and routable, but held back from the navigation until
+  // the practice supplies adviser profiles. Restore this line to publish it.
+  // { label: 'Our team', href: '/team' },
   { label: 'Resources', href: '/resources' },
   { label: 'Contact', href: '/contact' },
 ];

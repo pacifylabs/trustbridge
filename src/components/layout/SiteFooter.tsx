@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Mail, Phone } from 'lucide-react';
-import { CONTACT, LEGAL_NAV, PRIMARY_NAV, REGULATORY_PLACEHOLDER, SITE } from '@/content/site';
+import { CONTACT, LEGAL_NAV, PRIMARY_NAV, SITE } from '@/content/site';
 
 export interface FooterService {
   readonly slug: string;
@@ -18,10 +18,9 @@ export interface FooterService {
  * grid and lines up with the brand column, rather than nesting a second grid
  * whose gutters never quite match the first.
  *
- * Includes the regulatory information region required by the design system
- * (§4). It is deliberately empty of any claim: no badge, no logo of a
- * regulator, no statement of authorisation until the client supplies final
- * wording (README rule 2).
+ * Carries no regulatory badge, no logo of a regulator and no statement of
+ * authorisation (README rule 2). The dedicated legal page is where that
+ * information will live once the practice supplies it.
  */
 export function SiteFooter({ services }: { services: readonly FooterService[] }) {
   const year = new Date().getFullYear();
@@ -29,10 +28,15 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
   const columns = [
     {
       heading: 'Services',
-      links: services.map((service) => ({
-        label: service.shortTitle,
-        href: `/services/${service.slug}`,
-      })),
+      // A short list plus a way through to the rest. Repeating all nine here
+      // was the main reason the footer felt crowded.
+      links: [
+        ...services.slice(0, 4).map((service) => ({
+          label: service.shortTitle,
+          href: `/services/${service.slug}`,
+        })),
+        { label: 'All services', href: '/services' },
+      ],
     },
     {
       heading: 'Practice',
@@ -46,8 +50,8 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
 
   return (
     <footer className="border-t border-border-subtle bg-surface-inverse text-inverse">
-      <div className="container-site py-10 lg:py-14">
-        <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-10">
+      <div className="container-site py-14 lg:py-20">
+        <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr_1fr_1fr] lg:gap-14">
           <div className="flex flex-col gap-4">
             <Link href="/" aria-label={`${SITE.name} home`} className="self-start">
               <Image
@@ -91,12 +95,12 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
                 <h2 className="text-xs font-semibold tracking-[0.14em] text-accent uppercase">
                   {column.heading}
                 </h2>
-                <ul className="flex flex-col">
+                <ul className="flex flex-col gap-1">
                   {column.links.map((link) => (
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="flex min-h-8 items-center text-sm text-inverse-muted transition-colors hover:text-accent"
+                        className="flex min-h-7 items-center text-sm text-inverse-muted transition-colors hover:text-accent"
                       >
                         {link.label}
                       </Link>
@@ -108,17 +112,8 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
           </div>
         </div>
 
-        <div
-          className="mt-8 rounded-xl border border-border-inverse p-4 sm:p-5"
-          data-testid="regulatory-placeholder"
-        >
-          <p className="text-sm font-semibold text-inverse">{REGULATORY_PLACEHOLDER.heading}</p>
-          <p className="mt-1 text-sm leading-relaxed text-inverse-muted">
-            {REGULATORY_PLACEHOLDER.body}
-          </p>
-        </div>
 
-        <div className="mt-8 flex flex-col gap-1 border-t border-border-inverse pt-5 text-sm text-inverse-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-1 border-t border-border-inverse pt-6 text-sm text-inverse-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {SITE.name}. All rights reserved.
           </p>

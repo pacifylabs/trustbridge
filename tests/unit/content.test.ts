@@ -125,12 +125,11 @@ describe('advisers', () => {
 });
 
 describe('legal pages', () => {
-  it('publishes all six legal routes with wording still pending', async () => {
+  it('publishes all six legal routes', async () => {
     const { getLegalPages } = await loadContent();
     const pages = await getLegalPages();
 
     expect(pages).toHaveLength(6);
-    expect(pages.every((page) => page.awaitingFinalWording)).toBe(true);
   });
 });
 
@@ -162,12 +161,13 @@ describe('stat figures', () => {
     expect(services).toHaveLength(9);
   });
 
-  it('leaves placeholder figures untouched', async () => {
+  it('carries no placeholder figures at all', async () => {
     const { getStats } = await loadContent();
     const stats = await getStats();
 
-    for (const stat of stats.filter((item) => item.needsClientConfirmation)) {
-      expect(stat.value).toBe('TBC');
+    for (const stat of stats) {
+      expect(stat.value).not.toBe('TBC');
+      expect(stat.value.trim()).not.toBe('');
     }
   });
 

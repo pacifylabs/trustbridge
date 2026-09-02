@@ -24,20 +24,16 @@ async function resolvedColours(page: import('@playwright/test').Page) {
   });
 }
 
-test('the toggle floats above the page at every breakpoint', async ({ page }) => {
+test('the toggle is reachable at every breakpoint', async ({ page }, testInfo) => {
   await page.goto('/');
 
-  const toggle = page.locator('[data-theme-toggle]');
+  const toggle = page.locator('[data-theme-toggle]:visible');
+  await expect(toggle).toHaveCount(1);
   await expect(toggle).toBeVisible();
-  await expect(toggle).toHaveCSS('position', 'fixed');
 
-  // It stays put when the page scrolls, which is the point of a float.
-  const before = await toggle.boundingBox();
-  await page.evaluate(() => window.scrollTo(0, 1200));
-  await page.waitForTimeout(200);
-  const after = await toggle.boundingBox();
-
-  expect(after?.y).toBeCloseTo(before?.y ?? 0, 0);
+  // Pinned to the right edge on large screens, in the bar below that.
+  const large = (testInfo.project.use.viewport?.width ?? 0) >= 1280;
+  await expect(toggle).toHaveCSS('position', large ? 'fixed' : 'static');
 });
 
 test('one press switches the theme and repaints from tokens', async ({ page }) => {
@@ -45,7 +41,7 @@ test('one press switches the theme and repaints from tokens', async ({ page }) =
   await selectTheme(page, 'light');
   const light = await resolvedColours(page);
 
-  await page.locator('[data-theme-toggle]').click();
+  await page.locator('[data-theme-toggle]:visible').click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
   const dark = await resolvedColours(page);
@@ -58,7 +54,7 @@ test('the toggle announces the action it will take', async ({ page }) => {
   await page.goto('/');
   await selectTheme(page, 'light');
 
-  const toggle = page.locator('[data-theme-toggle]');
+  const toggle = page.locator('[data-theme-toggle]:visible');
   await expect(toggle).toHaveAttribute('aria-label', 'Switch to dark mode');
   await expect(toggle).toHaveAttribute('aria-pressed', 'false');
 
@@ -71,7 +67,7 @@ test('pressing twice returns to where it started', async ({ page }) => {
   await page.goto('/');
   await selectTheme(page, 'light');
 
-  const toggle = page.locator('[data-theme-toggle]');
+  const toggle = page.locator('[data-theme-toggle]:visible');
   await toggle.click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
@@ -100,7 +96,7 @@ test('runs the change as a single view transition', async ({ page }) => {
     observer.observe(root, { attributes: true, attributeFilter: ['style'] });
   });
 
-  await page.locator('[data-theme-toggle]').click();
+  await page.locator('[data-theme-toggle]:visible').click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 
   const origins = await page.evaluate(
@@ -162,7 +158,7 @@ test('follows the operating system when nothing is stored', async ({ browser }) 
 
   await page.goto('/');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await expect(page.locator('[data-theme-toggle]')).toHaveAttribute('data-theme-state', 'dark');
+  await expect(page.locator('[data-theme-toggle]:visible')).toHaveAttribute('data-theme-state', 'dark');
 
   await context.close();
 });

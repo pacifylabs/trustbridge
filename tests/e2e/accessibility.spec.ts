@@ -24,10 +24,28 @@ const PAGES = [
   { path: '/coming-soon', name: 'Coming Soon' },
 ];
 
+/**
+ * Settles the entrance animation before measuring.
+ *
+ * The reveal transitions opacity, so a scan that lands mid-animation reads
+ * half-faded text and reports contrast failures that do not exist once the
+ * page has settled. The reveal is decorative and content is visible without
+ * it, so the state worth testing is the finished one.
+ */
+async function settleReveals(page: import('@playwright/test').Page) {
+  await page.evaluate(() => {
+    for (const element of document.querySelectorAll('.reveal')) {
+      element.setAttribute('data-revealed', 'true');
+    }
+  });
+  await page.waitForTimeout(700);
+}
+
 for (const { path, name } of PAGES) {
   test(`${name} has no WCAG A or AA violations`, async ({ page }) => {
     await page.goto(path);
     await page.waitForLoadState('networkidle');
+    await settleReveals(page);
 
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
@@ -52,6 +70,7 @@ test('dark mode has no WCAG violations either', async ({ page }) => {
   await page.goto('/');
   await selectTheme(page, 'dark');
   await page.waitForLoadState('networkidle');
+  await settleReveals(page);
 
   const results = await new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
@@ -105,8 +124,9 @@ test('the hero copy stays legible over every photograph in the rotation', async 
     )!;
 
     // The eyebrow is included because it is 14px, so it is held to the body
-    // threshold rather than the large-text one, and it was the element most
-    // at risk of being missed.
+    // threshold rather than the large-text one. The panel is a light surface
+    // now, so the worst case is the darkest pixel beneath it rather than the
+    // brightest.
     const eyebrow = panel.querySelector('p')!;
 
     const text = {
@@ -171,16 +191,20 @@ test('the hero copy stays legible over every photograph in the rotation', async 
       const [x1, y1] = toImage(rect.right, rect.bottom);
       const data = ctx.getImageData(x0, y0, Math.max(1, x1 - x0), Math.max(1, y1 - y0)).data;
 
-      let lightest = [0, 0, 0];
-      let best = -1;
+      // A light panel is worst over a dark photo; a dark one over a bright
+      // photo. Which extreme matters follows from the panel's own tint.
+      const panelIsLight = luminance(panelRgb) > 0.5;
+      let extreme = [0, 0, 0];
+      let best: number | null = null;
       for (let i = 0; i < data.length; i += 4 * 37) {
         const px = [data[i]!, data[i + 1]!, data[i + 2]!];
         const l = luminance(px);
-        if (l > best) {
+        if (best === null || (panelIsLight ? l < best : l > best)) {
           best = l;
-          lightest = px;
+          extreme = px;
         }
       }
+      const lightest = extreme;
 
       // Composite the panel tint over the brightest part of the photograph.
       const ground = lightest.map((c, i) => panelRgb[i]! * panelAlpha + c * (1 - panelAlpha));

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { buildMetadata } from '@/lib/seo';
 import { Newspaper } from 'lucide-react';
 import { Hero } from '@/components/blocks/Hero';
 import { Section } from '@/components/layout/Section';
@@ -10,11 +11,12 @@ import { getArticles } from '@/lib/content';
 import { RESOURCES_PAGE } from '@/content/pages';
 import { CTA_LABELS } from '@/content/site';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Resources',
   description:
     'Notes and updates from TrustBridge Immigration Services Ltd on how the immigration process works and what to expect.',
-};
+  path: '/resources',
+});
 
 export default async function ResourcesPage() {
   const articles = await getArticles();

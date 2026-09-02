@@ -106,15 +106,18 @@ test('every service page carries the shared outcome disclaimer', async ({ page }
   }
 });
 
-test('the footer regulatory region is present but empty of claims', async ({ page }) => {
+test('the footer carries no regulatory claim and no placeholder', async ({ page }) => {
   await page.goto('/');
-  const region = page.getByTestId('regulatory-placeholder');
+  const footer = page.locator('footer');
 
-  await expect(region).toBeVisible();
-  await expect(region).toContainText(/will be published here before the site goes live/i);
+  // The placeholder region was removed, so the footer must simply say nothing
+  // about regulatory status rather than say something provisional.
+  await expect(page.getByTestId('regulatory-placeholder')).toHaveCount(0);
+  await expect(footer).not.toContainText(/awaiting/i);
+  await expect(footer).not.toContainText(/regulated by|authorised/i);
 });
 
-test('legal pages state that the wording is pending', async ({ page }) => {
+test('every legal route publishes without placeholder furniture', async ({ page }) => {
   const slugs = [
     'privacy-policy',
     'cookie-policy',
@@ -125,8 +128,11 @@ test('legal pages state that the wording is pending', async ({ page }) => {
   ];
 
   for (const slug of slugs) {
-    await page.goto(`/legal/${slug}`);
-    await expect(page.getByTestId('pending-wording-notice'), slug).toBeVisible();
+    const response = await page.goto(`/legal/${slug}`);
+    expect(response?.status(), slug).toBe(200);
+
+    await expect(page.getByTestId('pending-wording-notice'), slug).toHaveCount(0);
+    await expect(page.locator('main'), slug).not.toContainText(/before launch/i);
   }
 });
 
@@ -137,12 +143,15 @@ test('the team page shows an honest empty state rather than invented advisers', 
   await expect(page.locator('main')).not.toContainText(/Sample Adviser/i);
 });
 
-test('placeholder statistics are visibly marked', async ({ page }) => {
-  await page.goto('/');
+test('no page carries a launch placeholder', async ({ page }) => {
+  for (const path of ['/', '/about', '/services', '/contact', '/book', '/team']) {
+    await page.goto(path);
+    const text = await page.locator('body').innerText();
 
-  const markers = page.getByTestId('stat-placeholder-marker');
-  await expect(markers.first()).toBeVisible();
-  expect(await markers.count()).toBeGreaterThan(0);
+    expect(text, `${path} awaiting`).not.toMatch(/awaiting (client|wording)/i);
+    expect(text, `${path} before launch`).not.toMatch(/before launch/i);
+    expect(text, `${path} TBC`).not.toMatch(/TBC/);
+  }
 });
 
 test('no third-party requests are made', async ({ page }) => {

@@ -127,13 +127,16 @@ describe('StatBand', () => {
     }
   });
 
-  it('marks placeholder figures so they cannot pass for real ones', () => {
+  it('publishes only figures that can be stood behind', () => {
     render(<StatBand />);
-    const markers = screen.getAllByTestId('stat-placeholder-marker');
-    const expected = STATS.filter((stat) => stat.needsClientConfirmation).length;
+    const band = screen.getByTestId('stat-band');
 
-    expect(markers).toHaveLength(expected);
-    expect(markers.length).toBeGreaterThan(0);
+    // There are no placeholder markers any more, so nothing in the band may
+    // be a stand-in: every value has to be real or derived from the site.
+    expect(screen.queryAllByTestId('stat-placeholder-marker')).toHaveLength(0);
+    expect(band.textContent).not.toMatch(/TBC/);
+    expect(band.textContent).not.toMatch(/to be confirmed/i);
+    expect(band.textContent).not.toMatch(/awaiting/i);
   });
 
   it('publishes no success rate or client count', () => {

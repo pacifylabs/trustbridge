@@ -11,6 +11,7 @@ import { ProcessSteps } from '@/components/blocks/ProcessSteps';
 import { ImageCluster } from '@/components/blocks/ImageCluster';
 import { CredentialCard } from '@/components/blocks/CredentialCard';
 import { RibbonBand } from '@/components/blocks/RibbonBand';
+import { TestimonialSlider } from '@/components/blocks/TestimonialSlider';
 import { StampBadge } from '@/components/ui/StampBadge';
 import { CtaBand } from '@/components/blocks/CtaBand';
 import { DisclaimerBlock } from '@/components/blocks/DisclaimerBlock';
@@ -42,23 +43,23 @@ export default async function HomePage() {
             <Button href="/book" variant="accent" size="lg">
               {CTA_LABELS.book}
             </Button>
-            <Button href="/services" variant="inverse" size="lg">
+            <Button href="/services" variant="secondary" size="lg">
               See how we can help
             </Button>
           </>
         }
         footnote={
           <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-sm">
-            <span className="font-medium text-on-photo">Popular routes:</span>
+            <span className="font-medium text-strong">Popular routes:</span>
             {services.slice(0, 4).map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="group inline-flex items-center gap-1 rounded-md border border-white/25 bg-white/10 px-3 py-1.5 font-medium text-on-photo backdrop-blur-sm transition-[background-color,border-color,transform] hover:-translate-y-0.5 hover:border-accent hover:bg-white/20"
+                className="group inline-flex items-center gap-1 rounded-md border border-border-subtle bg-surface px-3 py-1.5 font-medium text-body transition-[color,border-color,transform] hover:-translate-y-0.5 hover:border-accent hover:text-accent-ink"
               >
                 {service.shortTitle}
                 <ArrowRight
-                  className="h-3.5 w-3.5 shrink-0 text-accent transition-transform group-hover:translate-x-0.5"
+                  className="h-3.5 w-3.5 shrink-0 text-accent-ink transition-transform group-hover:translate-x-0.5"
                   aria-hidden="true"
                 />
               </Link>
@@ -101,7 +102,7 @@ export default async function HomePage() {
         </div>
       </Section>
 
-      <Section tone="mist" labelledBy="home-approach">
+      <Section tone="surface" labelledBy="home-approach">
         <SectionHeading
           id="home-approach"
           align="centre"
@@ -131,6 +132,19 @@ export default async function HomePage() {
             </Card>
           ))}
         </ul>
+      </Section>
+
+      <Section tone="surface" labelledBy="home-testimonials">
+        <SectionHeading
+          id="home-testimonials"
+          eyebrow={HOME.testimonials.eyebrow}
+          lead={HOME.testimonials.lead}
+          emphasis={HOME.testimonials.emphasis}
+          standfirst={HOME.testimonials.standfirst}
+        />
+        <Reveal className="mt-10">
+          <TestimonialSlider items={HOME.testimonials.items} />
+        </Reveal>
       </Section>
 
       {featuredArticles.length > 0 ? (

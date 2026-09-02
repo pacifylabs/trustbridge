@@ -33,17 +33,54 @@ export const metadata: Metadata = {
     template: `%s | ${SITE.shortName}`,
   },
   description: SITE.description,
+  applicationName: SITE.shortName,
+  authors: [{ name: SITE.name, url: SITE.url }],
+  creator: SITE.name,
+  publisher: SITE.name,
+  keywords: [
+    'UK immigration advice',
+    'immigration adviser',
+    'spouse visa',
+    'skilled worker visa',
+    'settlement and ILR',
+    'British citizenship',
+    'EU Settlement Scheme',
+  ],
+  alternates: { canonical: '/' },
+  formatDetection: { telephone: true, address: false, email: true },
   openGraph: {
     type: 'website',
-    locale: 'en_GB',
+    locale: SITE.locale,
+    url: SITE.url,
     siteName: SITE.name,
     title: `${SITE.name} | ${SITE.tagline}`,
     description: SITE.description,
+    images: [
+      {
+        url: SITE.ogImage.path,
+        width: SITE.ogImage.width,
+        height: SITE.ogImage.height,
+        alt: SITE.ogImage.alt,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${SITE.name} | ${SITE.tagline}`,
+    description: SITE.description,
+    images: [{ url: SITE.ogImage.path, alt: SITE.ogImage.alt }],
   },
   robots: {
     // Nothing is indexed until the client approves launch (README rule 3).
     index: env.SITE_LAUNCHED,
     follow: env.SITE_LAUNCHED,
+    googleBot: {
+      index: env.SITE_LAUNCHED,
+      follow: env.SITE_LAUNCHED,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
   },
 };
 

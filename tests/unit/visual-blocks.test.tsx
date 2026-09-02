@@ -143,9 +143,11 @@ describe('CredentialCard', () => {
     expect(screen.getByText(HOME.credential.subtitle)).toBeInTheDocument();
   });
 
-  it('marks the regulatory line as awaiting wording', () => {
+  it('carries no regulatory placeholder', () => {
     render(<CredentialCard {...HOME.credential} />);
-    expect(screen.getByTestId('regulatory-placeholder-marker')).toBeInTheDocument();
+
+    expect(screen.queryByTestId('regulatory-placeholder-marker')).toBeNull();
+    expect(screen.getByTestId('credential-card').textContent).not.toMatch(/awaiting/i);
   });
 
   it('makes no regulatory claim and states no outcome', () => {

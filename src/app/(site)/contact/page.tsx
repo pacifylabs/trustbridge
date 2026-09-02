@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { buildMetadata } from '@/lib/seo';
 import { Clock, Mail, MapPin, Phone } from 'lucide-react';
 import { Hero } from '@/components/blocks/Hero';
 import { Section } from '@/components/layout/Section';
@@ -10,11 +11,12 @@ import { Card } from '@/components/ui/Card';
 import { CONTACT, SITE } from '@/content/site';
 import { CONTACT_PAGE } from '@/content/pages';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: 'Contact us',
   description:
     'Contact TrustBridge Immigration Services Ltd by email, telephone or enquiry form to discuss your immigration matter.',
-};
+  path: '/contact',
+});
 
 export default function ContactPage() {
   return (
@@ -88,7 +90,7 @@ export default function ContactPage() {
                         </address>
                       ) : (
                         <p className="mt-0.5 text-sm text-muted" data-testid="address-placeholder">
-                          To be confirmed before launch. {SITE.name} is registered in{' '}
+                          {SITE.name} is registered in{' '}
                           {SITE.incorporatedIn}, company number {SITE.companyNumber}.
                         </p>
                       )}
@@ -105,7 +107,7 @@ export default function ContactPage() {
                     <div>
                       <p className="text-sm font-semibold text-strong">Office hours</p>
                       <p className="mt-0.5 text-sm text-muted">
-                        {CONTACT.hours.value || 'To be confirmed before launch.'}
+                        {CONTACT.hours.value || 'Please call or email and we will come back to you.'}
                       </p>
                     </div>
                   </li>

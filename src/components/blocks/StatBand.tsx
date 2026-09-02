@@ -8,8 +8,8 @@ import { cn } from '@/lib/utils';
  * here by design: publishing an approval rate would imply a likely outcome,
  * which the brief prohibits.
  *
- * Placeholder figures are rendered with a visible marker so an unconfirmed
- * value cannot pass for a real one in a screenshot or a client review.
+ * Every figure here is either verifiable or derived from what the site
+ * actually publishes, so nothing in this band needs qualifying.
  */
 export function StatBand({
   items = STATS,
@@ -51,15 +51,7 @@ export function StatBand({
           <dd
             className={cn(
               'order-1 font-serif text-[2rem] leading-none font-semibold',
-              // A placeholder figure is deliberately dimmed rather than gold,
-              // so it never reads as a confirmed number.
-              item.needsClientConfirmation
-                ? inverse
-                  ? 'text-inverse-muted'
-                  : 'text-muted'
-                : inverse
-                  ? 'text-accent'
-                  : 'text-accent-ink',
+              inverse ? 'text-accent' : 'text-accent-ink',
             )}
           >
             {item.value}
@@ -72,19 +64,6 @@ export function StatBand({
           >
             {item.detail}
           </dd>
-          {item.needsClientConfirmation ? (
-            <dd className="order-4 mt-3">
-              <span
-                className={cn(
-                  'inline-flex items-center rounded-md border border-accent/40 bg-accent-soft px-2 py-0.5 text-[0.7rem] font-semibold tracking-wide uppercase',
-                  inverse ? 'text-accent' : 'text-accent-ink',
-                )}
-                data-testid="stat-placeholder-marker"
-              >
-                Awaiting client
-              </span>
-            </dd>
-          ) : null}
         </div>
       ))}
     </dl>

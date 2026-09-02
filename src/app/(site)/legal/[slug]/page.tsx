@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { AlertTriangle, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
+import { buildMetadata } from '@/lib/seo';
 import { Section } from '@/components/layout/Section';
 import { CtaBand } from '@/components/blocks/CtaBand';
 import { getLegalPageBySlug, getLegalPages } from '@/lib/content';
@@ -31,7 +32,11 @@ export async function generateMetadata({
 
   if (!page) return { title: 'Not found' };
 
-  return { title: page.title, description: page.summary };
+  return buildMetadata({
+    title: page.title,
+    description: page.summary,
+    path: `/legal/${page.slug}`,
+  });
 }
 
 export default async function LegalPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -64,22 +69,6 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
             <h1 className="text-[1.875rem] text-headline sm:text-[2rem] lg:text-h1">{page.title}</h1>
             <p className="measure mt-4 text-body-lg leading-relaxed text-muted">{page.summary}</p>
 
-            {page.awaitingFinalWording ? (
-              <div
-                className="mt-8 flex gap-4 rounded-xl border border-accent/40 bg-accent-soft p-5"
-                data-testid="pending-wording-notice"
-              >
-                <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-accent-ink" aria-hidden="true" />
-                <div>
-                  <p className="text-sm font-semibold text-strong">Wording to be supplied</p>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">
-                    This page is structurally complete but the text has not been finalised. The
-                    practice will supply the wording before the site goes live. Nothing on this page
-                    should be relied upon in the meantime.
-                  </p>
-                </div>
-              </div>
-            ) : null}
 
             <div className="mt-10 space-y-8">
               {page.sections.map((section) => (

@@ -82,11 +82,15 @@ export function Hero({
               ? 'pt-10 pb-12 sm:pt-14 sm:pb-14 lg:pt-14 lg:pb-12'
               : 'py-12 sm:py-16 lg:py-20',
             aside ? 'lg:grid-cols-12' : '',
+            // A page hero with media beside the copy stretches both columns to
+            // one height, so the image and the text block finish level instead
+            // of the shorter one floating inside a row sized by the taller.
+            !isLanding && aside ? 'lg:items-stretch' : '',
           )}
         >
           <div
             className={cn(
-              aside ? 'lg:col-span-6' : 'max-w-3xl',
+              aside ? 'lg:col-span-6 lg:self-center' : 'max-w-3xl',
               /*
                 Over photography the copy carries its own ground rather than
                 the whole hero being tinted. The blur is doing most of the work:
@@ -104,29 +108,19 @@ export function Hero({
               <div
                 aria-hidden="true"
                 data-testid="hero-copy-panel"
-                className="hero-copy-panel absolute inset-0 -z-10 rounded-[2rem] backdrop-blur-xl"
+                className="hero-copy-panel absolute inset-0 -z-10 rounded-[2rem] shadow-xl backdrop-blur-xl"
               />
             ) : null}
 
-            {eyebrow ? (
-              <Eyebrow tone={onPhoto ? 'onPhoto' : 'default'}>{eyebrow}</Eyebrow>
-            ) : null}
+            {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
             <TwoToneHeading
               as="h1"
               size={isLanding ? 'display' : 'h1'}
               lead={lead}
               emphasis={emphasis}
               trail={trail}
-              tone={onPhoto ? 'onPhoto' : 'default'}
             />
-            <p
-              className={cn(
-                'measure mt-5 text-body-lg',
-                onPhoto ? 'text-on-photo-muted' : 'text-muted',
-              )}
-            >
-              {standfirst}
-            </p>
+            <p className="measure mt-5 text-body-lg text-muted">{standfirst}</p>
 
             {actions ? (
               // Stacked and full width on the narrowest screens, where buttons

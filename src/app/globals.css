@@ -58,9 +58,9 @@
   --text-h2: var(--tb-text-h2);
   --text-h2--line-height: 1.2;
   --text-h3: var(--tb-text-h3);
-  --text-h3--line-height: 1.3;
+  --text-h3--line-height: 1.35;
   --text-body-lg: var(--tb-text-body-lg);
-  --text-body-lg--line-height: 1.6;
+  --text-body-lg--line-height: 1.7;
 
   --radius-md: var(--tb-radius-md);
   --radius-lg: var(--tb-radius-lg);
@@ -255,14 +255,12 @@
   legibility.
 */
 @utility hero-copy-panel {
-  --tb-panel-rgb: 10 27 48;
-  --tb-panel-alpha-min: 0.66;
 
   background-image: radial-gradient(
     130% 120% at 28% 32%,
-    rgb(var(--tb-panel-rgb) / 0.76) 0%,
-    rgb(var(--tb-panel-rgb) / var(--tb-panel-alpha-min)) 65%,
-    rgb(var(--tb-panel-rgb) / 0.54) 100%
+    rgb(var(--tb-panel-rgb) / 0.96) 0%,
+    rgb(var(--tb-panel-rgb) / var(--tb-panel-alpha-min)) 68%,
+    rgb(var(--tb-panel-rgb) / 0.8) 100%
   );
 
   /* Feathers the last few percent of the box only. */

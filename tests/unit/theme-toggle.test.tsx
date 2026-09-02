@@ -2,11 +2,11 @@ import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
-import { FloatingThemeToggle } from '@/components/layout/FloatingThemeToggle';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { THEME_ATTRIBUTE, THEME_STORAGE_KEY } from '@/lib/theme';
 
 /**
- * Floating theme toggle.
+ * Theme toggle.
  *
  * One control with one action, so the tests cover the switch itself, what it
  * announces, and the fallbacks: no View Transitions API, reduced motion, and
@@ -41,17 +41,17 @@ beforeEach(() => {
   delete (document as Partial<Document> & { startViewTransition?: unknown }).startViewTransition;
 });
 
-describe('FloatingThemeToggle', () => {
+describe('ThemeToggle', () => {
   it('renders a single control, not a group of options', () => {
     document.documentElement.setAttribute(THEME_ATTRIBUTE, 'light');
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
 
     expect(screen.getAllByRole('button')).toHaveLength(1);
   });
 
   it('announces the action it will take, not the current state', () => {
     document.documentElement.setAttribute(THEME_ATTRIBUTE, 'light');
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
 
     expect(screen.getByRole('button', { name: 'Switch to dark mode' })).toBeInTheDocument();
   });
@@ -59,7 +59,7 @@ describe('FloatingThemeToggle', () => {
   it('switches to dark in one press', async () => {
     document.documentElement.setAttribute(THEME_ATTRIBUTE, 'light');
     const user = userEvent.setup();
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
 
     await user.click(screen.getByRole('button'));
 
@@ -69,7 +69,7 @@ describe('FloatingThemeToggle', () => {
   it('switches back on a second press', async () => {
     document.documentElement.setAttribute(THEME_ATTRIBUTE, 'light');
     const user = userEvent.setup();
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
 
     await user.click(screen.getByRole('button'));
     await user.click(screen.getByRole('button'));
@@ -80,7 +80,7 @@ describe('FloatingThemeToggle', () => {
   it('relabels itself after switching', async () => {
     document.documentElement.setAttribute(THEME_ATTRIBUTE, 'light');
     const user = userEvent.setup();
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
 
     await user.click(screen.getByRole('button'));
 
@@ -92,7 +92,7 @@ describe('FloatingThemeToggle', () => {
   it('reports the switch state through aria-pressed', async () => {
     document.documentElement.setAttribute(THEME_ATTRIBUTE, 'light');
     const user = userEvent.setup();
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
 
     expect(screen.getByRole('button')).toHaveAttribute('aria-pressed', 'false');
     await user.click(screen.getByRole('button'));
@@ -105,7 +105,7 @@ describe('FloatingThemeToggle', () => {
   it('persists the choice', async () => {
     document.documentElement.setAttribute(THEME_ATTRIBUTE, 'light');
     const user = userEvent.setup();
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
 
     await user.click(screen.getByRole('button'));
 
@@ -114,7 +114,7 @@ describe('FloatingThemeToggle', () => {
 
   it('reflects the theme already applied by the head script', () => {
     document.documentElement.setAttribute(THEME_ATTRIBUTE, 'dark');
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
 
     expect(screen.getByRole('button')).toHaveAttribute('data-theme-state', 'dark');
     expect(screen.getByRole('button', { name: 'Switch to light mode' })).toBeInTheDocument();
@@ -122,7 +122,7 @@ describe('FloatingThemeToggle', () => {
 
   it('falls back to the operating system when no theme is applied', () => {
     mockMatchMedia({ dark: true });
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
 
     expect(screen.getByRole('button')).toHaveAttribute('data-theme-state', 'dark');
   });
@@ -134,7 +134,7 @@ describe('FloatingThemeToggle', () => {
     });
 
     const user = userEvent.setup();
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
     await user.click(screen.getByRole('button'));
 
     expect(document.documentElement.getAttribute(THEME_ATTRIBUTE)).toBe('dark');
@@ -155,7 +155,7 @@ describe('FloatingThemeToggle', () => {
     });
 
     const user = userEvent.setup();
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
     await user.click(screen.getByRole('button'));
 
     expect(startViewTransition).toHaveBeenCalledTimes(1);
@@ -174,7 +174,7 @@ describe('FloatingThemeToggle', () => {
     });
 
     const user = userEvent.setup();
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
     await user.click(screen.getByRole('button'));
 
     expect(startViewTransition).not.toHaveBeenCalled();
@@ -184,7 +184,7 @@ describe('FloatingThemeToggle', () => {
   it('switches without a View Transitions API at all', async () => {
     document.documentElement.setAttribute(THEME_ATTRIBUTE, 'light');
     const user = userEvent.setup();
-    render(<FloatingThemeToggle />);
+    render(<ThemeToggle />);
 
     await user.click(screen.getByRole('button'));
 
@@ -193,7 +193,7 @@ describe('FloatingThemeToggle', () => {
 
   it('has no detectable accessibility violations', async () => {
     document.documentElement.setAttribute(THEME_ATTRIBUTE, 'light');
-    const { container } = render(<FloatingThemeToggle />);
+    const { container } = render(<ThemeToggle />);
 
     expect(await axe(container)).toHaveNoViolations();
   });
