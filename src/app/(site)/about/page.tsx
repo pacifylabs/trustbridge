@@ -70,10 +70,10 @@ export default function AboutPage() {
 
           <div className="lg:col-span-5">
             <Card tone="sunken" className="h-full justify-center">
-              <p className="text-xs font-semibold tracking-[0.14em] text-accent-ink uppercase">
+              <p className="text-micro font-semibold tracking-[0.14em] text-accent-ink uppercase">
                 Company details
               </p>
-              <dl className="mt-5 space-y-4 text-sm">
+              <dl className="mt-5 space-y-4 text-small">
                 <div>
                   <dt className="font-semibold text-strong">Registered name</dt>
                   <dd className="mt-1 text-muted">{SITE.name}</dd>
@@ -117,7 +117,7 @@ export default function AboutPage() {
           {ABOUT.values.items.map((value) => (
             <Card as="li" key={value.title}>
               <CardHeading>{value.title}</CardHeading>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{value.body}</p>
+              <p className="mt-3 text-small leading-relaxed text-muted">{value.body}</p>
             </Card>
           ))}
         </ul>

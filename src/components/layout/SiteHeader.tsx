@@ -219,7 +219,7 @@ export function SiteHeader({ services }: { services: readonly HeaderService[] })
                     href={item.href}
                     aria-current={isActive(item.href) ? 'page' : undefined}
                     className={cn(
-                      'flex min-h-11 items-center rounded-md px-3 text-base font-medium',
+                      'flex min-h-11 items-center rounded-md px-3 text-sm font-medium',
                       isActive(item.href) ? 'bg-accent-soft text-accent-ink' : 'text-body',
                     )}
                   >

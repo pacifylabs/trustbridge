@@ -5,7 +5,6 @@ import { Hero } from '@/components/blocks/Hero';
 import { Section } from '@/components/layout/Section';
 import { SectionHeading } from '@/components/layout/SectionHeading';
 import { EnquiryForm } from '@/components/blocks/EnquiryForm';
-import { DisclaimerBlock } from '@/components/blocks/DisclaimerBlock';
 import { CtaBand } from '@/components/blocks/CtaBand';
 import { Card } from '@/components/ui/Card';
 import { CONTACT, SITE } from '@/content/site';
@@ -137,7 +136,6 @@ export default function ContactPage() {
                 </p>
               </Card>
 
-              <DisclaimerBlock />
             </div>
           </div>
 

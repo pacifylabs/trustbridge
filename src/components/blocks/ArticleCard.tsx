@@ -44,7 +44,7 @@ export function ArticleCard({ article }: { article: Article }) {
       <div className="flex flex-1 flex-col p-6 sm:p-7">
         <div className="flex flex-wrap items-center gap-3">
           <Badge tone="accent">{article.category}</Badge>
-          <time dateTime={toIsoDate(article.publishedAt)} className="text-xs text-muted">
+          <time dateTime={toIsoDate(article.publishedAt)} className="text-small text-muted">
             {formatDate(article.publishedAt)}
           </time>
         </div>
@@ -55,10 +55,10 @@ export function ArticleCard({ article }: { article: Article }) {
           </Link>
         </CardHeading>
 
-        <p className="mt-3 text-sm leading-relaxed text-muted">{article.excerpt}</p>
+        <p className="mt-3 text-body leading-relaxed text-muted">{article.excerpt}</p>
 
         <CardFooter>
-          <p className="text-xs text-muted">{article.readingMinutes} minute read</p>
+          <p className="text-small text-muted">{article.readingMinutes} minute read</p>
         </CardFooter>
       </div>
     </Card>

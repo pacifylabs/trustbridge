@@ -57,7 +57,7 @@ export default async function ResourcesPage() {
               <Newspaper className="h-6 w-6" strokeWidth={1.5} />
             </span>
             <h2 className="text-h3 text-strong">{RESOURCES_PAGE.emptyState.heading}</h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
+            <p className="mt-3 text-small leading-relaxed text-muted">
               {RESOURCES_PAGE.emptyState.body}
             </p>
             <Button href="/contact" variant="secondary" className="mt-7">

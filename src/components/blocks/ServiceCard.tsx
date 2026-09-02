@@ -114,7 +114,7 @@ export function ServiceCard({
           </span>
         ) : null}
 
-        <h3 className="text-h2 text-strong">
+        <h3 className="text-[28px] font-bold leading-tight text-strong">
           {/*
             The overlay is lifted above the media, which is positioned so the
             photograph can fill it. Without this the card was clickable over

@@ -56,7 +56,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
       <nav aria-label="Breadcrumb" className="border-b border-border-subtle bg-canvas">
         <div className="container-site py-3">
-          <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted">
+          <ol className="flex flex-wrap items-center gap-1.5 text-small text-muted">
             <li>
               <Link href="/" className="transition-colors hover:text-accent-ink">
                 Home
@@ -77,17 +77,17 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <header>
             <div className="flex flex-wrap items-center gap-3">
               <Badge tone="accent">{article.category}</Badge>
-              <time dateTime={toIsoDate(article.publishedAt)} className="text-sm text-muted">
+              <time dateTime={toIsoDate(article.publishedAt)} className="text-small text-muted">
                 {formatDate(article.publishedAt)}
               </time>
-              <span className="text-sm text-muted">{article.readingMinutes} minute read</span>
+              <span className="text-small text-muted">{article.readingMinutes} minute read</span>
             </div>
 
-            <h1 className="mt-5 text-[1.875rem] text-headline sm:text-[2rem] lg:text-h1">
+            <h1 className="mt-5 text-h1 text-headline">
               {article.title}
             </h1>
             <p className="mt-4 text-body-lg leading-relaxed text-muted">{article.excerpt}</p>
-            <p className="mt-6 border-t border-border-subtle pt-6 text-sm text-muted">
+            <p className="mt-6 border-t border-border-subtle pt-6 text-small text-muted">
               Written by {article.author}
             </p>
           </header>
