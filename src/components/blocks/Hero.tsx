@@ -80,7 +80,7 @@ export function Hero({
             'grid items-center gap-10 lg:gap-14',
             isLanding
               ? 'pt-10 pb-12 sm:pt-14 sm:pb-14 lg:pt-14 lg:pb-12'
-              : 'py-12 sm:py-16 lg:py-20',
+              : 'pt-10 pb-4 sm:pt-14 sm:pb-6 lg:pt-14 lg:pb-6',
             aside ? 'lg:grid-cols-12' : '',
             // A page hero with media beside the copy stretches both columns to
             // one height, so the image and the text block finish level instead

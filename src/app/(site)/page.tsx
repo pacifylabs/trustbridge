@@ -41,7 +41,6 @@ export default async function HomePage() {
     <>
       <Hero
         variant="landing"
-        backdrop={HOME.heroBackdrop}
         eyebrow={HOME.hero.eyebrow}
         lead={HOME.hero.lead}
         emphasis={HOME.hero.emphasis}

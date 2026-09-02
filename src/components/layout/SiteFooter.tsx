@@ -49,7 +49,7 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
   ];
 
   return (
-    <footer className="border-t border-border-subtle bg-surface-inverse text-inverse">
+    <footer className="border-t border-border-subtle bg-surface text-body">
       <div className="container-site py-14 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.6fr_1fr_1fr_1fr] lg:gap-14">
           <div className="flex flex-col gap-4">
@@ -59,11 +59,11 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
                 alt={SITE.name}
                 width={2172}
                 height={724}
-                className="site-logo-inverse h-10 w-auto sm:h-11"
+                className="site-logo h-10 w-auto sm:h-11"
               />
             </Link>
 
-            <p className="max-w-sm text-sm leading-relaxed text-inverse-muted">
+            <p className="max-w-sm text-sm leading-relaxed text-muted">
               {SITE.description}
             </p>
 
@@ -71,7 +71,7 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
               <li>
                 <a
                   href={`mailto:${CONTACT.email}`}
-                  className="inline-flex min-h-9 items-center gap-2.5 text-sm text-inverse transition-colors hover:text-accent"
+                  className="inline-flex min-h-9 items-center gap-2.5 text-sm text-strong transition-colors hover:text-accent"
                 >
                   <Mail className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                   {CONTACT.email}
@@ -80,7 +80,7 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
               <li>
                 <a
                   href={`tel:${CONTACT.phoneHref}`}
-                  className="inline-flex min-h-9 items-center gap-2.5 text-sm text-inverse transition-colors hover:text-accent"
+                  className="inline-flex min-h-9 items-center gap-2.5 text-sm text-strong transition-colors hover:text-accent"
                 >
                   <Phone className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                   {CONTACT.phone}
@@ -100,7 +100,7 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="flex min-h-7 items-center text-sm text-inverse-muted transition-colors hover:text-accent"
+                        className="flex min-h-7 items-center text-sm text-muted transition-colors hover:text-accent"
                       >
                         {link.label}
                       </Link>
@@ -113,7 +113,7 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
         </div>
 
 
-        <div className="mt-12 flex flex-col gap-1 border-t border-border-inverse pt-6 text-sm text-inverse-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-1 border-t border-border-subtle pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {SITE.name}. All rights reserved.
           </p>
