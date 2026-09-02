@@ -50,7 +50,7 @@ export function StatBand({
           </dt>
           <dd
             className={cn(
-              'order-1 font-serif text-[2rem] leading-none font-semibold',
+              'order-1 font-serif text-h1 leading-none font-semibold',
               inverse ? 'text-accent' : 'text-accent-ink',
             )}
           >

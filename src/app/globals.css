@@ -52,15 +52,21 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   --text-display: var(--tb-text-display);
-  --text-display--line-height: 1.08;
+  --text-display--line-height: 1.1;
   --text-h1: var(--tb-text-h1);
   --text-h1--line-height: 1.15;
   --text-h2: var(--tb-text-h2);
   --text-h2--line-height: 1.2;
   --text-h3: var(--tb-text-h3);
-  --text-h3--line-height: 1.35;
+  --text-h3--line-height: 1.25;
   --text-body-lg: var(--tb-text-body-lg);
   --text-body-lg--line-height: 1.7;
+  --text-body: var(--tb-text-body);
+  --text-body--line-height: 1.7;
+  --text-small: var(--tb-text-small);
+  --text-small--line-height: 1.6;
+  --text-micro: var(--tb-text-micro);
+  --text-micro--line-height: 1.5;
 
   --radius-md: var(--tb-radius-md);
   --radius-lg: var(--tb-radius-lg);

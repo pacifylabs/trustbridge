@@ -30,8 +30,8 @@ export function CredentialCard({ title, subtitle, className }: CredentialCardPro
         <ShieldCheck className="h-4.5 w-4.5" />
       </span>
 
-      <p className="font-serif text-lg leading-tight font-semibold text-inverse">{title}</p>
-      <p className="mt-1.5 text-sm leading-relaxed text-inverse-muted">{subtitle}</p>
+      <p className="font-serif text-body-lg leading-tight font-semibold text-inverse">{title}</p>
+      <p className="mt-1.5 text-small leading-relaxed text-inverse-muted">{subtitle}</p>
 
       {/* A rule gives the card a base now that the pending row has gone; it
           was ending abruptly under a two-line paragraph. */}

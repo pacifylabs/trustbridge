@@ -15,7 +15,7 @@ export function ProcessSteps({ steps }: { steps: readonly ProcessStep[] }) {
       {steps.map((step, index) => (
         <Card as="li" key={step.title} tone="surface">
           <span
-            className="font-serif text-[2rem] leading-none font-semibold text-accent-ink/80"
+            className="font-serif text-h2 leading-none font-semibold text-accent-ink/80"
             aria-hidden="true"
           >
             {String(index + 1).padStart(2, '0')}

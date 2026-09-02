@@ -131,11 +131,11 @@ export default async function HomePage() {
           emphasis={HOME.reasons.emphasis}
           standfirst={HOME.reasons.standfirst}
         />
-        <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {HOME.reasons.items.map((item) => (
             <Card as="li" key={item.title}>
               <CardHeading>{item.title}</CardHeading>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
+              <p className="mt-3 text-body leading-relaxed text-muted">{item.body}</p>
             </Card>
           ))}
         </ul>

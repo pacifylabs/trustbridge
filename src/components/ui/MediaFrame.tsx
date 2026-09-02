@@ -60,7 +60,7 @@ export function MediaFrame({
       </div>
 
       {placeholderLabel ? (
-        <span className="absolute inset-x-0 bottom-0 p-3 text-[0.68rem] font-medium tracking-wide text-muted uppercase">
+        <span className="absolute inset-x-0 bottom-0 p-3 text-micro font-medium tracking-wide text-muted uppercase">
           {placeholderLabel}
         </span>
       ) : null}

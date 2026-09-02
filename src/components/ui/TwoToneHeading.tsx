@@ -27,9 +27,9 @@ export interface TwoToneHeadingProps {
 }
 
 const sizeClasses = {
-  display: 'text-[2rem] sm:text-[2.5rem] lg:text-display',
-  h1: 'text-[1.875rem] sm:text-[2rem] lg:text-h1',
-  h2: 'text-[1.5rem] sm:text-[1.625rem] lg:text-h2',
+  display: 'text-display',
+  h1: 'text-h1',
+  h2: 'text-h2',
   h3: 'text-h3',
 } as const;
 

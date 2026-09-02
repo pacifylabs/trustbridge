@@ -16,14 +16,14 @@ export const HOME = {
     lead: 'Navigating UK immigration with',
     emphasis: 'confidence and clarity',
     standfirst:
-      'TrustBridge delivers tailored immigration solutions for individuals, families, and businesses. We decipher complex rules, build robust applications, and provide honest, strategic advice every step of the way.',
+      'TrustBridge delivers tailored UK immigration solutions. We decipher complex rules and build robust applications, providing strategic advice every step of the way.',
   },
   services: {
     eyebrow: 'Our expertise',
     lead: 'Specialised advice across',
     emphasis: 'major UK visa routes',
     standfirst:
-      'Explore our core practice areas. Each service outlines who it is designed for, the application requirements, and how we manage the process from start to finish.',
+      'Explore our core practice areas. Each service sets out who it is for, the requirements, and how we manage your application.',
   },
   approach: {
     eyebrow: 'How we work',
@@ -34,19 +34,19 @@ export const HOME = {
     steps: [
       {
         title: 'First consultation',
-        body: 'We go through your history and circumstances, and set out the routes realistically open to you.',
+        body: 'We review your history and present the routes open to you.',
       },
       {
         title: 'Written summary',
-        body: 'You receive a written note of the options discussed, what each requires, and what it would cost.',
+        body: 'You receive a clear note of options, requirements, and costs.',
       },
       {
         title: 'Preparing the application',
-        body: 'If you instruct us, we work through the evidence with you and review everything before submission.',
+        body: 'We assemble your evidence and review the bundle before submission.',
       },
       {
         title: 'After submission',
-        body: 'We keep you informed of the position and explain any further request from the Home Office.',
+        body: 'We manage all Home Office correspondence until a decision is made.',
       },
     ] as readonly ProcessStep[],
   },
@@ -59,27 +59,19 @@ export const HOME = {
     items: [
       {
         title: 'Plain English, not jargon',
-        body: 'The Immigration Rules are dense. Our job is to translate them into what you actually need to do, in what order.',
+        body: 'The Immigration Rules are dense. We translate them into what you actually need to do.',
       },
       {
         title: 'Told early where the difficulty is',
-        body: 'If we can see a weakness in your case, you will hear about it at the first consultation rather than after a refusal.',
+        body: 'If your case has a weakness, you will hear about it at the first consultation.',
       },
       {
         title: 'Evidence prepared properly',
-        body: 'Most refusals we see come down to evidence: the wrong document, the wrong period, or a gap left unexplained.',
+        body: 'We ensure your documents meet the exact requirements to prevent avoidable refusals.',
       },
       {
         title: 'Clear on scope and cost',
-        body: 'You will know what the work covers, what it costs, and what falls outside what we are able to advise on.',
-      },
-      {
-        title: 'Responsive to your questions',
-        body: 'An application is stressful. We would rather answer a question twice than leave you guessing about the position.',
-      },
-      {
-        title: 'Confidential by default',
-        body: 'Your information is held securely, shared only with those working on your matter, and deleted when it is no longer needed.',
+        body: 'You will know exactly what the work covers and what it costs upfront.',
       },
     ],
   },
@@ -114,8 +106,6 @@ export const HOME = {
     'Skilled Worker',
     'Settlement and ILR',
     'British citizenship',
-    'Visitor visas',
-    'EU Settlement Scheme',
   ],
   /*
     Deliberately empty. A fabricated testimonial presented as a genuine
@@ -174,7 +164,7 @@ export const ABOUT = {
     lead: 'A practice built on',
     emphasis: 'careful advice',
     standfirst:
-      'TrustBridge Immigration Services Ltd is a United Kingdom immigration advice practice working with individuals, families and employers. We are registered in England and Wales.',
+      'TrustBridge Immigration Services is a registered UK practice. Our mission is to bring clarity to a complex system, providing straightforward guidance so you can navigate immigration with confidence.',
   },
   /* Hero frames. Reuses existing artwork rather than adding more downloads. */
   media: [
@@ -226,7 +216,7 @@ export const CONTACT_PAGE = {
     lead: 'Tell us about',
     emphasis: 'your situation',
     standfirst:
-      'Send us a summary of your circumstances and we will come back to you. If your matter is urgent, please call rather than using the form.',
+      'Send a short summary of your circumstances and we will get back to you. If your matter is urgent, please call us directly.',
   },
   formHeading: {
     lead: 'Make an',
@@ -289,7 +279,7 @@ export const SERVICES_PAGE = {
     lead: 'Immigration advice',
     emphasis: 'by route',
     standfirst:
-      'Choose the area closest to your circumstances. If none of them quite fits, get in touch and we will tell you which applies.',
+      'Choose the area closest to your circumstances. If you are unsure which applies, get in touch and we will guide you.',
   },
 } as const;
 

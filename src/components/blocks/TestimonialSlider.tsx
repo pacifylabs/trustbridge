@@ -193,10 +193,10 @@ export function TestimonialSlider({
               </blockquote>
 
               <figcaption className="mt-6 border-t border-border-subtle pt-4">
-                <span className="block text-sm font-semibold text-strong">
+                <span className="block text-small font-semibold text-strong">
                   {item.attribution}
                 </span>
-                <span className="mt-0.5 block text-sm text-muted">{item.location}</span>
+                <span className="mt-0.5 block text-small text-muted">{item.location}</span>
               </figcaption>
             </figure>
           </li>

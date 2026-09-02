@@ -104,6 +104,37 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {/* Applies the stored theme before first paint, so there is no flash. */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        {/* JSON-LD Structured Data for Google Sitelinks & SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': 'WebSite',
+                  '@id': `${env.NEXT_PUBLIC_SITE_URL}/#website`,
+                  url: env.NEXT_PUBLIC_SITE_URL,
+                  name: SITE.name,
+                  description: SITE.description,
+                  publisher: {
+                    '@id': `${env.NEXT_PUBLIC_SITE_URL}/#organization`,
+                  },
+                },
+                {
+                  '@type': 'Organization',
+                  '@id': `${env.NEXT_PUBLIC_SITE_URL}/#organization`,
+                  name: SITE.name,
+                  url: env.NEXT_PUBLIC_SITE_URL,
+                  logo: {
+                    '@type': 'ImageObject',
+                    url: `${env.NEXT_PUBLIC_SITE_URL}/logo.png`,
+                  },
+                },
+              ],
+            }),
+          }}
+        />
       </head>
       <body>{children}</body>
     </html>

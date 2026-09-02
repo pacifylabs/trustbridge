@@ -27,24 +27,20 @@ export const SERVICES: readonly Service[] = [
     icon: 'users',
     order: 1,
     intro: [
-      'Partner applications turn on evidence. The Home Office needs to see that your relationship is genuine and subsisting, that you meet the financial requirement, and that your English language and accommodation arrangements are in order.',
-      'We work through each requirement with you, tell you what the caseworker will be looking for, and help you assemble a bundle that answers those questions clearly.',
+      'Partner applications turn on evidence. The Home Office needs to see a genuine relationship, that you meet the financial requirement, and that your accommodation is in order.',
+      'We work through each requirement with you, tell you what the caseworker expects, and help assemble a clear, focused bundle.',
     ],
     audience: [
       'Partners of British citizens applying from outside the UK',
       'Couples switching into the partner route from another visa',
       'Applicants extending partner leave before it expires',
-      'Unmarried partners evidencing two years of cohabitation',
       'Fiancés and proposed civil partners planning to marry in the UK',
-      'Families where a child is included in the application',
     ],
     includes: [
-      'An assessment of which partner route fits your circumstances',
-      'A review of the financial requirement and the evidence that supports it',
-      'Guidance on relationship evidence and how much is enough',
-      'A document checklist tailored to your case',
+      'Assessment of which partner route fits your circumstances',
+      'Review of the financial requirement and supporting evidence',
+      'Guidance on relationship evidence and what to include',
       'Review of your completed forms before submission',
-      'Clear advice on any weaknesses we can see in the application',
     ],
     sections: [
       {
@@ -86,9 +82,9 @@ export const SERVICES: readonly Service[] = [
       },
     ],
     seo: {
-      title: 'Spouse and partner visa advice',
+      title: 'Spouse & Partner Visa Advice UK | TrustBridge',
       description:
-        'Advice on UK spouse, civil partner and unmarried partner applications, covering the financial requirement, relationship evidence and switching routes.',
+        'Expert advice on UK spouse, civil partner, and unmarried partner visas. We guide you through financial requirements and relationship evidence.',
     },
   },
   {
@@ -107,24 +103,20 @@ export const SERVICES: readonly Service[] = [
     icon: 'plane',
     order: 2,
     intro: [
-      'Visitor applications look simple and are refused more often than people expect. The decision rests on whether the caseworker accepts that you are a genuine visitor who will leave at the end of your stay.',
-      'That judgement is made on the papers, without an interview, so the application has to answer the obvious questions before they are asked.',
+      'Visitor applications are refused more often than people expect. The decision rests entirely on whether the caseworker believes you will leave at the end of your stay.',
+      'That judgement is made on the papers without an interview, so the application must answer the obvious questions before they are asked.',
     ],
     audience: [
       'Parents and relatives visiting family in the UK',
-      'Applicants attending a wedding, graduation or family event',
       'Business visitors attending meetings or conferences',
-      'Applicants reapplying after a refusal',
-      'Visitors seeking private medical treatment',
+      'Applicants reapplying after a previous refusal',
       'Academics and researchers on short visits',
     ],
     includes: [
-      'A review of your circumstances against the genuine visitor requirement',
-      'Advice on evidencing ties to your home country',
-      'Guidance on funding the trip and who may sponsor it',
+      'Review of your circumstances against the genuine visitor requirement',
+      'Guidance on evidencing ties to your home country and funding',
       'Help preparing a clear covering letter and itinerary',
-      'A considered response to any previous refusal',
-      'A check of your form and supporting documents before submission',
+      'Considered response to any previous refusals',
     ],
     sections: [
       {
@@ -154,9 +146,9 @@ export const SERVICES: readonly Service[] = [
       },
     ],
     seo: {
-      title: 'UK visitor visa advice',
+      title: 'UK Visitor Visa Advice & Appeals | TrustBridge',
       description:
-        'Advice on standard visitor visa applications for family visits, business trips and reapplications following a refusal.',
+        'Professional advice for UK standard visitor visas, business trips, and strong reapplications following a previous refusal.',
     },
   },
   {
@@ -175,24 +167,20 @@ export const SERVICES: readonly Service[] = [
     icon: 'briefcase',
     order: 3,
     intro: [
-      'The Skilled Worker route requires a sponsoring employer, a job at an eligible skill level, and a salary that meets both the general threshold and the going rate for the occupation code.',
-      'Most problems we see come from the detail: the wrong occupation code, a salary calculated on the wrong basis, or a certificate of sponsorship that does not match the job actually being done.',
+      'The Skilled Worker route requires a sponsoring employer, a job at an eligible skill level, and a salary that meets the threshold and occupation code going rate.',
+      'Most problems arise from the detail: the wrong occupation code, an incorrectly calculated salary, or a mismatched certificate of sponsorship.',
     ],
     audience: [
       'Workers with a certificate of sponsorship from a licensed employer',
       'Employees changing sponsor or moving to a new role',
-      'Applicants extending Skilled Worker leave',
       'Workers bringing partners and children as dependants',
-      'Applicants switching into the route from within the UK',
       'Skilled Workers approaching eligibility for settlement',
     ],
     includes: [
-      'A check of the role, occupation code and salary against current requirements',
-      'Advice on English language and maintenance evidence',
+      'Check of your role, occupation code and salary against requirements',
       'Review of the certificate of sponsorship before you apply',
       'Guidance on dependant applications made alongside yours',
       'Advice on continuity of leave when changing employer',
-      'A view on your route to settlement and what could interrupt it',
     ],
     sections: [
       {
@@ -228,9 +216,9 @@ export const SERVICES: readonly Service[] = [
       },
     ],
     seo: {
-      title: 'Skilled Worker visa advice',
+      title: 'UK Skilled Worker Visa Advice | TrustBridge',
       description:
-        'Advice on Skilled Worker applications, occupation codes, salary thresholds, changing sponsor and dependant applications.',
+        'Advice on UK Skilled Worker visas, including changing sponsors, occupation codes, salary thresholds, and dependants.',
     },
   },
   {
@@ -249,24 +237,20 @@ export const SERVICES: readonly Service[] = [
     icon: 'award',
     order: 4,
     intro: [
-      'The Health and Care Worker route is a form of Skilled Worker visa for qualifying medical and care professionals sponsored by an approved employer.',
-      'Eligibility turns on the occupation code, the employer’s approval to sponsor on this route, and in some roles a relevant professional registration.',
+      'The Health and Care Worker route is a distinct visa for medical and care professionals sponsored by an approved employer.',
+      'Eligibility turns on your occupation code, your employer’s approval to sponsor on this route, and any necessary professional registration.',
     ],
     audience: [
       'Doctors, nurses and allied health professionals',
       'Adult social care workers sponsored by an approved provider',
-      'Applicants moving from another route into health and care work',
       'Professionals awaiting or holding UK registration',
-      'Applicants bringing partners and children as dependants',
       'Workers extending leave or approaching settlement',
     ],
     includes: [
       'Confirmation that the role and employer qualify for this route',
-      'Advice on professional registration requirements where they apply',
-      'A review of salary against the going rate for the occupation code',
+      'Advice on professional registration requirements',
+      'Review of salary against the going rate for the occupation code',
       'Guidance on dependant applications',
-      'Advice on continuous residence and settlement',
-      'Review of your application before submission',
     ],
     sections: [
       {
@@ -295,9 +279,9 @@ export const SERVICES: readonly Service[] = [
       },
     ],
     seo: {
-      title: 'Health and Care Worker visa advice',
+      title: 'Health and Care Worker Visa Advice | TrustBridge',
       description:
-        'Advice for health and social care professionals applying on the Health and Care Worker route, including registration and dependants.',
+        'Expert guidance for health and social care professionals on UK visas, registration requirements, and dependants.',
     },
   },
   {
@@ -316,24 +300,20 @@ export const SERVICES: readonly Service[] = [
     icon: 'home',
     order: 5,
     intro: [
-      'Settlement is the point at which your right to live in the UK stops depending on a time-limited visa. The qualifying period and conditions vary by route, and the detail matters more here than almost anywhere else.',
-      'Most difficulties come down to continuous residence: an absence that ran long, a gap between visas, or time on a route that does not count.',
+      'Settlement is the point at which your right to live in the UK stops depending on a time-limited visa.',
+      'The detail matters more here than almost anywhere else. Most difficulties come down to continuous residence rules, absences, or gaps between visas.',
     ],
     audience: [
       'Applicants completing five years on a work or partner route',
-      'Those with long residence in the UK',
-      'Applicants with absences they are unsure about',
-      'People whose leave has been on more than one route',
-      'Applicants preparing for the Life in the UK test',
-      'Anyone unsure when they become eligible',
+      'People with long residence in the UK',
+      'Applicants with complex absences they are unsure about',
+      'Anyone unsure when they become eligible for ILR',
     ],
     includes: [
-      'A calculation of your qualifying period and eligibility date',
-      'A review of absences against the continuous residence rules',
-      'Advice on the Life in the UK and English language requirements',
-      'Guidance where your leave has spanned several routes',
-      'A document checklist covering the full qualifying period',
-      'Advice on the effect of any gap in your leave',
+      'Calculation of your qualifying period and eligibility date',
+      'Review of absences against continuous residence rules',
+      'Advice on the Life in the UK and English language tests',
+      'Guidance on the effect of any gap in your leave',
     ],
     sections: [
       {
@@ -369,9 +349,9 @@ export const SERVICES: readonly Service[] = [
       },
     ],
     seo: {
-      title: 'Settlement and indefinite leave to remain advice',
+      title: 'Settlement & ILR Advice UK | TrustBridge',
       description:
-        'Advice on applying for indefinite leave to remain, covering continuous residence, absences, Life in the UK and combined routes.',
+        'Secure your future in the UK. Advice on indefinite leave to remain (ILR), continuous residence, and absences.',
     },
   },
   {
@@ -390,24 +370,20 @@ export const SERVICES: readonly Service[] = [
     icon: 'globe',
     order: 6,
     intro: [
-      'Citizenship is usually the step after settlement. Naturalisation has its own residence requirements, which are calculated differently from those for indefinite leave to remain.',
-      'The good character requirement applies throughout, and it covers more than criminal convictions.',
+      'Citizenship is usually the final step after settlement. Naturalisation has its own distinct residence requirements, which are calculated differently from those for ILR.',
+      'The good character requirement applies throughout and covers more than just criminal convictions, making full disclosure essential.',
     ],
     audience: [
       'Settled applicants naturalising as British citizens',
-      'Spouses and civil partners of British citizens',
       'Parents registering a child as a British citizen',
-      'Applicants unsure whether they are already British',
       'Applicants with previous immigration breaches to address',
       'Those checking their absences before applying',
     ],
     includes: [
-      'Confirmation of the route and requirements that apply to you',
-      'A calculation of residence and absences over the qualifying period',
-      'Advice on the good character requirement and anything you should disclose',
-      'Guidance on referees and the documents required',
-      'Advice on registration applications for children',
-      'A review of your application before submission',
+      'Calculation of residence and absences over the qualifying period',
+      'Advice on the good character requirement and disclosures',
+      'Guidance on referees and the required documentation',
+      'Review of your application before final submission',
     ],
     sections: [
       {
@@ -443,9 +419,9 @@ export const SERVICES: readonly Service[] = [
       },
     ],
     seo: {
-      title: 'British citizenship and naturalisation advice',
+      title: 'British Citizenship & Naturalisation Advice | TrustBridge',
       description:
-        'Advice on naturalising as a British citizen, registration applications for children, residence requirements and good character.',
+        'Professional advice on naturalising as a British citizen, registering children, and meeting the good character requirement.',
     },
   },
   {
@@ -464,24 +440,20 @@ export const SERVICES: readonly Service[] = [
     icon: 'file-text',
     order: 7,
     intro: [
-      'The EU Settlement Scheme continues to matter for people who hold pre-settled status, for family members joining a relevant sponsor, and for those who have reasonable grounds for applying late.',
-      'The evidence needed is different in character from other routes, resting largely on residence in the UK over particular periods.',
+      'The EU Settlement Scheme remains vital for those holding pre-settled status, family members joining sponsors, and those with grounds for late applications.',
+      'The evidence required is distinct from other routes, relying heavily on proving continuous residence in the UK over specific periods.',
     ],
     audience: [
       'Holders of pre-settled status moving to settled status',
       'Applicants with reasonable grounds for a late application',
-      'Family members joining an eligible sponsor',
-      'Applicants evidencing continuous residence',
-      'Those who need to prove their status to an employer or landlord',
-      'Applicants whose earlier application was refused',
+      'Family members joining an eligible EU sponsor',
+      'Applicants whose earlier EUSS application was refused',
     ],
     includes: [
-      'Confirmation of which status you hold and what it permits',
-      'A review of your residence evidence',
-      'Advice on late applications and what counts as reasonable grounds',
-      'Guidance on family member applications',
-      'Help understanding and sharing your digital status',
-      'Advice on any earlier refusal',
+      'Confirmation of your current status and what it permits',
+      'Review of your continuous residence evidence',
+      'Advice on late applications and reasonable grounds',
+      'Guidance on applications for joining family members',
     ],
     sections: [
       {
@@ -510,9 +482,9 @@ export const SERVICES: readonly Service[] = [
       },
     ],
     seo: {
-      title: 'EU Settlement Scheme advice',
+      title: 'EU Settlement Scheme Advice | TrustBridge',
       description:
-        'Advice on pre-settled and settled status, late applications, family member applications and proving your digital status.',
+        'Guidance on the EU Settlement Scheme, including pre-settled to settled status, late applications, and family members.',
     },
   },
   {
@@ -531,24 +503,20 @@ export const SERVICES: readonly Service[] = [
     icon: 'file-text',
     order: 8,
     intro: [
-      'Not every enquiry fits neatly into one route. Sometimes you need an overall assessment of where you stand, what your options are, and what each one involves before deciding which path to take.',
-      'This service covers the practical side of any immigration application: working out eligibility, preparing forms and supporting documents, writing cover letters and representations, and reviewing your position if your circumstances change.',
+      'Not every enquiry fits neatly into a single route. Sometimes you need a strategic overview of your options before deciding which path to take.',
+      'We handle the practical side: assessing eligibility, preparing forms and evidence, drafting cover letters, and reviewing changed circumstances.',
     ],
     audience: [
-      'Anyone unsure which immigration route applies to their circumstances',
-      'Applicants who need help preparing forms and supporting documents',
-      'People whose immigration status has changed or is about to expire',
-      'Applicants extending their leave or switching to a different route',
-      'Anyone who has received correspondence from the Home Office and needs advice on what it means',
-      'Applicants who want an independent review of their evidence before submitting',
+      'Anyone unsure which immigration route applies to them',
+      'Applicants needing help preparing forms and supporting documents',
+      'People whose immigration status is about to expire',
+      'Applicants wanting an independent review before submitting',
     ],
     includes: [
-      'An initial consultation to understand your circumstances and identify the relevant route',
-      'An eligibility assessment against the current Immigration Rules',
-      'A tailored evidence and document checklist',
-      'Preparation and review of application forms',
-      'Cover letters and written representations where appropriate',
-      'A review of your current immigration status and what it permits',
+      'Initial consultation to identify the best route for you',
+      'Eligibility assessment against current Immigration Rules',
+      'Preparation and review of application forms and evidence',
+      'Drafting of cover letters and written representations',
     ],
     sections: [
       {
@@ -597,9 +565,9 @@ export const SERVICES: readonly Service[] = [
       },
     ],
     seo: {
-      title: 'Immigration status and application support',
+      title: 'Immigration Status & Application Support | TrustBridge',
       description:
-        'Immigration consultations, eligibility assessments, application preparation, document reviews and cover letters across all UK immigration routes.',
+        'General immigration consultations, eligibility assessments, document reviews, and application preparation across all UK routes.',
     },
   },
   {
@@ -618,24 +586,20 @@ export const SERVICES: readonly Service[] = [
     icon: 'building',
     order: 9,
     intro: [
-      'Employers who sponsor overseas workers take on duties that continue for as long as the sponsorship lasts. Getting the systems right at the outset is considerably easier than correcting them under scrutiny.',
-      'We advise employers on what sponsorship involves in practice, and individuals on the business routes available to them.',
+      'Employers who sponsor overseas workers take on compliance duties that last as long as the sponsorship. Getting systems right early prevents serious issues later.',
+      'We advise employers on practical sponsorship management, and guide individuals through specific business and investment routes.',
     ],
     audience: [
       'Employers considering sponsoring overseas workers',
-      'HR teams reviewing existing sponsorship arrangements',
-      'Businesses preparing for a compliance visit',
-      'Employers with reporting duties they are unsure about',
-      'Individuals exploring business and investment routes',
-      'Organisations planning for growth in overseas recruitment',
+      'HR teams preparing for a Home Office compliance visit',
+      'Businesses unsure about their reporting duties',
+      'Individuals exploring UK business and investment routes',
     ],
     includes: [
-      'An explanation of what sponsorship duties involve',
-      'A review of your record-keeping against the published requirements',
-      'Guidance on reporting duties and their deadlines',
-      'Advice on right to work checks',
-      'Practical preparation for compliance activity',
-      'A view on which routes suit your recruitment plans',
+      'Review of your record-keeping against compliance requirements',
+      'Guidance on reporting duties, deadlines, and right to work checks',
+      'Practical preparation for Home Office compliance activity',
+      'Strategic advice on which routes suit your recruitment plans',
     ],
     sections: [
       {
@@ -679,9 +643,9 @@ export const SERVICES: readonly Service[] = [
       },
     ],
     seo: {
-      title: 'Business immigration and sponsorship advice',
+      title: 'UK Business Immigration & Sponsorship Advice | TrustBridge',
       description:
-        'Advice for employers on sponsorship duties, record keeping, right to work checks and preparing for Home Office compliance activity.',
+        'Expert advice for employers on sponsor licences, compliance duties, right to work checks, and business immigration routes.',
     },
   },
   {
@@ -701,20 +665,20 @@ export const SERVICES: readonly Service[] = [
     order: 10,
     requiresFeature: 'complexMatters',
     intro: [
-      'Some cases turn on more than meeting a list of requirements. Refusals, previous breaches of immigration conditions and long or interrupted histories all need careful handling.',
-      'We provide detailed analysis and strategic representation for matters requiring advanced intervention.',
+      'Some cases require more than just meeting standard requirements. Previous refusals, breaches of conditions, and interrupted histories all need highly careful handling.',
+      'We provide detailed analysis and strategic representation for complex matters that require advanced intervention.',
     ],
     audience: [
       'Applicants with a previous refusal to address',
       'Cases involving earlier breaches of immigration conditions',
-      'Long and interrupted immigration histories',
+      'Long and complicated immigration histories',
       'Applications requiring detailed written representations',
     ],
     includes: [
-      'A full review of your immigration history',
-      'An assessment of the difficulties in your case',
-      'Advice on the options realistically open to you',
-      'A clear explanation of where a matter falls outside our scope',
+      'Full review of your immigration history and past refusals',
+      'Assessment of the specific legal difficulties in your case',
+      'Clear advice on the options realistically open to you',
+      'Strategic representation and preparation of arguments',
     ],
     sections: [
       {
@@ -727,8 +691,9 @@ export const SERVICES: readonly Service[] = [
     ],
     faqs: [],
     seo: {
-      title: 'Complex immigration matters',
-      description: 'Advice on immigration cases requiring detailed consideration.',
+      title: 'Complex UK Immigration Matters & Refusals | TrustBridge',
+      description:
+        'Strategic advice and representation for complex UK immigration cases, including previous refusals and breaches of conditions.',
     },
   },
 ];

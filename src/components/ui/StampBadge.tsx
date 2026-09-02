@@ -29,10 +29,10 @@ export function StampBadge({
     >
       <svg viewBox="0 0 100 100" className="stamp-rotate absolute inset-0 h-full w-full">
         <defs>
-          <path id="tb-stamp-path" d="M 50,50 m -37,0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none" />
+          <path id="stampPath" d="M 50,50 m -34,0 a 34,34 0 1,1 68,0 a 34,34 0 1,1 -68,0" fill="none" />
         </defs>
-        <text className="fill-muted text-[0.62rem] tracking-[0.22em] uppercase">
-          <textPath href="#tb-stamp-path" startOffset="0%">
+        <text className="fill-muted text-micro tracking-[0.22em] uppercase">
+          <textPath href="#stampPath" startOffset="0%">
             {ring}
           </textPath>
         </text>

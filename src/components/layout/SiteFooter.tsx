@@ -63,7 +63,7 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
               />
             </Link>
 
-            <p className="max-w-sm text-sm leading-relaxed text-muted">
+            <p className="max-w-sm text-small leading-relaxed text-muted">
               {SITE.description}
             </p>
 
@@ -71,7 +71,7 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
               <li>
                 <a
                   href={`mailto:${CONTACT.email}`}
-                  className="inline-flex min-h-9 items-center gap-2.5 text-sm text-strong transition-colors hover:text-accent"
+                  className="inline-flex min-h-9 items-center gap-2.5 text-small text-strong transition-colors hover:text-accent"
                 >
                   <Mail className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                   {CONTACT.email}
@@ -80,7 +80,7 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
               <li>
                 <a
                   href={`tel:${CONTACT.phoneHref}`}
-                  className="inline-flex min-h-9 items-center gap-2.5 text-sm text-strong transition-colors hover:text-accent"
+                  className="inline-flex min-h-9 items-center gap-2.5 text-small text-strong transition-colors hover:text-accent"
                 >
                   <Phone className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                   {CONTACT.phone}
@@ -92,7 +92,7 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
           <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:contents">
             {columns.map((column) => (
               <nav key={column.heading} aria-label={column.heading} className="flex min-w-0 flex-col gap-2">
-                <h2 className="text-xs font-semibold tracking-[0.14em] text-accent uppercase">
+                <h2 className="text-micro font-semibold tracking-[0.14em] text-accent uppercase">
                   {column.heading}
                 </h2>
                 <ul className="flex flex-col gap-1">
@@ -100,7 +100,7 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="flex min-h-7 items-center text-sm text-muted transition-colors hover:text-accent"
+                        className="flex min-h-7 items-center text-small text-muted transition-colors hover:text-accent"
                       >
                         {link.label}
                       </Link>
@@ -113,7 +113,7 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
         </div>
 
 
-        <div className="mt-12 flex flex-col gap-1 border-t border-border-subtle pt-6 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-1 border-t border-border-subtle pt-6 text-small text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {SITE.name}. All rights reserved.
           </p>

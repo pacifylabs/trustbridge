@@ -65,7 +65,7 @@ function Band({
           <ul key={pass} className="flex shrink-0 items-center">
             {items.map((item) => (
               <li key={`${pass}-${item}`} className="flex items-center">
-                <span className="font-serif text-lg font-semibold whitespace-nowrap text-inverse sm:text-xl lg:text-2xl">
+                <span className="font-serif text-h3 font-semibold whitespace-nowrap text-inverse">
                   {item}
                 </span>
                 <span className="mx-6 h-1.5 w-1.5 rotate-45 bg-accent sm:mx-8" />

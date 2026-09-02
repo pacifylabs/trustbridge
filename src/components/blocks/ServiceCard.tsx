@@ -133,7 +133,7 @@ export function ServiceCard({
         </p>
 
         <CardFooter>
-          <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-ink">
+          <span className="inline-flex items-center gap-1.5 text-small font-semibold text-accent-ink">
             Learn more
             <ArrowRight
               className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"

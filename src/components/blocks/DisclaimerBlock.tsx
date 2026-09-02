@@ -32,12 +32,12 @@ export function DisclaimerBlock({
         aria-hidden="true"
       />
       <div>
-        <p className={cn('text-sm font-semibold', inverse ? 'text-inverse' : 'text-strong')}>
+        <p className={cn('text-small font-semibold', inverse ? 'text-inverse' : 'text-strong')}>
           {OUTCOME_DISCLAIMER.heading}
         </p>
         <p
           className={cn(
-            'mt-2 text-sm leading-relaxed',
+            'mt-2 text-small leading-relaxed',
             inverse ? 'text-inverse-muted' : 'text-muted',
           )}
         >
