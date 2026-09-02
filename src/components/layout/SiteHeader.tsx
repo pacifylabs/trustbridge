@@ -187,8 +187,7 @@ export function SiteHeader({ services }: { services: readonly HeaderService[] })
               {CTA_LABELS.book}
             </Button>
 
-            {/* Below xl only. From xl it floats at the right of the viewport. */}
-            <ThemeToggle className="xl:hidden" />
+            <ThemeToggle />
             <button
               type="button"
               onClick={() => setMobileOpen((open) => !open)}
