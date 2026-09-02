@@ -12,25 +12,25 @@ import type { Testimonial } from '@/components/blocks/TestimonialSlider';
 
 export const HOME = {
   hero: {
-    eyebrow: 'UK immigration advice',
-    lead: 'Immigration advice that is',
-    emphasis: 'clear from the start',
+    eyebrow: 'UK Immigration Experts',
+    lead: 'Navigating UK immigration with',
+    emphasis: 'confidence and clarity',
     standfirst:
-      'TrustBridge advises individuals, families and employers on United Kingdom immigration applications. We explain what each route requires, help you evidence it properly, and tell you plainly where the difficulties lie.',
+      'TrustBridge delivers tailored immigration solutions for individuals, families, and businesses. We decipher complex rules, build robust applications, and provide honest, strategic advice every step of the way.',
   },
   services: {
-    eyebrow: 'What we do',
-    lead: 'Advice across the routes',
-    emphasis: 'people actually need',
+    eyebrow: 'Our expertise',
+    lead: 'Specialised advice across',
+    emphasis: 'major UK visa routes',
     standfirst:
-      'Each service below sets out who it is for, what the application requires and what working with us involves.',
+      'Explore our core practice areas. Each service outlines who it is designed for, the application requirements, and how we manage the process from start to finish.',
   },
   approach: {
     eyebrow: 'How we work',
-    lead: 'A straightforward',
-    emphasis: 'way of working',
+    lead: 'A transparent,',
+    emphasis: 'strategic approach',
     standfirst:
-      'Four steps, with no obligation to continue beyond the first. You will know where you stand before you commit to anything.',
+      'Our four-step process is designed to give you absolute clarity. You will understand your options, costs, and timeline before committing to any instruction.',
     steps: [
       {
         title: 'First consultation',
@@ -52,10 +52,10 @@ export const HOME = {
   },
   reasons: {
     eyebrow: 'Why clients choose us',
-    lead: 'Careful work, and',
-    emphasis: 'an honest view',
+    lead: 'Meticulous preparation and',
+    emphasis: 'unwavering honesty',
     standfirst:
-      'Immigration decisions rest with the Home Office. What we can control is the quality of the application and the clarity of the advice behind it.',
+      'Immigration decisions rest with the Home Office. We control what matters: the exceptional quality of your application and the strategic clarity of the advice behind it.',
     items: [
       {
         title: 'Plain English, not jargon',
