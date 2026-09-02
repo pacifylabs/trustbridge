@@ -145,6 +145,28 @@ describe('EnquiryForm', () => {
     expect(screen.queryByTestId('enquiry-success')).not.toBeInTheDocument();
   });
 
+  it('renders no reCAPTCHA widget when no site key is configured', () => {
+    render(<EnquiryForm />);
+    expect(screen.queryByTestId('recaptcha-widget')).not.toBeInTheDocument();
+  });
+
+  it('renders the reCAPTCHA widget once a site key is configured', () => {
+    render(<EnquiryForm recaptchaSiteKey="test-site-key" />);
+    expect(screen.getByTestId('recaptcha-widget')).toBeInTheDocument();
+  });
+
+  it('refuses to submit without completing reCAPTCHA when it is configured', async () => {
+    const user = userEvent.setup();
+    render(<EnquiryForm recaptchaSiteKey="test-site-key" />);
+
+    await fillValidForm(user);
+    await user.click(screen.getByLabelText(/consent to my details/i));
+    await user.click(screen.getByRole('button', { name: /send enquiry/i }));
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(await screen.findByText(/confirm you are not a robot/i)).toBeInTheDocument();
+  });
+
   it('hides the honeypot from assistive technology', () => {
     render(<EnquiryForm />);
     const honeypot = document.querySelector('input[name="website"]');

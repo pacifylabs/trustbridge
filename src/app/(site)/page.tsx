@@ -19,7 +19,7 @@ import { Card, CardHeading } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { getArticles, getStats, getVisibleServices } from '@/lib/content';
 import { CTA_LABELS } from '@/content/site';
-import { HOME } from '@/content/pages';
+import { DEV_TESTIMONIAL_SEEDS, HOME } from '@/content/pages';
 
 export default async function HomePage() {
   const [services, articles, stats] = await Promise.all([
@@ -28,6 +28,14 @@ export default async function HomePage() {
     getStats(),
   ]);
   const featuredArticles = articles.slice(0, 3);
+
+  // No real testimonials yet (see HOME.testimonials). The dev seeds are
+  // gated on NODE_ENV, the same way DEV_ADVISER_SEEDS is, so they can never
+  // reach staging or production.
+  const testimonials =
+    HOME.testimonials.items.length === 0 && process.env.NODE_ENV === 'development'
+      ? DEV_TESTIMONIAL_SEEDS
+      : HOME.testimonials.items;
 
   return (
     <>
@@ -134,18 +142,20 @@ export default async function HomePage() {
         </ul>
       </Section>
 
-      <Section tone="surface" labelledBy="home-testimonials">
-        <SectionHeading
-          id="home-testimonials"
-          eyebrow={HOME.testimonials.eyebrow}
-          lead={HOME.testimonials.lead}
-          emphasis={HOME.testimonials.emphasis}
-          standfirst={HOME.testimonials.standfirst}
-        />
-        <Reveal className="mt-10">
-          <TestimonialSlider items={HOME.testimonials.items} />
-        </Reveal>
-      </Section>
+      {testimonials.length > 0 ? (
+        <Section tone="surface" labelledBy="home-testimonials">
+          <SectionHeading
+            id="home-testimonials"
+            eyebrow={HOME.testimonials.eyebrow}
+            lead={HOME.testimonials.lead}
+            emphasis={HOME.testimonials.emphasis}
+            standfirst={HOME.testimonials.standfirst}
+          />
+          <Reveal className="mt-10">
+            <TestimonialSlider items={testimonials} />
+          </Reveal>
+        </Section>
+      ) : null}
 
       {featuredArticles.length > 0 ? (
         <Section tone="surface" labelledBy="home-resources">

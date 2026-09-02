@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { POST, GET } from '@/app/api/enquiry/route';
 
 /**
@@ -6,8 +6,19 @@ import { POST, GET } from '@/app/api/enquiry/route';
  *
  * The client validates for convenience; the server validates because anything
  * arriving over the network is untrusted. These tests exercise the server side
- * directly, bypassing the form entirely.
+ * directly, bypassing the form entirely. Email delivery and reCAPTCHA
+ * verification are mocked: what matters here is that the route calls them
+ * correctly and reports their outcome honestly, not Resend's or Google's
+ * actual behaviour.
  */
+
+const { verifyRecaptcha, sendEnquiryEmail } = vi.hoisted(() => ({
+  verifyRecaptcha: vi.fn(),
+  sendEnquiryEmail: vi.fn(),
+}));
+
+vi.mock('@/lib/recaptcha', () => ({ verifyRecaptcha }));
+vi.mock('@/lib/email', () => ({ sendEnquiryEmail }));
 
 const VALID = {
   fullName: 'Amina Yusuf',
@@ -20,6 +31,7 @@ const VALID = {
   contactPreference: 'Email',
   consent: true,
   website: '',
+  recaptchaToken: 'a-valid-token',
 };
 
 function post(body: unknown): Promise<Response> {
@@ -32,21 +44,45 @@ function post(body: unknown): Promise<Response> {
   );
 }
 
+beforeEach(() => {
+  verifyRecaptcha.mockReset().mockResolvedValue(true);
+  sendEnquiryEmail.mockReset().mockResolvedValue({ ok: true });
+});
+
 describe('POST /api/enquiry', () => {
-  it('accepts a valid submission', async () => {
+  it('accepts a valid submission and sends it by email', async () => {
     const response = await post(VALID);
     expect(response.status).toBe(200);
 
     const body = await response.json();
-    expect(body.message).toBeTruthy();
+    expect(body.message).toMatch(/received/i);
+    expect(sendEnquiryEmail).toHaveBeenCalledTimes(1);
   });
 
-  it('reports honestly that nothing is persisted yet', async () => {
-    // Phase 4 wires storage and email. Until then the response must not imply
-    // the enquiry has reached the practice.
-    const body = await (await post(VALID)).json();
-    expect(body.persisted).toBe(false);
-    expect(body.message).toMatch(/please also email or call us/i);
+  it('verifies the reCAPTCHA token before sending', async () => {
+    await post(VALID);
+    expect(verifyRecaptcha).toHaveBeenCalledWith('a-valid-token', undefined);
+  });
+
+  it('rejects a submission that fails reCAPTCHA verification, without sending', async () => {
+    verifyRecaptcha.mockResolvedValue(false);
+
+    const response = await post(VALID);
+    expect(response.status).toBe(422);
+
+    const body = await response.json();
+    expect(body.fieldErrors.recaptchaToken).toBeTruthy();
+    expect(sendEnquiryEmail).not.toHaveBeenCalled();
+  });
+
+  it('reports delivery failure honestly rather than claiming success', async () => {
+    sendEnquiryEmail.mockResolvedValue({ ok: false, error: 'Resend rejected the request.' });
+
+    const response = await post(VALID);
+    expect(response.status).toBe(502);
+
+    const body = await response.json();
+    expect(body.message).toMatch(/email or call us directly/i);
   });
 
   it('rejects a submission without consent', async () => {
@@ -80,11 +116,12 @@ describe('POST /api/enquiry', () => {
     expect(response.status).toBe(400);
   });
 
-  it('silently accepts a filled honeypot without revealing the trap', async () => {
+  it('silently accepts a filled honeypot without revealing the trap, and does not send', async () => {
     const response = await post({ ...VALID, website: 'http://spam.example' });
 
     // A 422 would tell a bot which field gave it away, so this returns 200.
     expect(response.status).toBe(200);
+    expect(sendEnquiryEmail).not.toHaveBeenCalled();
   });
 
   it('does not echo the submitted personal data back in the response', async () => {

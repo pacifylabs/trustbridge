@@ -1,9 +1,10 @@
 'use client';
 
-import { useId, useState, type FormEvent } from 'react';
+import { useId, useRef, useState, type FormEvent } from 'react';
 import { CheckCircle2, Loader2, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Field, controlClasses } from '@/components/ui/Field';
+import { Recaptcha, type RecaptchaHandle } from '@/components/blocks/Recaptcha';
 import {
   CONTACT_PREFERENCES,
   ENQUIRY_TYPES,
@@ -26,18 +27,29 @@ const EMPTY_FORM = {
   contactPreference: '',
   consent: false,
   website: '',
+  recaptchaToken: '',
 };
 
 /**
  * Enquiry form (PRD §6.1).
  *
- * Phase 1 scope: the complete form, with the same schema validating on the
- * client and on the server. Encrypted storage, transactional email, CAPTCHA
- * and rate limiting are Phase 4; the endpoint validates and acknowledges
- * without persisting anything, and says so in its response.
+ * The same schema validates on the client and on the server. There is no
+ * database: a submission is emailed straight to the shared inbox, so the
+ * status shown here reflects whether that email actually sent.
+ *
+ * `recaptchaSiteKey` is optional so the form still renders in an environment
+ * where the client's Google account has not been set up yet; the widget, and
+ * the validation that requires it, only appear once a key is supplied.
  */
-export function EnquiryForm({ className }: { className?: string }) {
+export function EnquiryForm({
+  className,
+  recaptchaSiteKey,
+}: {
+  className?: string;
+  recaptchaSiteKey?: string;
+}) {
   const formId = useId();
+  const recaptchaRef = useRef<RecaptchaHandle>(null);
   const [values, setValues] = useState<Record<string, string | boolean>>({ ...EMPTY_FORM });
   const [errors, setErrors] = useState<EnquiryFieldErrors>({});
   const [status, setStatus] = useState<Status>('idle');
@@ -58,7 +70,11 @@ export function EnquiryForm({ className }: { className?: string }) {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const parsed = enquirySchema.safeParse(values);
+    // No reCAPTCHA configured: skip the schema field so the rest of the form
+    // still works while the client's Google account is set up.
+    const toValidate = recaptchaSiteKey ? values : { ...values, recaptchaToken: 'unconfigured' };
+
+    const parsed = enquirySchema.safeParse(toValidate);
     if (!parsed.success) {
       const fieldErrors = collectFieldErrors(parsed.error);
       setErrors(fieldErrors);
@@ -93,11 +109,14 @@ export function EnquiryForm({ className }: { className?: string }) {
         setSubmitMessage(
           result.message ?? 'We could not send your enquiry. Please try again, or email us directly.',
         );
+        recaptchaRef.current?.reset();
+        setValue('recaptchaToken', '');
         return;
       }
 
       setStatus('success');
       setValues({ ...EMPTY_FORM });
+      recaptchaRef.current?.reset();
       setSubmitMessage(
         result.message ?? 'Thank you. Your enquiry has been received and we will be in touch.',
       );
@@ -106,6 +125,8 @@ export function EnquiryForm({ className }: { className?: string }) {
       setSubmitMessage(
         'We could not reach the server. Please check your connection, or email us directly.',
       );
+      recaptchaRef.current?.reset();
+      setValue('recaptchaToken', '');
     }
   }
 
@@ -303,6 +324,17 @@ export function EnquiryForm({ className }: { className?: string }) {
             onChange={(event) => setValue('website', event.target.value)}
           />
         </div>
+
+        {recaptchaSiteKey ? (
+          <div className="mt-6">
+            <Recaptcha
+              ref={recaptchaRef}
+              siteKey={recaptchaSiteKey}
+              onChange={(token) => setValue('recaptchaToken', token ?? '')}
+              error={errors.recaptchaToken}
+            />
+          </div>
+        ) : null}
 
         <div className="mt-6 rounded-lg border border-border-subtle bg-surface-sunken p-4">
           <div className="flex items-start gap-3">

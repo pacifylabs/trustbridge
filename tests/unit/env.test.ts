@@ -30,9 +30,11 @@ describe('reading a blank environment', () => {
     FEATURE_COMPLEX_MATTERS: '',
     FEATURE_BUSINESS_IMMIGRATION: '',
     PREVIEW_SECRET: '',
-    CONTENT_SOURCE: '',
-    DATABASE_URL: '',
-    PAYLOAD_SECRET: '',
+    ENQUIRY_INBOX: '',
+    ENQUIRY_FROM_EMAIL: '',
+    RESEND_API_KEY: '',
+    NEXT_PUBLIC_RECAPTCHA_SITE_KEY: '',
+    RECAPTCHA_SECRET_KEY: '',
   };
 
   it('does not throw when every variable is an empty string', async () => {
@@ -43,21 +45,22 @@ describe('reading a blank environment', () => {
     const { env } = await loadEnv(BLANK);
 
     expect(env.NEXT_PUBLIC_SITE_URL).toBe('https://trustbridgeimmigration.co.uk');
-    expect(env.CONTENT_SOURCE).toBe('local');
+    expect(env.ENQUIRY_INBOX).toBe('info@trustbridgeimmigration.co.uk');
     expect(env.SITE_LAUNCHED).toBe(false);
   });
 
   it('treats whitespace as unset', async () => {
-    const { env } = await loadEnv({ ...BLANK, CONTENT_SOURCE: '   ' });
-    expect(env.CONTENT_SOURCE).toBe('local');
+    const { env } = await loadEnv({ ...BLANK, ENQUIRY_INBOX: '   ' });
+    expect(env.ENQUIRY_INBOX).toBe('info@trustbridgeimmigration.co.uk');
   });
 
   it('leaves optional variables undefined rather than empty', async () => {
     const { env } = await loadEnv(BLANK);
 
     expect(env.PREVIEW_SECRET).toBeUndefined();
-    expect(env.DATABASE_URL).toBeUndefined();
-    expect(env.PAYLOAD_SECRET).toBeUndefined();
+    expect(env.RESEND_API_KEY).toBeUndefined();
+    expect(env.RECAPTCHA_SECRET_KEY).toBeUndefined();
+    expect(env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY).toBeUndefined();
   });
 
   it('does not throw when the variables are absent entirely', async () => {
@@ -65,10 +68,58 @@ describe('reading a blank environment', () => {
       loadEnv({
         NEXT_PUBLIC_SITE_URL: undefined,
         NEXT_PUBLIC_APP_ENV: undefined,
-        CONTENT_SOURCE: undefined,
+        ENQUIRY_INBOX: undefined,
         SITE_LAUNCHED: undefined,
       }),
     ).resolves.toBeDefined();
+  });
+});
+
+describe('enquiry delivery configuration', () => {
+  it('is not configured when Resend or reCAPTCHA keys are missing', async () => {
+    const { isEnquiryDeliveryConfigured } = await loadEnv({
+      RESEND_API_KEY: '',
+      RECAPTCHA_SECRET_KEY: '',
+      NEXT_PUBLIC_RECAPTCHA_SITE_KEY: '',
+    });
+
+    expect(isEnquiryDeliveryConfigured()).toBe(false);
+  });
+
+  it('is configured once every key is present', async () => {
+    const { isEnquiryDeliveryConfigured } = await loadEnv({
+      RESEND_API_KEY: 're_test_key',
+      RECAPTCHA_SECRET_KEY: 'recaptcha_secret',
+      NEXT_PUBLIC_RECAPTCHA_SITE_KEY: 'recaptcha_site_key',
+    });
+
+    expect(isEnquiryDeliveryConfigured()).toBe(true);
+  });
+
+  it('rejects an invalid enquiry inbox address', async () => {
+    await expect(loadEnv({ ENQUIRY_INBOX: 'not-an-email' })).rejects.toThrow(
+      /Invalid environment configuration/,
+    );
+  });
+});
+
+describe('Calendly booking configuration', () => {
+  it('leaves the Calendly URL undefined when unset', async () => {
+    const { env } = await loadEnv({ NEXT_PUBLIC_CALENDLY_URL: '' });
+    expect(env.NEXT_PUBLIC_CALENDLY_URL).toBeUndefined();
+  });
+
+  it('accepts a configured Calendly event URL', async () => {
+    const { env } = await loadEnv({
+      NEXT_PUBLIC_CALENDLY_URL: 'https://calendly.com/trustbridge/consultation',
+    });
+    expect(env.NEXT_PUBLIC_CALENDLY_URL).toBe('https://calendly.com/trustbridge/consultation');
+  });
+
+  it('rejects a malformed Calendly URL rather than shipping a broken embed', async () => {
+    await expect(loadEnv({ NEXT_PUBLIC_CALENDLY_URL: 'not-a-url' })).rejects.toThrow(
+      /Invalid environment configuration/,
+    );
   });
 });
 
@@ -109,29 +160,9 @@ describe('genuinely invalid values still fail', () => {
     );
   });
 
-  it('rejects an unknown content source', async () => {
-    await expect(loadEnv({ CONTENT_SOURCE: 'sanity' })).rejects.toThrow(
+  it('rejects an invalid Resend "from" address', async () => {
+    await expect(loadEnv({ ENQUIRY_FROM_EMAIL: 'not-an-email' })).rejects.toThrow(
       /Invalid environment configuration/,
     );
-  });
-});
-
-describe('content source and database are validated together', () => {
-  it('objects when Payload is selected with no database', async () => {
-    const { assertContentSourceConfigured } = await loadEnv({
-      CONTENT_SOURCE: 'payload',
-      DATABASE_URL: '',
-    });
-
-    expect(() => assertContentSourceConfigured()).toThrow(/DATABASE_URL is not set/);
-  });
-
-  it('is satisfied when both are supplied', async () => {
-    const { assertContentSourceConfigured } = await loadEnv({
-      CONTENT_SOURCE: 'payload',
-      DATABASE_URL: 'postgres://localhost:5432/trustbridge',
-    });
-
-    expect(() => assertContentSourceConfigured()).not.toThrow();
   });
 });

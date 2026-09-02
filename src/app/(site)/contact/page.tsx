@@ -10,6 +10,7 @@ import { CtaBand } from '@/components/blocks/CtaBand';
 import { Card } from '@/components/ui/Card';
 import { CONTACT, SITE } from '@/content/site';
 import { CONTACT_PAGE } from '@/content/pages';
+import { env } from '@/lib/env';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Contact us',
@@ -146,7 +147,7 @@ export default function ContactPage() {
               emphasis={CONTACT_PAGE.formHeading.emphasis}
               standfirst={CONTACT_PAGE.formHeading.standfirst}
             />
-            <EnquiryForm className="mt-8" />
+            <EnquiryForm className="mt-8" recaptchaSiteKey={env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY} />
           </div>
         </div>
       </Section>

@@ -1,7 +1,5 @@
-import { env } from '../env';
 import { isFeatureEnabled, type FlagContext } from '../flags';
 import { localContentSource } from './local-source';
-import { payloadContentSource } from './payload-source';
 import { STATS, type StatItem } from '@/content/site';
 import type { Adviser, Article, ContentSource, LegalPage, Service, ServiceSection } from './types';
 
@@ -10,13 +8,13 @@ export type * from './types';
 /**
  * The single place the rest of the application asks for content.
  *
- * Pages call these functions and never touch a source directly, so switching
- * from the bundled content to Payload is a change to CONTENT_SOURCE alone.
+ * Pages call these functions and never touch a source directly. Content is
+ * bundled with the repository and edited by a developer; there is no CMS.
  * Feature gating is applied here rather than in each page, which is what stops
  * a gated service leaking through a route that forgot to check.
  */
 function getSource(): ContentSource {
-  return env.CONTENT_SOURCE === 'payload' ? payloadContentSource : localContentSource;
+  return localContentSource;
 }
 
 /** Services the visitor is permitted to see, in display order. */

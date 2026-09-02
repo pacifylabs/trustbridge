@@ -6,69 +6,85 @@ import { Section } from '@/components/layout/Section';
 import { SectionHeading } from '@/components/layout/SectionHeading';
 import { ProcessSteps } from '@/components/blocks/ProcessSteps';
 import { DisclaimerBlock } from '@/components/blocks/DisclaimerBlock';
+import { CalendlyEmbed } from '@/components/blocks/CalendlyEmbed';
 import { CtaBand } from '@/components/blocks/CtaBand';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { CONTACT } from '@/content/site';
 import { BOOK_PAGE, HOME } from '@/content/pages';
+import { env } from '@/lib/env';
 
-export const metadata: Metadata = buildMetadata({
-  title: 'Book a consultation',
-  description:
-    'Arrange a consultation with a TrustBridge immigration adviser by email or telephone. Online booking opens when the site goes live.',
-  path: '/book',
-});
+const CONFIGURED_STANDFIRST =
+  'Choose a time that works for you below. If none of the available slots suit, email or call us and we will find one directly.';
+
+export function generateMetadata(): Metadata {
+  const configured = Boolean(env.NEXT_PUBLIC_CALENDLY_URL);
+
+  return buildMetadata({
+    title: 'Book a consultation',
+    description: configured
+      ? 'Book a consultation with a TrustBridge immigration adviser online, or get in touch by email or telephone.'
+      : 'Arrange a consultation with a TrustBridge immigration adviser by email or telephone. Online booking opens when the site goes live.',
+    path: '/book',
+  });
+}
 
 /**
  * Booking page.
  *
- * The booking integration is Phase 4 and the tool has not been chosen yet
- * (Cal.com or Calendly, PRD open decision 2). No calendar is embedded and none
- * is mocked up, because a booking widget that cannot take a booking would be
- * worse than an honest explanation of how to arrange one.
+ * Embeds Calendly when `NEXT_PUBLIC_CALENDLY_URL` is set (PRD §6.4, open
+ * decision resolved in favour of Calendly). Left unset, this falls back to an
+ * honest explanation of how to arrange a consultation instead, because a
+ * booking widget that cannot take a booking would be worse than no widget.
  */
 export default function BookPage() {
+  const calendlyUrl = env.NEXT_PUBLIC_CALENDLY_URL;
+
   return (
     <>
       <Hero
         eyebrow={BOOK_PAGE.hero.eyebrow}
         lead={BOOK_PAGE.hero.lead}
         emphasis={BOOK_PAGE.hero.emphasis}
-        standfirst={BOOK_PAGE.hero.standfirst}
+        standfirst={calendlyUrl ? CONFIGURED_STANDFIRST : BOOK_PAGE.hero.standfirst}
       />
 
       <Section tone="surface">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-7">
-            <Card
-              tone="sunken"
-              className="items-start border-dashed"
-              data-testid="booking-placeholder"
-            >
-              <span
-                className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-accent-soft text-accent-ink"
-                aria-hidden="true"
+            {calendlyUrl ? (
+              <CalendlyEmbed url={calendlyUrl} />
+            ) : (
+              <Card
+                tone="sunken"
+                className="items-start border-dashed"
+                data-testid="booking-placeholder"
               >
-                <CalendarClock className="h-5 w-5" strokeWidth={1.75} />
-              </span>
-              <h2 className="text-h3 text-strong">Online booking opens at launch</h2>
-              <p className="measure mt-3 text-sm leading-relaxed text-muted">
-                We are setting up online scheduling so you can pick a time directly. Until it is
-                live, email or call us and we will find a slot that works for you, usually within a
-                day or two of hearing from you.
-              </p>
+                <span
+                  className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-accent-soft text-accent-ink"
+                  aria-hidden="true"
+                >
+                  <CalendarClock className="h-5 w-5" strokeWidth={1.75} />
+                </span>
+                <h2 className="text-h3 text-strong">Online booking opens at launch</h2>
+                <p className="measure mt-3 text-sm leading-relaxed text-muted">
+                  We are setting up online scheduling so you can pick a time directly. Until it is
+                  live, email or call us and we will find a slot that works for you, usually within a
+                  day or two of hearing from you.
+                </p>
 
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <Button href={`mailto:${CONTACT.email}`} variant="accent">
-                  <Mail className="h-4 w-4" aria-hidden="true" />
-                  Email us
-                </Button>
-                <Button href={`tel:${CONTACT.phoneHref}`} variant="secondary">
-                  <Phone className="h-4 w-4" aria-hidden="true" />
-                  {CONTACT.phone}
-                </Button>
-              </div>
-            </Card>
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                  <Button href={`mailto:${CONTACT.email}`} variant="accent">
+                    <Mail className="h-4 w-4" aria-hidden="true" />
+                    Email us
+                  </Button>
+                  <Button href={`tel:${CONTACT.phoneHref}`} variant="secondary">
+                    <Phone className="h-4 w-4" aria-hidden="true" />
+                    {CONTACT.phone}
+                  </Button>
+                </div>
+              </Card>
+            )}
           </div>
 
           <div className="lg:col-span-5">

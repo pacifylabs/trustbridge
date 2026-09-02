@@ -48,10 +48,28 @@ const envSchema = z.object({
   FEATURE_BUSINESS_IMMIGRATION: booleanFromString.default(false),
 
   PREVIEW_SECRET: z.string().optional(),
-  CONTENT_SOURCE: z.enum(['local', 'payload']).default('local'),
 
-  DATABASE_URL: z.string().optional(),
-  PAYLOAD_SECRET: z.string().optional(),
+  /**
+   * Enquiry delivery. There is no database: a submission either sends
+   * successfully or the visitor is told to email or call directly, so both
+   * the inbox and the sending identity are validated as ordinary strings
+   * rather than left to fail inside the Resend call.
+   */
+  ENQUIRY_INBOX: z.email().default('info@trustbridgeimmigration.co.uk'),
+  ENQUIRY_FROM_EMAIL: z.email().default('enquiries@trustbridgeimmigration.co.uk'),
+  RESEND_API_KEY: z.string().optional(),
+
+  /** Google reCAPTCHA v2 (checkbox). Both keys come from the same site registration. */
+  NEXT_PUBLIC_RECAPTCHA_SITE_KEY: z.string().optional(),
+  RECAPTCHA_SECRET_KEY: z.string().optional(),
+
+  /**
+   * The Calendly event type to embed on /book, e.g.
+   * https://calendly.com/trustbridge/consultation. Public: it only names
+   * which public booking page to show, nothing secret. Left unset, the page
+   * falls back to an honest "email or call us" placeholder.
+   */
+  NEXT_PUBLIC_CALENDLY_URL: z.url().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -64,9 +82,12 @@ function readEnv(): Env {
     FEATURE_COMPLEX_MATTERS: read(process.env.FEATURE_COMPLEX_MATTERS),
     FEATURE_BUSINESS_IMMIGRATION: read(process.env.FEATURE_BUSINESS_IMMIGRATION),
     PREVIEW_SECRET: read(process.env.PREVIEW_SECRET),
-    CONTENT_SOURCE: read(process.env.CONTENT_SOURCE),
-    DATABASE_URL: read(process.env.DATABASE_URL),
-    PAYLOAD_SECRET: read(process.env.PAYLOAD_SECRET),
+    ENQUIRY_INBOX: read(process.env.ENQUIRY_INBOX),
+    ENQUIRY_FROM_EMAIL: read(process.env.ENQUIRY_FROM_EMAIL),
+    RESEND_API_KEY: read(process.env.RESEND_API_KEY),
+    NEXT_PUBLIC_RECAPTCHA_SITE_KEY: read(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY),
+    RECAPTCHA_SECRET_KEY: read(process.env.RECAPTCHA_SECRET_KEY),
+    NEXT_PUBLIC_CALENDLY_URL: read(process.env.NEXT_PUBLIC_CALENDLY_URL),
   });
 
   if (!parsed.success) {
@@ -83,12 +104,7 @@ function readEnv(): Env {
 
 export const env: Env = readEnv();
 
-/**
- * `CONTENT_SOURCE=payload` is meaningless without a database to read from,
- * so the two are validated together rather than independently.
- */
-export function assertContentSourceConfigured(): void {
-  if (env.CONTENT_SOURCE === 'payload' && !env.DATABASE_URL) {
-    throw new Error('CONTENT_SOURCE is "payload" but DATABASE_URL is not set.');
-  }
+/** True once both Resend and reCAPTCHA are configured and the form can actually send. */
+export function isEnquiryDeliveryConfigured(): boolean {
+  return Boolean(env.RESEND_API_KEY && env.RECAPTCHA_SECRET_KEY && env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
 }

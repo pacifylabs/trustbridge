@@ -85,6 +85,14 @@ export const enquirySchema = z.object({
    * submission without acting on it.
    */
   website: z.string().optional().default(''),
+
+  /**
+   * The token the reCAPTCHA widget issues once a visitor completes it.
+   * Required here so an incomplete widget fails the same client-side
+   * validation as any other field; verified for real against Google's
+   * endpoint in the route handler, since a token can be forged or replayed.
+   */
+  recaptchaToken: z.string().min(1, 'Please confirm you are not a robot.'),
 });
 
 export type EnquiryInput = z.input<typeof enquirySchema>;

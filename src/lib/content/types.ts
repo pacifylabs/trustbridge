@@ -2,9 +2,8 @@
  * Content model.
  *
  * These types are the contract between the site and whatever supplies its
- * content. The local adapter satisfies them from files in `src/content`; the
- * Payload adapter will satisfy them from CMS collections. Pages depend on this
- * module only, so switching source is a configuration change (Phase 3).
+ * content. The local adapter satisfies them from files in `src/content`.
+ * Pages depend on this module only, never on `src/content` directly.
  */
 
 import type { FeatureFlag } from '../flags';
@@ -104,7 +103,7 @@ export interface Article {
   readonly readingMinutes: number;
   /** Card and article artwork. Optional: an article renders fully without one. */
   readonly image?: ContentImage;
-  /** Paragraphs and headings, in order. Kept simple until Payload supplies rich text. */
+  /** Paragraphs and headings, in order. */
   readonly body: readonly ArticleBlock[];
   readonly status: 'draft' | 'published';
   /** Marks seeded demonstration content so it can be excluded from production. */
@@ -138,11 +137,12 @@ export interface LegalPage {
 }
 
 /**
- * The interface every content source implements. Adding Payload means adding
- * one file that satisfies this, not touching any page.
+ * The interface the content source implements. Kept as an interface, rather
+ * than inlining the local adapter's shape, so a future source would be a new
+ * file satisfying this contract rather than a change to every page.
  */
 export interface ContentSource {
-  readonly name: 'local' | 'payload';
+  readonly name: 'local';
   getServices(): Promise<readonly Service[]>;
   getServiceBySlug(slug: string): Promise<Service | null>;
   getArticles(): Promise<readonly Article[]>;

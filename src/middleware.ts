@@ -18,7 +18,7 @@ import { NextResponse, type NextRequest } from 'next/server';
  */
 const ALLOWED_PREFIXES = ['/_next', '/api', '/favicon', '/logo.png', '/robots.txt', '/sitemap.xml'];
 
-export function proxy(request: NextRequest): NextResponse {
+export function middleware(request: NextRequest): NextResponse {
   /*
     Fail-closed. A blank or missing value used to leave `appEnv` as
     'development', which opened the gate and would have published an

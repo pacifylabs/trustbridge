@@ -7,9 +7,9 @@ import type { Adviser, Article, ContentSource, LegalPage, Service } from './type
 /**
  * Local content source.
  *
- * Reads the seeded content bundled with the repository. This is the active
- * source until Payload collections are provisioned, which keeps the pages
- * renderable without a database and makes the switch a configuration change.
+ * Reads the content bundled with the repository. There is no CMS: articles,
+ * services and adviser profiles are edited as code, by a developer, and
+ * published through the normal deploy process.
  */
 
 function isProduction(): boolean {

@@ -1,4 +1,5 @@
 import type { ProcessStep } from '@/components/blocks/ProcessSteps';
+import type { Testimonial } from '@/components/blocks/TestimonialSlider';
 
 /**
  * Page copy for Home, About and the standalone pages.
@@ -117,13 +118,10 @@ export const HOME = {
     'EU Settlement Scheme',
   ],
   /*
-    Sample testimonials, to be replaced with the practice's own once real
-    clients have approved their words.
-
-    Two rules held to while writing them, which apply to whatever replaces
-    them: nothing refers to the result of an application, and nobody is given
-    an invented full name. Each is attributed by route and region, which is
-    how a firm can quote a client without publishing their identity.
+    Deliberately empty. A fabricated testimonial presented as a genuine
+    client's words is a serious problem for a regulated advice practice, not
+    a copy nitpick, so nothing is invented here (README rule 6). The section
+    stays hidden on the homepage until this holds real, consented testimonials.
   */
   testimonials: {
     eyebrow: 'In their words',
@@ -131,38 +129,7 @@ export const HOME = {
     emphasis: 'actually feels like',
     standfirst:
       'Clients tell us the same thing more often than anything else: they finally understood what was being asked of them.',
-    items: [
-      {
-        quote:
-          'I had read the guidance three times and still could not tell which parts applied to me. Half an hour into the first consultation I had a list of what to gather and the order to do it in.',
-        attribution: 'Spouse visa client',
-        location: 'Manchester',
-      },
-      {
-        quote:
-          'What I valued most was being told plainly where my case was weak. Nobody had done that before, and it changed how we put the application together.',
-        attribution: 'Skilled Worker client',
-        location: 'Birmingham',
-      },
-      {
-        quote:
-          'They answered the same question twice without ever making me feel awkward for asking. When you are dealing with your family, that matters more than people realise.',
-        attribution: 'Family visa client',
-        location: 'London',
-      },
-      {
-        quote:
-          'The written summary after the consultation was the useful part. I could read it again a week later instead of trying to remember what had been said.',
-        attribution: 'Settlement client',
-        location: 'Leeds',
-      },
-      {
-        quote:
-          'We are a small employer and had never sponsored anyone. The duties were explained in terms of what we actually had to do each month, not just quoted at us.',
-        attribution: 'Business immigration client',
-        location: 'Bristol',
-      },
-    ],
+    items: [] as readonly Testimonial[],
   },
   resources: {
     eyebrow: 'Resources',
@@ -172,6 +139,34 @@ export const HOME = {
       'Short pieces on what to expect, what things cost, and how we handle your information.',
   },
 } as const;
+
+/**
+ * Development-only seeds, used to check the testimonial slider's layout with
+ * content in it. Gated on `NODE_ENV` the same way `DEV_ADVISER_SEEDS` is, so
+ * there is no configuration under which these reach staging or production.
+ *
+ * Never add a real-sounding name or outcome here: see `HOME.testimonials`.
+ */
+export const DEV_TESTIMONIAL_SEEDS: readonly Testimonial[] = [
+  {
+    quote:
+      'I had read the guidance three times and still could not tell which parts applied to me. Half an hour into the first consultation I had a list of what to gather and the order to do it in.',
+    attribution: 'Spouse visa client',
+    location: 'Manchester',
+  },
+  {
+    quote:
+      'What I valued most was being told plainly where my case was weak. Nobody had done that before, and it changed how we put the application together.',
+    attribution: 'Skilled Worker client',
+    location: 'Birmingham',
+  },
+  {
+    quote:
+      'They answered the same question twice without ever making me feel awkward for asking. When you are dealing with your family, that matters more than people realise.',
+    attribution: 'Family visa client',
+    location: 'London',
+  },
+] as const;
 
 export const ABOUT = {
   hero: {
@@ -284,7 +279,7 @@ export const RESOURCES_PAGE = {
   },
   emptyState: {
     heading: 'No articles published yet',
-    body: 'Articles will appear here once the practice begins publishing. The section is managed through the content system, so staff can add and edit pieces without a developer.',
+    body: 'Articles will appear here once the practice begins publishing. New pieces are added through the development process and go live with each deployment.',
   },
 } as const;
 

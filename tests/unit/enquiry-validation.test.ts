@@ -21,6 +21,7 @@ const VALID = {
   contactPreference: 'Email',
   consent: true,
   website: '',
+  recaptchaToken: 'a-valid-token',
 };
 
 describe('enquiry schema', () => {
@@ -104,6 +105,20 @@ describe('enquiry schema', () => {
     expect(isHoneypotFilled({ website: 'http://spam.example' })).toBe(true);
     expect(isHoneypotFilled({ website: '   ' })).toBe(false);
     expect(isHoneypotFilled({ website: '' })).toBe(false);
+  });
+
+  it('rejects a submission with no reCAPTCHA token', () => {
+    const result = enquirySchema.safeParse({ ...VALID, recaptchaToken: '' });
+    expect(result.success).toBe(false);
+
+    if (!result.success) {
+      expect(collectFieldErrors(result.error).recaptchaToken).toMatch(/not a robot/i);
+    }
+  });
+
+  it('rejects a missing reCAPTCHA token entirely', () => {
+    const { recaptchaToken: _recaptchaToken, ...withoutToken } = VALID;
+    expect(enquirySchema.safeParse(withoutToken).success).toBe(false);
   });
 
   it('reports one error per field, in field order', () => {

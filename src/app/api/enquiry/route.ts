@@ -1,21 +1,19 @@
 import { NextResponse } from 'next/server';
+import { sendEnquiryEmail } from '@/lib/email';
+import { verifyRecaptcha } from '@/lib/recaptcha';
 import { collectFieldErrors, enquirySchema, isHoneypotFilled } from '@/lib/validation/enquiry';
 
 /**
  * Enquiry endpoint.
  *
- * PHASE 1 SCOPE. This handler validates the submission and acknowledges it.
- * It does NOT persist anything and does NOT send email. Encrypted storage in
- * Postgres, delivery to the shared mailbox, CAPTCHA verification and rate
- * limiting are Phase 4 (PRD §6.1).
- *
- * The acknowledgement wording reflects that honestly: it tells the visitor
- * their details have been received rather than claiming a reply is on its way,
- * because until Phase 4 lands nothing actually reaches the practice.
+ * There is no database: a submission is validated, checked for spam, and
+ * emailed straight to the shared inbox. If the email fails to send, the
+ * visitor is told plainly rather than shown a false confirmation, since
+ * nothing else records that they got in touch.
  */
 
-const NOT_YET_PERSISTED_NOTICE =
-  'Your details have been checked and received. Enquiry delivery is being finalised, so please also email or call us using the details on this page.';
+const DELIVERY_FAILED_MESSAGE =
+  'We could not send your enquiry. Please email or call us directly using the details on this page.';
 
 export async function POST(request: Request): Promise<NextResponse> {
   let payload: unknown;
@@ -41,15 +39,35 @@ export async function POST(request: Request): Promise<NextResponse> {
   // Honeypot. A filled field means a bot, so acknowledge without acting on it:
   // returning an error would tell the bot which field gave it away.
   if (isHoneypotFilled(parsed.data)) {
-    return NextResponse.json({ message: NOT_YET_PERSISTED_NOTICE }, { status: 200 });
+    return NextResponse.json(
+      { message: 'Thank you. Your enquiry has been received and we will be in touch.' },
+      { status: 200 },
+    );
   }
 
-  // Phase 4 wires encryption, the TypeORM write and the transactional email
-  // here. Nothing is stored in the meantime, so nothing is logged either: the
-  // payload contains personal data and must not reach application logs.
+  const remoteIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim();
+  const recaptchaOk = await verifyRecaptcha(parsed.data.recaptchaToken, remoteIp);
+
+  if (!recaptchaOk) {
+    return NextResponse.json(
+      {
+        message: 'Please correct the highlighted fields and try again.',
+        fieldErrors: { recaptchaToken: 'Please confirm the reCAPTCHA check and try again.' },
+      },
+      { status: 422 },
+    );
+  }
+
+  // The payload contains personal data and must not reach application logs;
+  // only the outcome of sending it is ever logged, inside sendEnquiryEmail.
+  const { ok } = await sendEnquiryEmail(parsed.data);
+
+  if (!ok) {
+    return NextResponse.json({ message: DELIVERY_FAILED_MESSAGE }, { status: 502 });
+  }
 
   return NextResponse.json(
-    { message: NOT_YET_PERSISTED_NOTICE, persisted: false },
+    { message: 'Thank you. Your enquiry has been received and we will be in touch.' },
     { status: 200 },
   );
 }

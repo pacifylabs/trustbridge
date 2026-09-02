@@ -21,8 +21,7 @@ Critically, this is a **regulated professional services** context. The site must
 
 ### Goals
 - Present immigration services clearly across defined categories.
-- Enable client self-editing of articles/resources without developer involvement.
-- Capture enquiries securely (sensitive personal data) with GDPR consent.
+- Capture enquiries with GDPR consent and deliver them reliably to the shared inbox.
 - Integrate online consultation booking.
 - Provide a modular, future-proof architecture (add services/advisers/articles without redesign).
 - Deliver full ownership and admin control to the client at handover.
@@ -32,6 +31,7 @@ Critically, this is a **regulated professional services** context. The site must
 - No online payments.
 - No automated immigration decisioning or outcome prediction.
 - No live regulatory badge until wording is confirmed by client.
+- **No database and no CMS.** At the client's direction, enquiries go to email only — nothing is persisted anywhere by the site — and content is edited as code rather than through an admin UI. Self-editing without a developer is deferred until a database is in scope (see §9).
 
 ## 3. Users
 
@@ -50,7 +50,7 @@ Critically, this is a **regulated professional services** context. The site must
 - **Service pages (modular, per route):** Spouse & Partner, Visitor, Skilled Worker, Health & Care Worker, Settlement/ILR, British Citizenship, EU Settlement Scheme, Business Immigration.
 - **Complex Immigration Matters**: BUILT BUT DISABLED (feature-flagged) until regulatory authorisation confirmed.
 - **Our Team**: adviser profiles with regulatory-level fields (populated at launch).
-- **Resources / Immigration Updates**: CMS-managed articles, admin-editable.
+- **Resources / Immigration Updates**: Articles bundled with the repository and developer-edited (no CMS in v1).
 - **Contact Us**: phone, email, enquiry form.
 - **Book a Consultation**: booking integration.
 - **Regulatory & Legal**: Privacy Policy, Cookie Policy, Terms & Conditions, Complaints Procedure, Regulatory Information, Accessibility. Structure live; final wording slotted in later.
@@ -66,14 +66,13 @@ Final publicly-available services confirmed pre-launch based on regulatory autho
 ### 6.1 Enquiry Form
 Fields: Full Name, Email, Telephone, Country of Residence, Nationality, Type of Immigration Enquiry, Brief Description, Preferred Method of Contact.
 - Explicit privacy/consent acknowledgement (checkbox) required before submit.
-- Server-side validation + spam protection (honeypot + CAPTCHA) + rate limiting.
-- On submit: **encrypted store in Postgres AND email to info@trustbridgeimmigration.co.uk.**
-- Admin can view submissions, mark handled, and delete (right-to-erasure).
-- Retention policy: auto-purge after configurable period (default suggestion: 12 months: CONFIRM with client).
+- Server-side validation + spam protection (honeypot + Google reCAPTCHA v2, verified server-side).
+- On submit: **emailed via Resend to info@trustbridgeimmigration.co.uk. Nothing is stored anywhere else** — there is no database, so a failed send is reported to the visitor rather than silently lost.
+- No admin submissions view, retention job, or erasure tooling: with nothing persisted by the site, there is nothing to view or purge.
 
-### 6.2 CMS / Resources
-- Admin creates/edits/publishes articles with categories, SEO metadata, draft/publish states.
-- No developer needed for content changes.
+### 6.2 Content / Resources
+- Articles, service pages and adviser profiles are bundled with the repository (`src/content`) and edited as code by a developer, then published through the normal deploy process.
+- No CMS in v1, at the client's direction — see §9.
 
 ### 6.3 Adviser Profiles
 - Content model with: name, professional title, regulatory level, registration number, bio, photo, linked services. Built empty; populated at launch.
@@ -90,8 +89,8 @@ Reusable CTA components: "Book a Consultation", "Speak to an Immigration Adviser
 
 ## 7. Non-Functional Requirements
 
-- **Security:** HTTPS/HSTS throughout, encrypted enquiry data at rest, secure admin auth with 2FA, least-privilege roles, security headers (CSP), dependency updates, automated backups.
-- **Privacy/GDPR:** granular cookie consent, data-minimisation, documented retention, DSAR/erasure support.
+- **Security:** HTTPS/HSTS throughout, security headers (CSP), dependency updates. No enquiry data at rest to encrypt or back up — see §6.1.
+- **Privacy/GDPR:** data-minimisation (nothing retained beyond the outgoing email); cookie consent only if a future feature actually sets non-essential cookies (none does today).
 - **Performance:** SSG/ISR for marketing pages; Lighthouse ≥ 90 across the board.
 - **Accessibility:** target WCAG 2.1 AA.
 - **Responsive:** mobile-first; excellent on phones.
@@ -108,10 +107,9 @@ Reusable CTA components: "Book a Consultation", "Speak to an Immigration Adviser
 
 ## 9. Open Decisions (confirm with client)
 
-1. CMS: Payload (self-hosted, max ownership) vs Sanity (easiest editing).
-2. Booking tool: self-hosted Cal.com vs hosted Calendly.
-3. Enquiry retention period.
-4. Email platform: Google Workspace vs Microsoft 365 (shared mailbox on either).
+1. Booking tool: self-hosted Cal.com vs hosted Calendly vs SimplyBook.me.
+2. CMS: not built in v1, at the client's direction — content is edited as code. Worth revisiting once a database is in scope, so staff can self-edit without a developer.
+3. Email platform for the mailboxes themselves: Google Workspace vs Microsoft 365 — client-managed, outside this repository.
 
 ## 10. Handover Deliverables
 
@@ -119,7 +117,6 @@ Admin credentials · hosting/DNS access · email admin access · backup details 
 
 ## 11. Success Criteria
 
-- Client can add an article and an adviser profile unaided.
-- Enquiry submits, stores encrypted, and arrives in shared mailbox.
+- Enquiry submits, passes reCAPTCHA, and arrives by email in the shared mailbox.
 - No page implies guaranteed outcomes; no unconfirmed regulatory claim appears.
 - Coming Soon live on domain until approval; full site launches only on client sign-off.

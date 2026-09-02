@@ -3,10 +3,9 @@ import type { Service } from '@/lib/content/types';
 /**
  * Seeded service content.
  *
- * PRD §5 defines nine categories; §4 publishes eight of them as routes in v1.
- * "Immigration status and application support" exists in the taxonomy with no
- * page yet, so the client can add one as data rather than as a code change.
- * Complex matters is present but gated (README rule 4).
+ * PRD §5 defines nine categories; all nine now have service pages.
+ * Complex matters and business immigration are present but gated (README
+ * rule 4).
  *
  * Copy rules applied throughout: plain English, no guaranteed outcomes, no
  * regulatory claims, and no promises about processing times we cannot control.
@@ -517,6 +516,93 @@ export const SERVICES: readonly Service[] = [
     },
   },
   {
+    slug: 'immigration-status-and-application-support',
+    image: {
+      src: '/images/services/immigration-status-and-application-support.webp',
+      alt: 'A person reviewing documents at a desk',
+      width: 1000,
+      height: 671,
+    },
+    category: 'status-support',
+    title: 'Immigration status and application support',
+    shortTitle: 'Status and applications',
+    summary:
+      'General immigration consultations, eligibility assessments, application preparation and supporting document reviews across all routes.',
+    icon: 'file-text',
+    order: 8,
+    intro: [
+      'Not every enquiry fits neatly into one route. Sometimes you need an overall assessment of where you stand, what your options are, and what each one involves before deciding which path to take.',
+      'This service covers the practical side of any immigration application: working out eligibility, preparing forms and supporting documents, writing cover letters and representations, and reviewing your position if your circumstances change.',
+    ],
+    audience: [
+      'Anyone unsure which immigration route applies to their circumstances',
+      'Applicants who need help preparing forms and supporting documents',
+      'People whose immigration status has changed or is about to expire',
+      'Applicants extending their leave or switching to a different route',
+      'Anyone who has received correspondence from the Home Office and needs advice on what it means',
+      'Applicants who want an independent review of their evidence before submitting',
+    ],
+    includes: [
+      'An initial consultation to understand your circumstances and identify the relevant route',
+      'An eligibility assessment against the current Immigration Rules',
+      'A tailored evidence and document checklist',
+      'Preparation and review of application forms',
+      'Cover letters and written representations where appropriate',
+      'A review of your current immigration status and what it permits',
+    ],
+    sections: [
+      {
+        heading: 'Immigration consultations and route assessments',
+        body: [
+          'A consultation is the starting point for most instructions. We go through your history, your current status and what you are trying to achieve, then set out which routes are realistically open to you and what each requires.',
+          'You receive a written summary of the options discussed. You are under no obligation to proceed further.',
+        ],
+      },
+      {
+        heading: 'Application preparation',
+        body: [
+          'The difference between a well-prepared application and a poor one is rarely about the merits of the case. It is about whether the right evidence was submitted, in the right format, covering the right period.',
+          'We work through the requirements with you, check what you have against what is needed, and tell you where the gaps are before you submit.',
+        ],
+      },
+      {
+        heading: 'Further Leave to Remain',
+        body: [
+          'If you already hold leave and need to extend or vary it, the timing and the basis of the new application both matter. We advise on when to apply, which route to apply under, and how the evidence requirements differ from your original application.',
+        ],
+      },
+      {
+        heading: 'Document reviews and cover letters',
+        body: [
+          'A document review checks what you plan to submit against what the rules require. A cover letter sets out how your evidence meets each requirement and draws attention to anything that needs explaining.',
+          'Both are practical steps that improve the quality of the application without changing its substance.',
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: 'Do I need to know which visa route to apply for before contacting you?',
+        answer:
+          'No. That is often what the first consultation is for. Tell us your circumstances and what you are trying to achieve, and we will identify which routes apply.',
+      },
+      {
+        question: 'Can you review an application I have already started preparing myself?',
+        answer:
+          'Yes. We can review your forms and supporting documents, tell you where there are gaps or weaknesses, and advise on what to add or change before you submit.',
+      },
+      {
+        question: 'What is the difference between a consultation and full application preparation?',
+        answer:
+          'A consultation gives you an assessment of your options and what each involves. Application preparation means we work through the forms, evidence and submission with you. You can book a consultation first and decide afterwards whether to instruct us for the full preparation.',
+      },
+    ],
+    seo: {
+      title: 'Immigration status and application support',
+      description:
+        'Immigration consultations, eligibility assessments, application preparation, document reviews and cover letters across all UK immigration routes.',
+    },
+  },
+  {
     slug: 'business-immigration',
     image: {
       src: '/images/services/business-immigration.webp',
@@ -530,7 +616,7 @@ export const SERVICES: readonly Service[] = [
     summary:
       'Support for employers building a compliant approach to sponsoring overseas workers, and for individuals on business routes.',
     icon: 'building',
-    order: 8,
+    order: 9,
     intro: [
       'Employers who sponsor overseas workers take on duties that continue for as long as the sponsorship lasts. Getting the systems right at the outset is considerably easier than correcting them under scrutiny.',
       'We advise employers on what sponsorship involves in practice, and individuals on the business routes available to them.',
@@ -612,7 +698,7 @@ export const SERVICES: readonly Service[] = [
     summary:
       'Advice on cases involving refusals, previous breaches and other circumstances requiring detailed consideration.',
     icon: 'scale',
-    order: 9,
+    order: 10,
     requiresFeature: 'complexMatters',
     intro: [
       'Some cases turn on more than meeting a list of requirements. Refusals, previous breaches of immigration conditions and long or interrupted histories all need careful handling.',
