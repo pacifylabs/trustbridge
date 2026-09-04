@@ -90,9 +90,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     declaredEnv || (process.env.NODE_ENV === 'production' ? 'production' : 'development');
 
   if (appEnv !== 'production') {
-    const res = NextResponse.next();
-    res.headers.set('x-debug-gate', `appEnv-bypass:${appEnv}:node=${process.env.NODE_ENV}`);
-    return res;
+    return NextResponse.next();
   }
 
   const envLaunched = (process.env.SITE_LAUNCHED ?? '').trim().toLowerCase() === 'true';
@@ -104,16 +102,10 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     return NextResponse.next();
   }
 
-  const settingsLaunched = await isLaunchedInSettings();
-  const launched = envLaunched || settingsLaunched;
+  const launched = envLaunched || (await isLaunchedInSettings());
 
   if (launched) {
-    const res = NextResponse.next();
-    res.headers.set(
-      'x-debug-gate',
-      `launched:env=${envLaunched}:settings=${settingsLaunched}:site_launched_raw=${JSON.stringify(process.env.SITE_LAUNCHED)}`,
-    );
-    return res;
+    return NextResponse.next();
   }
 
   const url = request.nextUrl.clone();
