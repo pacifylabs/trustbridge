@@ -171,6 +171,7 @@ export function LegalPageForm({ slug, initial }: { slug: string; initial: LegalP
             <input
               {...props}
               type="text"
+              placeholder="e.g. Privacy policy"
               className={controlClasses}
               value={title}
               onChange={(event) => setTitle(event.target.value)}
@@ -189,6 +190,7 @@ export function LegalPageForm({ slug, initial }: { slug: string; initial: LegalP
             <textarea
               {...props}
               rows={2}
+              placeholder="A one-sentence summary of what this page covers."
               className={cn(controlClasses, 'resize-y')}
               value={summary}
               onChange={(event) => setSummary(event.target.value)}
@@ -243,6 +245,7 @@ export function LegalPageForm({ slug, initial }: { slug: string; initial: LegalP
                   <input
                     id={fieldId(`logo-alt-${index}`)}
                     type="text"
+                    placeholder="e.g. IAA registration mark"
                     className={cn(controlClasses, 'mt-1.5')}
                     value={logo.alt}
                     onChange={(event) =>
@@ -307,6 +310,7 @@ export function LegalPageForm({ slug, initial }: { slug: string; initial: LegalP
                     <input
                       {...props}
                       type="text"
+                      placeholder="e.g. How we handle your information"
                       className={controlClasses}
                       value={row.heading}
                       onChange={(event) => updateSection(row.key, { heading: event.target.value })}
@@ -324,6 +328,7 @@ export function LegalPageForm({ slug, initial }: { slug: string; initial: LegalP
                     <textarea
                       {...props}
                       rows={4}
+                      placeholder="Write the text for this section."
                       className={cn(controlClasses, 'resize-y')}
                       value={row.body}
                       onChange={(event) => updateSection(row.key, { body: event.target.value })}

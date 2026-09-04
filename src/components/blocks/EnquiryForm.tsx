@@ -174,6 +174,7 @@ export function EnquiryForm({
                 type="text"
                 name="fullName"
                 autoComplete="name"
+                placeholder="Jane Doe"
                 className={controlClasses}
                 value={values.fullName as string}
                 onChange={(event) => setValue('fullName', event.target.value)}
@@ -188,6 +189,7 @@ export function EnquiryForm({
                 type="email"
                 name="email"
                 autoComplete="email"
+                placeholder="jane@example.com"
                 className={controlClasses}
                 value={values.email as string}
                 onChange={(event) => setValue('email', event.target.value)}
@@ -202,6 +204,7 @@ export function EnquiryForm({
                 type="tel"
                 name="telephone"
                 autoComplete="tel"
+                placeholder="07417 487423"
                 className={controlClasses}
                 value={values.telephone as string}
                 onChange={(event) => setValue('telephone', event.target.value)}
@@ -221,6 +224,7 @@ export function EnquiryForm({
                 type="text"
                 name="countryOfResidence"
                 autoComplete="country-name"
+                placeholder="United Kingdom"
                 className={controlClasses}
                 value={values.countryOfResidence as string}
                 onChange={(event) => setValue('countryOfResidence', event.target.value)}
@@ -234,6 +238,7 @@ export function EnquiryForm({
                 {...props}
                 type="text"
                 name="nationality"
+                placeholder="e.g. Nigerian"
                 className={controlClasses}
                 value={values.nationality as string}
                 onChange={(event) => setValue('nationality', event.target.value)}
@@ -278,6 +283,7 @@ export function EnquiryForm({
                 {...props}
                 name="description"
                 rows={5}
+                placeholder="Tell us briefly what you need help with and where things stand so far."
                 className={cn(controlClasses, 'resize-y')}
                 value={values.description as string}
                 onChange={(event) => setValue('description', event.target.value)}

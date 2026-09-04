@@ -147,6 +147,7 @@ export function AdviserForm({ mode, adviser }: { mode: 'create' | 'edit'; advise
             <input
               {...props}
               type="text"
+              placeholder="e.g. Jane Doe"
               className={controlClasses}
               value={name}
               onChange={(event) => onNameChange(event.target.value)}
@@ -165,6 +166,7 @@ export function AdviserForm({ mode, adviser }: { mode: 'create' | 'edit'; advise
             <input
               {...props}
               type="text"
+              placeholder="jane-doe"
               className={controlClasses}
               value={slug}
               onChange={(event) => {
@@ -186,6 +188,7 @@ export function AdviserForm({ mode, adviser }: { mode: 'create' | 'edit'; advise
             <input
               {...props}
               type="text"
+              placeholder="e.g. Senior Immigration Adviser"
               className={controlClasses}
               value={professionalTitle}
               onChange={(event) => setProfessionalTitle(event.target.value)}
@@ -230,6 +233,7 @@ export function AdviserForm({ mode, adviser }: { mode: 'create' | 'edit'; advise
               <input
                 {...props}
                 type="text"
+                placeholder="To be confirmed"
                 className={controlClasses}
                 value={regulatoryLevel}
                 onChange={(event) => setRegulatoryLevel(event.target.value)}
@@ -247,6 +251,7 @@ export function AdviserForm({ mode, adviser }: { mode: 'create' | 'edit'; advise
               <input
                 {...props}
                 type="text"
+                placeholder="To be confirmed"
                 className={controlClasses}
                 value={registrationNumber}
                 onChange={(event) => setRegistrationNumber(event.target.value)}
@@ -265,6 +270,7 @@ export function AdviserForm({ mode, adviser }: { mode: 'create' | 'edit'; advise
         <textarea
           className={cn(controlClasses, 'mt-3 resize-y')}
           rows={6}
+          placeholder="A short introduction to this adviser's background and experience."
           value={biography}
           onChange={(event) => setBiography(event.target.value)}
         />

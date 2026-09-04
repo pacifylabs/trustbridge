@@ -243,6 +243,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
             <input
               {...props}
               type="text"
+              placeholder="e.g. Spouse and partner visas"
               className={controlClasses}
               value={title}
               onChange={(event) => onTitleChange(event.target.value)}
@@ -261,6 +262,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
             <input
               {...props}
               type="text"
+              placeholder="spouse-and-partner-visas"
               className={controlClasses}
               value={slug}
               onChange={(event) => {
@@ -282,6 +284,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
             <input
               {...props}
               type="text"
+              placeholder="e.g. Spouse and partner"
               className={controlClasses}
               value={shortTitle}
               onChange={(event) => setShortTitle(event.target.value)}
@@ -335,6 +338,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
             <textarea
               {...props}
               rows={2}
+              placeholder="A one or two sentence overview of who this service is for and what it covers."
               className={cn(controlClasses, 'resize-y')}
               value={summary}
               onChange={(event) => setSummary(event.target.value)}
@@ -354,6 +358,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
               {...props}
               type="number"
               min={1}
+              placeholder="1"
               className={controlClasses}
               value={order}
               onChange={(event) => setOrder(event.target.value)}
@@ -461,6 +466,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
                 <input
                   id={fieldId('image-alt')}
                   type="text"
+                  placeholder="e.g. A couple on their wedding day"
                   className={cn(controlClasses, 'mt-1.5')}
                   value={imageAlt}
                   onChange={(event) => {
@@ -486,6 +492,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
         <textarea
           className={cn(controlClasses, 'mt-3 resize-y')}
           rows={4}
+          placeholder="What the Home Office needs to see, and what makes this route straightforward or difficult."
           value={intro}
           onChange={(event) => setIntro(event.target.value)}
         />
@@ -501,6 +508,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
           <textarea
             className={cn(controlClasses, 'mt-3 resize-y')}
             rows={5}
+            placeholder={'Partners of British citizens applying from outside the UK\nCouples switching into the partner route from another visa'}
             value={audience}
             onChange={(event) => setAudience(event.target.value)}
           />
@@ -515,6 +523,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
           <textarea
             className={cn(controlClasses, 'mt-3 resize-y')}
             rows={5}
+            placeholder={'Assessment of which route fits your circumstances\nReview of your completed forms before submission'}
             value={includes}
             onChange={(event) => setIncludes(event.target.value)}
           />
@@ -566,6 +575,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
                     <input
                       {...props}
                       type="text"
+                      placeholder="e.g. The financial requirement"
                       className={controlClasses}
                       value={row.heading}
                       onChange={(event) => updateSection(row.key, { heading: event.target.value })}
@@ -584,6 +594,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
                     <textarea
                       {...props}
                       rows={4}
+                      placeholder="What this part of the page needs to explain."
                       className={cn(controlClasses, 'resize-y')}
                       value={row.body}
                       onChange={(event) => updateSection(row.key, { body: event.target.value })}
@@ -662,6 +673,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
                       <input
                         {...props}
                         type="text"
+                        placeholder="e.g. How long does an application take to decide?"
                         className={controlClasses}
                         value={row.question}
                         onChange={(event) => updateFaq(row.key, { question: event.target.value })}
@@ -679,6 +691,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
                       <textarea
                         {...props}
                         rows={3}
+                        placeholder="A clear, direct answer, without guaranteeing an outcome."
                         className={cn(controlClasses, 'resize-y')}
                         value={row.answer}
                         onChange={(event) => updateFaq(row.key, { answer: event.target.value })}
@@ -709,6 +722,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
               <input
                 {...props}
                 type="text"
+                placeholder={title || 'Defaults to the page title above'}
                 className={controlClasses}
                 value={seoTitle}
                 onChange={(event) => setSeoTitle(event.target.value)}
@@ -725,6 +739,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
               <input
                 {...props}
                 type="text"
+                placeholder={summary || 'Defaults to the summary above'}
                 className={controlClasses}
                 value={seoDescription}
                 onChange={(event) => setSeoDescription(event.target.value)}

@@ -105,6 +105,7 @@ export function TestimonialForm({
               {...props}
               className={cn(controlClasses, 'resize-y')}
               rows={4}
+              placeholder="What did this client say about working with us?"
               value={quote}
               onChange={(event) => setQuote(event.target.value)}
             />
@@ -124,6 +125,7 @@ export function TestimonialForm({
             <input
               {...props}
               type="text"
+              placeholder="Spouse visa client"
               className={controlClasses}
               value={attribution}
               onChange={(event) => onAttributionChange(event.target.value)}
@@ -136,6 +138,7 @@ export function TestimonialForm({
             <input
               {...props}
               type="text"
+              placeholder="Manchester"
               className={controlClasses}
               value={location}
               onChange={(event) => setLocation(event.target.value)}
@@ -154,6 +157,7 @@ export function TestimonialForm({
             <input
               {...props}
               type="text"
+              placeholder="spouse-visa-client-manchester"
               className={controlClasses}
               value={slug}
               onChange={(event) => {

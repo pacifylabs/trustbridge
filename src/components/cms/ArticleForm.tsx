@@ -168,6 +168,7 @@ export function ArticleForm({ mode, article }: { mode: 'create' | 'edit'; articl
             <input
               {...props}
               type="text"
+              placeholder="e.g. What to expect at your first consultation"
               className={controlClasses}
               value={title}
               onChange={(event) => onTitleChange(event.target.value)}
@@ -186,6 +187,7 @@ export function ArticleForm({ mode, article }: { mode: 'create' | 'edit'; articl
             <input
               {...props}
               type="text"
+              placeholder="what-to-expect-at-your-first-consultation"
               className={controlClasses}
               value={slug}
               onChange={(event) => {
@@ -225,6 +227,7 @@ export function ArticleForm({ mode, article }: { mode: 'create' | 'edit'; articl
             <textarea
               {...props}
               rows={2}
+              placeholder="A short guide to how the first meeting works, what to bring, and what you will have by the end of it."
               className={cn(controlClasses, 'resize-y')}
               value={excerpt}
               onChange={(event) => setExcerpt(event.target.value)}
@@ -237,6 +240,7 @@ export function ArticleForm({ mode, article }: { mode: 'create' | 'edit'; articl
             <input
               {...props}
               type="text"
+              placeholder="TrustBridge Immigration Services"
               className={controlClasses}
               value={author}
               onChange={(event) => setAuthor(event.target.value)}
@@ -330,6 +334,7 @@ export function ArticleForm({ mode, article }: { mode: 'create' | 'edit'; articl
                 <input
                   id={fieldId('image-alt')}
                   type="text"
+                  placeholder="e.g. A couple reviewing documents together at a table"
                   className={cn(controlClasses, 'mt-1.5')}
                   value={imageAlt}
                   onChange={(event) => {
@@ -372,6 +377,7 @@ export function ArticleForm({ mode, article }: { mode: 'create' | 'edit'; articl
               <input
                 {...props}
                 type="text"
+                placeholder={title || 'Defaults to the title above'}
                 className={controlClasses}
                 value={seoTitle}
                 onChange={(event) => setSeoTitle(event.target.value)}
@@ -388,6 +394,7 @@ export function ArticleForm({ mode, article }: { mode: 'create' | 'edit'; articl
               <input
                 {...props}
                 type="text"
+                placeholder={excerpt || 'Defaults to the excerpt above'}
                 className={controlClasses}
                 value={seoDescription}
                 onChange={(event) => setSeoDescription(event.target.value)}

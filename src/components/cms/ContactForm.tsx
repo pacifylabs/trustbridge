@@ -88,6 +88,7 @@ export function ContactForm({ initialContact }: { initialContact: ContactInput }
             <input
               {...props}
               type="email"
+              placeholder="info@trustbridgeimmigration.co.uk"
               className={controlClasses}
               value={email}
               onChange={(event) => setEmail(event.target.value)}
@@ -106,6 +107,7 @@ export function ContactForm({ initialContact }: { initialContact: ContactInput }
             <input
               {...props}
               type="text"
+              placeholder="07417 487423"
               className={controlClasses}
               value={phone}
               onChange={(event) => setPhone(event.target.value)}
@@ -124,6 +126,7 @@ export function ContactForm({ initialContact }: { initialContact: ContactInput }
             <textarea
               {...props}
               rows={3}
+              placeholder={'123 Example Street\nManchester\nM1 2AB'}
               className={cn(controlClasses, 'resize-y')}
               value={address}
               onChange={(event) => setAddress(event.target.value)}
@@ -142,6 +145,7 @@ export function ContactForm({ initialContact }: { initialContact: ContactInput }
             <input
               {...props}
               type="text"
+              placeholder="Monday to Friday, 9am to 5pm"
               className={controlClasses}
               value={hours}
               onChange={(event) => setHours(event.target.value)}
