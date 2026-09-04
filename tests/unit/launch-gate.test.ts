@@ -79,7 +79,15 @@ describe('production, before launch', () => {
     expect((await proxy(request('/coming-soon'))).headers.get('x-middleware-rewrite')).toBeNull();
   });
 
-  it.each(['/_next/static/chunk.js', '/api/enquiry', '/cms/articles', '/favicon.ico', '/logo.png', '/robots.txt'])(
+  it.each([
+    '/_next/static/chunk.js',
+    '/api/enquiry',
+    '/cms/articles',
+    '/favicon.ico',
+    '/logo.png',
+    '/og.jpg',
+    '/robots.txt',
+  ])(
     'lets %s through so the gated page still renders',
     async (path) => {
       setEnv(env);
