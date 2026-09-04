@@ -38,6 +38,9 @@ const ALLOWED_PREFIXES = [
   '/og.jpg',
   '/robots.txt',
   '/sitemap.xml',
+  // IndexNow key file (search-engine indexing verification) — needs to stay
+  // reachable even if the site ever goes back behind the Coming Soon gate.
+  '/006a45f5a6d50d18d05e7867d4647f84.txt',
 ];
 
 const SETTINGS_FETCH_TIMEOUT_MS = 1000;
