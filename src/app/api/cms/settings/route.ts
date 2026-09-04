@@ -70,6 +70,13 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
   // revalidated, not just Resources: the launch flag affects the entire
   // site's metadata (see generateMetadata in app/layout.tsx).
   revalidatePath('/', 'layout');
+  // robots.txt and sitemap.xml read the same launch flag but are their own
+  // route entries, outside '/'s layout tree, so the call above never reaches
+  // them — without this, flipping "Publish the site" leaves search engines
+  // reading a stale "disallow everything" / empty sitemap for up to the
+  // settings cache's own revalidate window.
+  revalidatePath('/robots.txt');
+  revalidatePath('/sitemap.xml');
 
   return NextResponse.json({ settings });
 }
