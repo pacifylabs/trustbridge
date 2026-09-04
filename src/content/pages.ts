@@ -12,7 +12,7 @@ import type { Testimonial } from '@/lib/content/types';
 
 export const HOME = {
   hero: {
-    eyebrow: 'UK Immigration Experts',
+    eyebrow: 'UK Immigration Advice & Services',
     lead: 'Navigating UK immigration with',
     emphasis: 'confidence and clarity',
     standfirst:
@@ -181,7 +181,7 @@ export const ABOUT = {
     lead: 'A practice built on',
     emphasis: 'careful advice',
     standfirst:
-      'TrustBridge Immigration Services is a registered UK practice. Our mission is to bring clarity to a complex system, providing straightforward guidance so you can navigate immigration with confidence.',
+      'TrustBridge Immigration Services Ltd is a UK immigration practice providing professional immigration advice and services to individuals, families and businesses.',
   },
   /* Hero frames. Reuses existing artwork rather than adding more downloads. */
   media: [

@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/lib/seo';
-import { Clock, Mail, MapPin, Phone } from 'lucide-react';
+import { Clock, Mail, MapPin, Navigation, Phone } from 'lucide-react';
 import { Hero } from '@/components/blocks/Hero';
 import { Section } from '@/components/layout/Section';
 import { SectionHeading } from '@/components/layout/SectionHeading';
 import { EnquiryForm } from '@/components/blocks/EnquiryForm';
 import { CtaBand } from '@/components/blocks/CtaBand';
 import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
 import { SITE } from '@/content/site';
 import { CONTACT_PAGE } from '@/content/pages';
 import { getContact } from '@/lib/content';
@@ -21,6 +22,19 @@ export const metadata: Metadata = buildMetadata({
 
 export default async function ContactPage() {
   const contact = await getContact();
+  // The first line is typically the company name — searching Google Maps by
+  // name risks matching a similarly-named, unrelated business near the same
+  // address instead of this office, so the map query uses the street address
+  // only (the lines after the name).
+  const streetAddress = (
+    contact.addressLines.length > 1 ? contact.addressLines.slice(1) : contact.addressLines
+  ).join(', ');
+  const mapsEmbedSrc = streetAddress
+    ? `https://www.google.com/maps?q=${encodeURIComponent(streetAddress)}&output=embed`
+    : null;
+  const directionsHref = streetAddress
+    ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(streetAddress)}`
+    : null;
 
   return (
     <>
@@ -152,6 +166,28 @@ export default async function ContactPage() {
           </div>
         </div>
       </Section>
+
+      {mapsEmbedSrc && directionsHref ? (
+        <Section tone="canvas" size="sm">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <SectionHeading lead="Find our" emphasis="office" />
+            <Button href={directionsHref} variant="secondary" target="_blank" rel="noopener noreferrer">
+              <Navigation className="h-4 w-4" aria-hidden="true" />
+              Get directions
+            </Button>
+          </div>
+          <div className="mt-6 overflow-hidden rounded-xl border border-border-subtle">
+            <iframe
+              title={`Map showing the location of ${SITE.name}`}
+              src={mapsEmbedSrc}
+              className="h-[360px] w-full"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </Section>
+      ) : null}
 
       <CtaBand
         lead="Would you rather"

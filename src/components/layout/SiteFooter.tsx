@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone } from 'lucide-react';
 import { LEGAL_NAV, PRIMARY_NAV, SITE } from '@/content/site';
 import type { ContactInfo } from '@/lib/cms/contact';
 
@@ -93,6 +93,18 @@ export function SiteFooter({
                   {contact.phone}
                 </a>
               </li>
+              {contact.addressLines.length > 0 ? (
+                <li className="flex items-start gap-2.5 py-2 text-small text-strong">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+                  <address className="not-italic">
+                    {contact.addressLines.map((line) => (
+                      <span key={line} className="block">
+                        {line}
+                      </span>
+                    ))}
+                  </address>
+                </li>
+              ) : null}
             </ul>
           </div>
 

@@ -13,7 +13,7 @@ export const SITE = {
   /** Used in running copy, where the full legal name reads heavily. */
   tagline: 'Expert UK Visa & Immigration Advice',
   description:
-    'TrustBridge Immigration Services provides clear, strategic UK immigration advice for individuals, families, and employers. Expert guidance from consultation to submission.',
+    'TrustBridge Immigration Services provides clear, professional UK immigration advice and services for individuals, families and employers.',
   companyNumber: '17399361',
   incorporatedIn: 'England and Wales',
   url: 'https://trustbridgeimmigration.co.uk',

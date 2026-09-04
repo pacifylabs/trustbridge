@@ -105,7 +105,7 @@ export const SERVICES: readonly Service[] = [
     order: 2,
     status: 'published',
     intro: [
-      'Visitor applications are refused more often than people expect. The decision rests entirely on whether the caseworker believes you will leave at the end of your stay.',
+      'Visitor applications are often decided on whether the applicant satisfies the Home Office that they are a genuine visitor. This includes showing that they intend to leave the UK at the end of the visit, are coming for a permitted purpose and have sufficient funds for the proposed stay.',
       'That judgement is made on the papers without an interview, so the application must answer the obvious questions before they are asked.',
     ],
     audience: [
@@ -125,7 +125,7 @@ export const SERVICES: readonly Service[] = [
         heading: 'What caseworkers look for',
         body: [
           'The application should show where you live and work, what you are returning to, who is funding the visit, and what you intend to do while you are here.',
-          'Vague applications invite refusal. Specific ones, with dates, addresses and named sponsors, give the caseworker something to accept.',
+          "A clear and consistent application, supported by evidence relevant to the applicant's circumstances and proposed visit, can help the decision-maker properly assess whether the Visitor requirements are met.",
         ],
       },
       {
@@ -189,7 +189,7 @@ export const SERVICES: readonly Service[] = [
       {
         heading: 'Salary and occupation codes',
         body: [
-          'Eligibility depends on the occupation code assigned to your role, which sets the going rate you must be paid. Codes are not interchangeable, and choosing one that loosely resembles the job creates a problem that surfaces later.',
+          "Salary eligibility depends on several factors, including the occupation code, the applicable going rate and the relevant salary requirements for the applicant's circumstances. Codes are not interchangeable, and choosing one that loosely resembles the job creates a problem that surfaces later.",
           'We review the job description against the code your employer has used and raise any mismatch before the certificate of sponsorship is assigned.',
         ],
       },
@@ -236,7 +236,7 @@ export const SERVICES: readonly Service[] = [
     title: 'Health and Care Worker visas',
     shortTitle: 'Health and Care Worker',
     summary:
-      'Advice for eligible health and care professionals sponsored by an approved employer, including dependants and settlement.',
+      'Advice for eligible Health and Care Worker applicants, including applications, extensions, settlement and dependant applications where the Immigration Rules permit.',
     icon: 'award',
     order: 4,
     status: 'published',
@@ -324,7 +324,7 @@ export const SERVICES: readonly Service[] = [
       {
         heading: 'Continuous residence and absences',
         body: [
-          'Most settlement routes limit how long you can spend outside the UK during the qualifying period, both in any twelve-month window and in total.',
+          'Absence requirements vary between settlement routes. Many routes apply limits on absences during the qualifying period, and different rules may apply depending on the route and when particular absences occurred. We assess the relevant continuous residence requirements against your individual immigration history.',
           'Work out your absences early, from your own records rather than from memory. If they exceed the limit, there may be options, but they need identifying well before you apply.',
         ],
       },
@@ -531,7 +531,7 @@ export const SERVICES: readonly Service[] = [
         heading: 'Immigration consultations and route assessments',
         body: [
           'A consultation is the starting point for most instructions. We go through your history, your current status and what you are trying to achieve, then set out which routes are realistically open to you and what each requires.',
-          'Where appropriate, you will receive confirmation of the key options discussed. You are under no obligation to proceed further.',
+          'Where appropriate, we provide confirmation of the key advice, options or next steps discussed. You are under no obligation to proceed further.',
         ],
       },
       {
@@ -575,7 +575,7 @@ export const SERVICES: readonly Service[] = [
     seo: {
       title: 'Immigration Status & Application Support | TrustBridge',
       description:
-        'General immigration consultations, eligibility assessments, document reviews, and application preparation across all UK routes.',
+        'General immigration consultations, eligibility assessments, document reviews, and application preparation across the immigration routes and matters within our authorised scope.',
     },
   },
   {
@@ -621,7 +621,7 @@ export const SERVICES: readonly Service[] = [
       {
         heading: 'Right to work checks',
         body: [
-          'A correctly conducted right to work check provides a statutory excuse against a civil penalty. An incorrectly conducted one provides nothing at all, which is why the process matters as much as the outcome.',
+          'Where the prescribed requirements are met, a compliant right to work check can establish a statutory excuse against liability for a civil penalty. This makes both the timing and method of the check important.',
         ],
       },
       {
