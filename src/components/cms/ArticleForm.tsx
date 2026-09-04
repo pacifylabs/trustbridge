@@ -6,6 +6,7 @@ import { Loader2, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Field, controlClasses } from '@/components/ui/Field';
 import { RichTextEditor } from './RichTextEditor';
+import { useConfirm } from '@/components/cms/ConfirmDialog';
 import { cn } from '@/lib/utils';
 import {
   ARTICLE_CATEGORIES,
@@ -29,6 +30,7 @@ function todayIsoDate(): string {
 
 export function ArticleForm({ mode, article }: { mode: 'create' | 'edit'; article?: Article }) {
   const router = useRouter();
+  const confirm = useConfirm();
   const formId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -124,7 +126,7 @@ export function ArticleForm({ mode, article }: { mode: 'create' | 'edit'; articl
     }
 
     if (parsed.data.status === 'published' && article?.status !== 'published') {
-      if (!confirm(`Show "${parsed.data.title}" on the website now?`)) return;
+      if (!(await confirm(`Show "${parsed.data.title}" on the website now?`))) return;
     }
 
     setSubmitting(true);

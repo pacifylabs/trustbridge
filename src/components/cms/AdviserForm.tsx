@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { AlertTriangle, Loader2, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Field, controlClasses } from '@/components/ui/Field';
+import { useConfirm } from '@/components/cms/ConfirmDialog';
 import { cn } from '@/lib/utils';
 import {
   adviserInputSchema,
@@ -17,6 +18,7 @@ import type { Adviser } from '@/lib/content/types';
 
 export function AdviserForm({ mode, adviser }: { mode: 'create' | 'edit'; adviser?: Adviser }) {
   const router = useRouter();
+  const confirm = useConfirm();
   const formId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -103,7 +105,7 @@ export function AdviserForm({ mode, adviser }: { mode: 'create' | 'edit'; advise
     }
 
     if (parsed.data.status === 'published' && adviser?.status !== 'published') {
-      if (!confirm(`Show "${parsed.data.name}" on the website now?`)) return;
+      if (!(await confirm(`Show "${parsed.data.name}" on the website now?`))) return;
     }
 
     setSubmitting(true);

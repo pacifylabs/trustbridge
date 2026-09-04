@@ -6,16 +6,19 @@ import { useRouter } from 'next/navigation';
 import { Loader2, MessageSquareQuote, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { useConfirm } from '@/components/cms/ConfirmDialog';
 import type { Testimonial } from '@/lib/content/types';
 
 export function TestimonialsList({ testimonials }: { testimonials: readonly Testimonial[] }) {
   const router = useRouter();
+  const confirm = useConfirm();
   const [pendingSlug, setPendingSlug] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   const [error, setError] = useState('');
 
   async function onDelete(slug: string) {
-    if (!confirm('Delete this testimonial? This cannot be undone.')) return;
+    if (!(await confirm({ message: 'Delete this testimonial? This cannot be undone.', tone: 'danger', confirmLabel: 'Delete' })))
+      return;
 
     setPendingSlug(slug);
     setError('');

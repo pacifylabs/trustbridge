@@ -7,6 +7,7 @@ import { Briefcase, Loader2, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Switch } from '@/components/ui/Switch';
+import { useConfirm } from '@/components/cms/ConfirmDialog';
 import { SERVICE_CATEGORY_LABELS } from '@/lib/validation/service';
 import type { Service } from '@/lib/content/types';
 
@@ -39,13 +40,15 @@ function toUpdatePayload(service: Service, status: 'draft' | 'published') {
 
 export function ServicesList({ services }: { services: readonly Service[] }) {
   const router = useRouter();
+  const confirm = useConfirm();
   const [pendingSlug, setPendingSlug] = useState<string | null>(null);
   const [togglingSlug, setTogglingSlug] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   const [error, setError] = useState('');
 
   async function onDelete(slug: string, title: string) {
-    if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+    if (!(await confirm({ message: `Delete "${title}"? This cannot be undone.`, tone: 'danger', confirmLabel: 'Delete' })))
+      return;
 
     setPendingSlug(slug);
     setError('');
@@ -68,7 +71,7 @@ export function ServicesList({ services }: { services: readonly Service[] }) {
     const nextStatus = service.status === 'published' ? 'draft' : 'published';
 
     if (nextStatus === 'published') {
-      const confirmed = confirm(`Show "${service.title}" on the website now?`);
+      const confirmed = await confirm(`Show "${service.title}" on the website now?`);
       if (!confirmed) return;
     }
 

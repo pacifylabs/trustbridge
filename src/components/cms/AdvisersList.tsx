@@ -6,15 +6,18 @@ import { useRouter } from 'next/navigation';
 import { Trash2, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { useConfirm } from '@/components/cms/ConfirmDialog';
 import type { Adviser } from '@/lib/content/types';
 
 export function AdvisersList({ advisers }: { advisers: readonly Adviser[] }) {
   const router = useRouter();
+  const confirm = useConfirm();
   const [pendingSlug, setPendingSlug] = useState<string | null>(null);
   const [error, setError] = useState('');
 
   async function onDelete(slug: string, name: string) {
-    if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+    if (!(await confirm({ message: `Delete "${name}"? This cannot be undone.`, tone: 'danger', confirmLabel: 'Delete' })))
+      return;
 
     setPendingSlug(slug);
     setError('');

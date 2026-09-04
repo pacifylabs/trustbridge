@@ -6,17 +6,20 @@ import { useRouter } from 'next/navigation';
 import { FileText, Loader2, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
+import { useConfirm } from '@/components/cms/ConfirmDialog';
 import { formatDate } from '@/lib/utils';
 import type { Article } from '@/lib/content/types';
 
 export function ArticlesList({ articles }: { articles: readonly Article[] }) {
   const router = useRouter();
+  const confirm = useConfirm();
   const [pendingSlug, setPendingSlug] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   const [error, setError] = useState('');
 
   async function onDelete(slug: string, title: string) {
-    if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+    if (!(await confirm({ message: `Delete "${title}"? This cannot be undone.`, tone: 'danger', confirmLabel: 'Delete' })))
+      return;
 
     setPendingSlug(slug);
     setError('');

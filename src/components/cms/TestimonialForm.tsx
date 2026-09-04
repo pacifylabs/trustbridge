@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Field, controlClasses } from '@/components/ui/Field';
+import { useConfirm } from '@/components/cms/ConfirmDialog';
 import { cn } from '@/lib/utils';
 import {
   testimonialInputSchema,
@@ -22,6 +23,7 @@ export function TestimonialForm({
   testimonial?: Testimonial;
 }) {
   const router = useRouter();
+  const confirm = useConfirm();
   const formId = useId();
 
   const [quote, setQuote] = useState(testimonial?.quote ?? '');
@@ -53,7 +55,7 @@ export function TestimonialForm({
     }
 
     if (parsed.data.status === 'published' && testimonial?.status !== 'published') {
-      if (!confirm('Show this testimonial on the website now?')) return;
+      if (!(await confirm('Show this testimonial on the website now?'))) return;
     }
 
     setSubmitting(true);

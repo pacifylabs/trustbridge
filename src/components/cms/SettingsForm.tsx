@@ -6,6 +6,7 @@ import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Switch } from '@/components/ui/Switch';
 import { controlClasses } from '@/components/ui/Field';
+import { useConfirm } from '@/components/cms/ConfirmDialog';
 import { cn } from '@/lib/utils';
 import type { CmsSettings } from '@/lib/cms/settings';
 
@@ -71,6 +72,7 @@ export function SettingsForm({
   readOnly: boolean;
 }) {
   const router = useRouter();
+  const confirm = useConfirm();
   const [settings, setSettings] = useState(initialSettings);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
@@ -80,9 +82,11 @@ export function SettingsForm({
   async function save() {
     const newlyVisible = describeNewlyVisible(initialSettings, settings);
     if (newlyVisible.length > 0) {
-      const confirmed = confirm(
-        `This will make the following visible to the public:\n\n${newlyVisible.map((line) => `• ${line}`).join('\n')}\n\nContinue?`,
-      );
+      const confirmed = await confirm({
+        title: 'This will go live',
+        message: `This will make the following visible to the public:\n\n${newlyVisible.map((line) => `• ${line}`).join('\n')}`,
+        confirmLabel: 'Continue',
+      });
       if (!confirmed) return;
     }
 

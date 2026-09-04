@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Loader2, Plus, Trash2, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Field, controlClasses } from '@/components/ui/Field';
+import { useConfirm } from '@/components/cms/ConfirmDialog';
 import { cn } from '@/lib/utils';
 import {
   SERVICE_CATEGORIES,
@@ -62,6 +63,7 @@ function faqsFromService(service?: Service): FaqRow[] {
 
 export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; service?: Service }) {
   const router = useRouter();
+  const confirm = useConfirm();
   const formId = useId();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -199,7 +201,7 @@ export function ServiceForm({ mode, service }: { mode: 'create' | 'edit'; servic
     }
 
     if (parsed.data.status === 'published' && service?.status !== 'published') {
-      if (!confirm(`Show "${parsed.data.title}" on the website now?`)) return;
+      if (!(await confirm(`Show "${parsed.data.title}" on the website now?`))) return;
     }
 
     setSubmitting(true);
