@@ -59,6 +59,10 @@ async function isLaunchedInSettings(): Promise<boolean> {
     const response = await fetch(`${url}/get/cms:settings`, {
       headers: { Authorization: `Bearer ${token}` },
       signal: controller.signal,
+      // Next.js caches an unconfigured fetch indefinitely (its Data Cache),
+      // which would freeze this launch check at whatever value it first saw
+      // — the opposite of the instant, no-redeploy toggle this exists for.
+      cache: 'no-store',
     });
     if (!response.ok) return false;
 
