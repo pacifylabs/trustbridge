@@ -70,6 +70,40 @@ const envSchema = z.object({
    * falls back to an honest "email or call us" placeholder.
    */
   NEXT_PUBLIC_CALENDLY_URL: z.url().optional(),
+
+  /**
+   * The lightweight Resources CMS. Articles are stored in Upstash Redis
+   * (provisioned from the Vercel Storage tab) and uploaded images in Vercel
+   * Blob. Left unset, the admin area is disabled and the public site falls
+   * back to the bundled sample articles read-only, rather than failing to
+   * build or serving an empty Resources page.
+   */
+  KV_REST_API_URL: z.url().optional(),
+  KV_REST_API_TOKEN: z.string().optional(),
+  BLOB_READ_WRITE_TOKEN: z.string().optional(),
+
+  /**
+   * A single shared editor password, not per-user accounts: proportionate for
+   * a three-person team editing articles, not a reason to add a full auth
+   * system. ADMIN_SESSION_SECRET signs the session cookie so it cannot be
+   * forged without both values.
+   */
+  ADMIN_PASSWORD: z.string().optional(),
+  ADMIN_SESSION_SECRET: z.string().optional(),
+
+  /**
+   * Which article set the public Resources pages show.
+   *
+   * 'demo'  → the three bundled sample articles, regardless of what is in
+   *           Redis. Lets the site be previewed and reviewed while the CMS is
+   *           still being populated, without publishing half-finished drafts.
+   * 'cms'   → the real, Redis-backed articles created through /admin.
+   *
+   * Defaults to 'demo' so a fresh deployment never shows an empty Resources
+   * page before anyone has written anything in the admin. Flip it to 'cms'
+   * when the practice is ready to go live with its own content.
+   */
+  RESOURCES_DATA_SOURCE: z.enum(['demo', 'cms']).default('demo'),
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -88,6 +122,12 @@ function readEnv(): Env {
     NEXT_PUBLIC_RECAPTCHA_SITE_KEY: read(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY),
     RECAPTCHA_SECRET_KEY: read(process.env.RECAPTCHA_SECRET_KEY),
     NEXT_PUBLIC_CALENDLY_URL: read(process.env.NEXT_PUBLIC_CALENDLY_URL),
+    KV_REST_API_URL: read(process.env.KV_REST_API_URL),
+    KV_REST_API_TOKEN: read(process.env.KV_REST_API_TOKEN),
+    BLOB_READ_WRITE_TOKEN: read(process.env.BLOB_READ_WRITE_TOKEN),
+    ADMIN_PASSWORD: read(process.env.ADMIN_PASSWORD),
+    ADMIN_SESSION_SECRET: read(process.env.ADMIN_SESSION_SECRET),
+    RESOURCES_DATA_SOURCE: read(process.env.RESOURCES_DATA_SOURCE),
   });
 
   if (!parsed.success) {
@@ -107,4 +147,19 @@ export const env: Env = readEnv();
 /** True once both Resend and reCAPTCHA are configured and the form can actually send. */
 export function isEnquiryDeliveryConfigured(): boolean {
   return Boolean(env.RESEND_API_KEY && env.RECAPTCHA_SECRET_KEY && env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
+}
+
+/** True once Redis is provisioned and articles can be read from/written to it. */
+export function isCmsConfigured(): boolean {
+  return Boolean(env.KV_REST_API_URL && env.KV_REST_API_TOKEN);
+}
+
+/** True once image uploads have somewhere to go. */
+export function isBlobConfigured(): boolean {
+  return Boolean(env.BLOB_READ_WRITE_TOKEN);
+}
+
+/** True once the admin area can actually authenticate an editor. */
+export function isAdminAuthConfigured(): boolean {
+  return Boolean(env.ADMIN_PASSWORD && env.ADMIN_SESSION_SECRET);
 }

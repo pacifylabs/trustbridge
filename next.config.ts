@@ -6,9 +6,10 @@ const isDevelopment = process.env.NODE_ENV === 'development';
  * Content Security Policy.
  *
  * The production policy is strict: fonts are self-hosted at build time via
- * `next/font`, so nothing legitimate needs an external origin. Two exceptions:
- * Google reCAPTCHA on the enquiry form, and the Calendly embed on /book, each
- * loading a script and an iframe from their own domains.
+ * `next/font`, so nothing legitimate needs an external origin. Three
+ * exceptions: Google reCAPTCHA on the enquiry form, the Calendly embed on
+ * /book, and Vercel Blob, which serves the images uploaded through the
+ * Resources admin (`img-src` only — nothing is executed from it).
  *
  * The development policy relaxes two things the dev server requires: 'unsafe-eval',
  * which React's development build uses to reconstruct stack traces, and websocket
@@ -18,6 +19,7 @@ const isDevelopment = process.env.NODE_ENV === 'development';
  */
 const RECAPTCHA_ORIGINS = 'https://www.google.com https://www.gstatic.com';
 const CALENDLY_ORIGINS = 'https://calendly.com https://assets.calendly.com';
+const BLOB_ORIGIN = 'https://*.public.blob.vercel-storage.com';
 
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -26,7 +28,7 @@ const contentSecurityPolicy = [
     ? `script-src 'self' 'unsafe-inline' 'unsafe-eval' ${RECAPTCHA_ORIGINS} ${CALENDLY_ORIGINS}`
     : `script-src 'self' 'unsafe-inline' ${RECAPTCHA_ORIGINS} ${CALENDLY_ORIGINS}`,
   `style-src 'self' 'unsafe-inline' ${CALENDLY_ORIGINS}`,
-  `img-src 'self' data: blob: ${CALENDLY_ORIGINS}`,
+  `img-src 'self' data: blob: ${CALENDLY_ORIGINS} ${BLOB_ORIGIN}`,
   "font-src 'self' data:",
   isDevelopment
     ? `connect-src 'self' ws: wss: https://www.google.com ${CALENDLY_ORIGINS}`
@@ -51,6 +53,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  images: {
+    remotePatterns: [{ protocol: 'https', hostname: '*.public.blob.vercel-storage.com' }],
+  },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },

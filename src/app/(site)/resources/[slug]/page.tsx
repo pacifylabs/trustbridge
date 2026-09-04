@@ -10,6 +10,7 @@ import { DisclaimerBlock } from '@/components/blocks/DisclaimerBlock';
 import { Badge } from '@/components/ui/Badge';
 import { getArticleBySlug, getArticles } from '@/lib/content';
 import { formatDate, toIsoDate } from '@/lib/utils';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const articles = await getArticles();
@@ -92,41 +93,15 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </p>
           </header>
 
-          <div className="mt-10 space-y-5">
-            {article.body.map((block, index) => {
-              if (block.type === 'heading') {
-                return (
-                  <h2 key={`${index}-${block.text.slice(0, 20)}`} className="pt-4 text-h2 text-strong">
-                    {block.text}
-                  </h2>
-                );
-              }
-
-              if (block.type === 'list') {
-                return (
-                  <ul
-                    key={`${index}-list`}
-                    className="ml-1 space-y-2.5 border-l-2 border-accent/30 pl-5"
-                  >
-                    {block.items.map((item) => (
-                      <li key={item} className="leading-relaxed text-body">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                );
-              }
-
-              return (
-                <p
-                  key={`${index}-${block.text.slice(0, 20)}`}
-                  className="leading-relaxed text-body"
-                >
-                  {block.text}
-                </p>
-              );
-            })}
-          </div>
+          {/*
+            Sanitized again here even though the CMS write path already does
+            it (lib/cms/articles.ts): cheap insurance against any future write
+            path — a migration, a direct Redis edit — that bypasses it.
+          */}
+          <div
+            className="rich-text mt-10"
+            dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(article.body) }}
+          />
 
           <div className="mt-12">
             <DisclaimerBlock />

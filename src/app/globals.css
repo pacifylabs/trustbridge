@@ -468,3 +468,79 @@
     clip-path: none;
   }
 }
+
+/* ==========================================================================
+   Rich text (article body)
+   --------------------------------------------------------------------------
+   Shared between the public article page and the CMS's editor, so what an
+   editor sees while writing is what a visitor sees once it is published.
+   Targets the exact tag set the editor's toolbar can produce (StarterKit +
+   a link extension — see lib/sanitize.ts for the matching allow-list), and
+   matches the classes the site's own components already use for the same
+   elements elsewhere, rather than introducing a second typographic scale.
+   ========================================================================== */
+.rich-text {
+  @apply text-body leading-relaxed;
+}
+
+.rich-text > *:first-child {
+  margin-top: 0;
+}
+
+.rich-text p {
+  @apply mt-4;
+}
+
+.rich-text h2 {
+  @apply mt-8 text-h2 text-strong;
+}
+
+.rich-text h3 {
+  @apply mt-6 text-h3 text-strong;
+}
+
+.rich-text ul,
+.rich-text ol {
+  @apply mt-4 ml-1 space-y-2.5 border-l-2 border-accent/30 pl-5;
+}
+
+.rich-text ul {
+  list-style-type: disc;
+}
+
+.rich-text ol {
+  list-style-type: decimal;
+}
+
+.rich-text li {
+  @apply leading-relaxed text-body;
+}
+
+.rich-text li::marker {
+  @apply text-accent-ink;
+}
+
+.rich-text a {
+  @apply text-link underline underline-offset-2 transition-colors hover:text-link-hover;
+}
+
+.rich-text strong {
+  @apply font-semibold text-strong;
+}
+
+.rich-text blockquote {
+  @apply mt-4 border-l-2 border-accent pl-4 text-muted italic;
+}
+
+.rich-text code {
+  @apply rounded bg-surface-sunken px-1.5 py-0.5 text-[0.9em];
+}
+
+/* Placeholder text in an empty Tiptap editor (the CMS only). */
+.rich-text.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  @apply text-muted/70;
+}

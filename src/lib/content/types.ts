@@ -68,6 +68,7 @@ export interface Service {
   /** When set, the whole page is gated on this flag. */
   readonly requiresFeature?: FeatureFlag;
   readonly seo: SeoMetadata;
+  readonly status: 'draft' | 'published';
 }
 
 export type ServiceIcon =
@@ -103,18 +104,17 @@ export interface Article {
   readonly readingMinutes: number;
   /** Card and article artwork. Optional: an article renders fully without one. */
   readonly image?: ContentImage;
-  /** Paragraphs and headings, in order. */
-  readonly body: readonly ArticleBlock[];
+  /**
+   * Sanitized rich-text HTML (headings, paragraphs, lists, links, bold/italic,
+   * blockquotes) from the CMS's editor. Sanitized on write and again on read
+   * — see `lib/sanitize.ts` — so this is safe to render directly.
+   */
+  readonly body: string;
   readonly status: 'draft' | 'published';
   /** Marks seeded demonstration content so it can be excluded from production. */
   readonly isSample: boolean;
   readonly seo: SeoMetadata;
 }
-
-export type ArticleBlock =
-  | { readonly type: 'paragraph'; readonly text: string }
-  | { readonly type: 'heading'; readonly text: string }
-  | { readonly type: 'list'; readonly items: readonly string[] };
 
 export interface Adviser {
   readonly slug: string;
@@ -126,6 +126,15 @@ export interface Adviser {
   readonly biography: readonly string[];
   readonly photoUrl?: string;
   readonly linkedServiceSlugs: readonly string[];
+  readonly status: 'draft' | 'published';
+}
+
+export interface Testimonial {
+  readonly slug: string;
+  readonly quote: string;
+  readonly attribution: string;
+  readonly location: string;
+  readonly status: 'draft' | 'published';
 }
 
 export interface LegalPage {
@@ -143,11 +152,6 @@ export interface LegalPage {
  */
 export interface ContentSource {
   readonly name: 'local';
-  getServices(): Promise<readonly Service[]>;
-  getServiceBySlug(slug: string): Promise<Service | null>;
-  getArticles(): Promise<readonly Article[]>;
-  getArticleBySlug(slug: string): Promise<Article | null>;
-  getAdvisers(): Promise<readonly Adviser[]>;
   getLegalPages(): Promise<readonly LegalPage[]>;
   getLegalPageBySlug(slug: string): Promise<LegalPage | null>;
 }

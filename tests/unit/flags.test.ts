@@ -7,13 +7,33 @@ import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
  * tests cover the closed-by-default behaviour explicitly rather than only the
  * happy path. The environment module reads process.env once at import, so each
  * case re-imports with a fresh module registry.
+ *
+ * KV_REST_API_URL/TOKEN are explicitly unset by default so these tests never
+ * depend on, or make real calls to, whatever Redis happens to be configured
+ * in the environment they run in. The "settings override" cases below opt
+ * back in deliberately, with a mocked Redis client.
+ *
+ * `next/cache`'s `unstable_cache` needs the real Next.js server runtime
+ * (an "incrementalCache" instance Vitest never provides), so it is mocked
+ * to a plain pass-through here — lib/cms/settings.ts uses it purely as a
+ * performance optimization (see its own comment for why), not for anything
+ * these tests are exercising.
  */
+vi.mock('next/cache', () => ({
+  unstable_cache: (fn: (...args: unknown[]) => unknown) => fn,
+  revalidateTag: vi.fn(),
+}));
 
 const ORIGINAL_ENV = { ...process.env };
 
 async function loadFlags(env: Record<string, string | undefined>) {
   vi.resetModules();
-  process.env = { ...ORIGINAL_ENV, ...env };
+  process.env = {
+    ...ORIGINAL_ENV,
+    KV_REST_API_URL: undefined,
+    KV_REST_API_TOKEN: undefined,
+    ...env,
+  };
   return import('@/lib/flags');
 }
 
@@ -23,6 +43,7 @@ beforeEach(() => {
 
 afterEach(() => {
   process.env = { ...ORIGINAL_ENV };
+  vi.doUnmock('@upstash/redis');
 });
 
 describe('feature flags', () => {
@@ -32,8 +53,8 @@ describe('feature flags', () => {
       FEATURE_BUSINESS_IMMIGRATION: undefined,
     });
 
-    expect(isFeatureEnabled('complexMatters')).toBe(false);
-    expect(isFeatureEnabled('businessImmigration')).toBe(false);
+    expect(await isFeatureEnabled('complexMatters')).toBe(false);
+    expect(await isFeatureEnabled('businessImmigration')).toBe(false);
   });
 
   it('stays disabled for any value other than the exact string "true"', async () => {
@@ -41,14 +62,14 @@ describe('feature flags', () => {
       const { isFeatureEnabled } = await loadFlags({ FEATURE_COMPLEX_MATTERS: value });
       // "TRUE " is trimmed and lowercased, so it does enable. The rest must not.
       const expected = value.trim().toLowerCase() === 'true';
-      expect(isFeatureEnabled('complexMatters')).toBe(expected);
+      expect(await isFeatureEnabled('complexMatters')).toBe(expected);
     }
   });
 
   it('enables a flag when set to true', async () => {
     const { isFeatureEnabled } = await loadFlags({ FEATURE_COMPLEX_MATTERS: 'true' });
-    expect(isFeatureEnabled('complexMatters')).toBe(true);
-    expect(isFeatureEnabled('businessImmigration')).toBe(false);
+    expect(await isFeatureEnabled('complexMatters')).toBe(true);
+    expect(await isFeatureEnabled('businessImmigration')).toBe(false);
   });
 
   it('allows preview to reveal gated content outside production', async () => {
@@ -57,8 +78,8 @@ describe('feature flags', () => {
       FEATURE_COMPLEX_MATTERS: 'false',
     });
 
-    expect(isFeatureEnabled('complexMatters')).toBe(false);
-    expect(isFeatureEnabled('complexMatters', { previewEnabled: true })).toBe(true);
+    expect(await isFeatureEnabled('complexMatters')).toBe(false);
+    expect(await isFeatureEnabled('complexMatters', { previewEnabled: true })).toBe(true);
   });
 
   it('never allows preview to reveal gated content in production', async () => {
@@ -67,7 +88,7 @@ describe('feature flags', () => {
       FEATURE_COMPLEX_MATTERS: 'false',
     });
 
-    expect(isFeatureEnabled('complexMatters', { previewEnabled: true })).toBe(false);
+    expect(await isFeatureEnabled('complexMatters', { previewEnabled: true })).toBe(false);
   });
 });
 
@@ -78,8 +99,8 @@ describe('launch gate', () => {
       SITE_LAUNCHED: 'false',
     });
 
-    expect(isSiteLaunched()).toBe(false);
-    expect(shouldServeComingSoon()).toBe(true);
+    expect(await isSiteLaunched()).toBe(false);
+    expect(await shouldServeComingSoon()).toBe(true);
   });
 
   it('serves the full site in production once launched', async () => {
@@ -88,8 +109,8 @@ describe('launch gate', () => {
       SITE_LAUNCHED: 'true',
     });
 
-    expect(isSiteLaunched()).toBe(true);
-    expect(shouldServeComingSoon()).toBe(false);
+    expect(await isSiteLaunched()).toBe(true);
+    expect(await shouldServeComingSoon()).toBe(false);
   });
 
   it('serves the full site on staging and development regardless of the flag', async () => {
@@ -98,7 +119,7 @@ describe('launch gate', () => {
         NEXT_PUBLIC_APP_ENV: appEnv,
         SITE_LAUNCHED: 'false',
       });
-      expect(isSiteLaunched()).toBe(true);
+      expect(await isSiteLaunched()).toBe(true);
     }
   });
 
@@ -108,6 +129,54 @@ describe('launch gate', () => {
       SITE_LAUNCHED: undefined,
     });
 
-    expect(shouldServeComingSoon()).toBe(true);
+    expect(await shouldServeComingSoon()).toBe(true);
+  });
+});
+
+describe('CMS settings override', () => {
+  function mockRedisSettings(stored: Record<string, unknown> | null) {
+    vi.doMock('@upstash/redis', () => ({
+      Redis: class {
+        async get() {
+          return stored;
+        }
+      },
+    }));
+  }
+
+  it('isSiteLaunched opens once the CMS settings say launched, with no env var set', async () => {
+    mockRedisSettings({ siteLaunched: true });
+    const { isSiteLaunched } = await loadFlags({
+      NEXT_PUBLIC_APP_ENV: 'production',
+      SITE_LAUNCHED: undefined,
+      KV_REST_API_URL: 'https://example.upstash.io',
+      KV_REST_API_TOKEN: 'test-token',
+    });
+
+    expect(await isSiteLaunched()).toBe(true);
+  });
+
+  it('an explicit SITE_LAUNCHED=true still wins even if settings say false', async () => {
+    mockRedisSettings({ siteLaunched: false });
+    const { isSiteLaunched } = await loadFlags({
+      NEXT_PUBLIC_APP_ENV: 'production',
+      SITE_LAUNCHED: 'true',
+      KV_REST_API_URL: 'https://example.upstash.io',
+      KV_REST_API_TOKEN: 'test-token',
+    });
+
+    expect(await isSiteLaunched()).toBe(true);
+  });
+
+  it('isFeatureEnabled reflects a CMS-enabled flag with no env var set', async () => {
+    mockRedisSettings({ featureComplexMatters: true });
+    const { isFeatureEnabled } = await loadFlags({
+      FEATURE_COMPLEX_MATTERS: undefined,
+      KV_REST_API_URL: 'https://example.upstash.io',
+      KV_REST_API_TOKEN: 'test-token',
+    });
+
+    expect(await isFeatureEnabled('complexMatters')).toBe(true);
+    expect(await isFeatureEnabled('businessImmigration')).toBe(false);
   });
 });

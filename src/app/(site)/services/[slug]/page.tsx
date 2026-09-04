@@ -58,7 +58,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
   if (!service) notFound();
 
-  const sections = getVisibleSections(service);
+  const sections = await getVisibleSections(service);
   const allServices = await getVisibleServices();
   const related = allServices.filter((entry) => entry.slug !== service.slug).slice(0, 3);
 

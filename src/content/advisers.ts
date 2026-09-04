@@ -28,6 +28,7 @@ export const DEV_ADVISER_SEEDS: readonly Adviser[] = [
       'Layout sample only. This profile exists so the adviser grid can be checked with content in it, and is never rendered outside local development.',
     ],
     linkedServiceSlugs: ['spouse-and-partner-visas', 'settlement-indefinite-leave-to-remain'],
+    status: 'published',
   },
   {
     slug: 'sample-adviser-two',
@@ -39,6 +40,7 @@ export const DEV_ADVISER_SEEDS: readonly Adviser[] = [
       'Layout sample only. A deliberately longer biography, so that unequal text lengths can be checked against the equal-height card rule before real profiles arrive.',
     ],
     linkedServiceSlugs: ['skilled-worker-visas'],
+    status: 'published',
   },
   {
     slug: 'sample-adviser-three',
@@ -48,5 +50,6 @@ export const DEV_ADVISER_SEEDS: readonly Adviser[] = [
     registrationNumber: 'Registration number to be confirmed',
     biography: ['Layout sample only.'],
     linkedServiceSlugs: ['british-citizenship', 'eu-settlement-scheme'],
+    status: 'published',
   },
 ];

@@ -3,12 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Quote } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { Testimonial } from '@/lib/content/types';
 
-export interface Testimonial {
-  readonly quote: string;
-  readonly attribution: string;
-  readonly location: string;
-}
+export type { Testimonial };
 
 /**
  * Testimonial slider.

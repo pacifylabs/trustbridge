@@ -1,5 +1,5 @@
 import type { ProcessStep } from '@/components/blocks/ProcessSteps';
-import type { Testimonial } from '@/components/blocks/TestimonialSlider';
+import type { Testimonial } from '@/lib/content/types';
 
 /**
  * Page copy for Home, About and the standalone pages.
@@ -38,7 +38,7 @@ export const HOME = {
       },
       {
         title: 'Written summary',
-        body: 'You receive a clear note of options, requirements, and costs.',
+        body: 'Where appropriate, clients will receive confirmation of the key advice, options or next steps arising from their consultation.',
       },
       {
         title: 'Preparing the application',
@@ -55,7 +55,7 @@ export const HOME = {
     lead: 'Meticulous preparation and',
     emphasis: 'unwavering honesty',
     standfirst:
-      'Immigration decisions rest with the Home Office. We control what matters: the exceptional quality of your application and the strategic clarity of the advice behind it.',
+      'Immigration decisions rest with the Home Office. We focus on careful preparation, clear advice and ensuring that applications and supporting evidence address the relevant requirements.',
     items: [
       {
         title: 'Plain English, not jargon',
@@ -67,7 +67,7 @@ export const HOME = {
       },
       {
         title: 'Evidence prepared properly',
-        body: 'We ensure your documents meet the exact requirements to prevent avoidable refusals.',
+        body: 'We carefully review supporting documents and evidence against the relevant immigration requirements, helping to identify and address potential issues before submission.',
       },
       {
         title: 'Clear on scope and cost',
@@ -108,10 +108,11 @@ export const HOME = {
     'British citizenship',
   ],
   /*
-    Deliberately empty. A fabricated testimonial presented as a genuine
-    client's words is a serious problem for a regulated advice practice, not
-    a copy nitpick, so nothing is invented here (README rule 6). The section
-    stays hidden on the homepage until this holds real, consented testimonials.
+    The section heading only — the testimonials themselves are managed from
+    /cms/testimonials (Redis-backed) and read via getTestimonials(), not
+    stored here. See README rule 6: a fabricated testimonial presented as a
+    genuine client's words is a serious problem for a regulated advice
+    practice, so nothing is invented here or pre-filled in the CMS form.
   */
   testimonials: {
     eyebrow: 'In their words',
@@ -119,7 +120,17 @@ export const HOME = {
     emphasis: 'actually feels like',
     standfirst:
       'Clients tell us the same thing more often than anything else: they finally understood what was being asked of them.',
-    items: [] as readonly Testimonial[],
+  },
+  /*
+    The section heading only — advisers themselves are managed from
+    /cms/team (Redis-backed) and read via getAdvisers(), not stored here.
+  */
+  team: {
+    eyebrow: 'Our team',
+    lead: 'The advisers',
+    emphasis: 'behind your case',
+    standfirst:
+      'Every profile sets out who you would be working with, their professional title, and the regulatory details behind their advice.',
   },
   resources: {
     eyebrow: 'Resources',
@@ -139,22 +150,28 @@ export const HOME = {
  */
 export const DEV_TESTIMONIAL_SEEDS: readonly Testimonial[] = [
   {
+    slug: 'dev-seed-spouse-visa-manchester',
     quote:
       'I had read the guidance three times and still could not tell which parts applied to me. Half an hour into the first consultation I had a list of what to gather and the order to do it in.',
     attribution: 'Spouse visa client',
     location: 'Manchester',
+    status: 'published',
   },
   {
+    slug: 'dev-seed-skilled-worker-birmingham',
     quote:
       'What I valued most was being told plainly where my case was weak. Nobody had done that before, and it changed how we put the application together.',
     attribution: 'Skilled Worker client',
     location: 'Birmingham',
+    status: 'published',
   },
   {
+    slug: 'dev-seed-family-visa-london',
     quote:
       'They answered the same question twice without ever making me feel awkward for asking. When you are dealing with your family, that matters more than people realise.',
     attribution: 'Family visa client',
     location: 'London',
+    status: 'published',
   },
 ] as const;
 
@@ -173,31 +190,54 @@ export const ABOUT = {
     { src: '/images/cluster/family.webp', alt: 'An adult and child walking together', width: 800, height: 600, placeholderLabel: 'Family at home' },
   ],
   story: {
-    eyebrow: 'Our approach',
-    lead: 'Why we set the practice up',
-    emphasis: 'this way',
+    eyebrow: 'About us',
+    lead: 'A practice built on',
+    emphasis: 'clarity and care',
     paragraphs: [
-      'Most people meeting the Immigration Rules for the first time are not short of information. They are short of a clear account of which parts apply to them, in what order, and what the caseworker will actually be looking for.',
-      'We built the practice around that gap. Each matter starts with a proper look at your circumstances and an honest view of the options, including the ones we would advise against.',
-      'That approach shapes how we work: fewer assumptions, more questions at the outset, and a written record of what was advised so you are not relying on memory weeks later.',
+      'TrustBridge Immigration Services Ltd is a UK-based immigration practice established to provide clear, professional and client-focused immigration advice and services to individuals, families and businesses.',
+      "We understand that immigration decisions can affect some of the most important aspects of a person's life, including family, career, business and long-term plans. Our approach is therefore centred on understanding each client's individual circumstances, providing clear and practical advice, and preparing matters carefully and professionally.",
+      'TrustBridge combines professional immigration expertise with a modern, efficient and accessible approach to client service. We are committed to clear communication, attention to detail, confidentiality and treating every client with respect.',
+      'Our practice is being developed to provide support across a broad range of UK immigration matters, with cases handled by advisers with the appropriate level of authorisation and competence for the work involved.',
     ],
   },
+  missionVision: {
+    mission: {
+      title: 'Our mission',
+      body: 'To provide clear, reliable and professional UK immigration advice that helps individuals, families and businesses understand their options and navigate the immigration system with confidence.',
+    },
+    vision: {
+      title: 'Our vision',
+      body: 'To build a trusted and respected immigration practice recognised for professional standards, sound judgement, excellent client service and a commitment to helping clients navigate complex immigration matters with clarity and confidence.',
+    },
+  },
   values: {
-    eyebrow: 'What we hold to',
-    lead: 'Three things we',
-    emphasis: 'will not compromise on',
+    eyebrow: 'Our values',
+    lead: 'The principles',
+    emphasis: 'behind our work',
     items: [
       {
-        title: 'Trust',
-        body: 'We tell you what we think, including when it is not what you were hoping to hear. An adviser who only delivers good news is not much use when a decision goes the other way.',
+        title: 'Trust and Integrity',
+        body: 'We act honestly, responsibly and in the best interests of our clients.',
       },
       {
         title: 'Clarity',
-        body: 'Every requirement is explained in terms you can act on. If we have written something you cannot follow, that is a failing on our part rather than yours.',
+        body: 'Immigration law can be complex. We aim to explain options, requirements and risks in clear and understandable language.',
       },
       {
         title: 'Professionalism',
-        body: 'We work within the scope of what we are authorised to advise on, keep your information secure, and say so plainly when a matter needs someone else.',
+        body: 'We approach every matter carefully, responsibly and with appropriate attention to detail.',
+      },
+      {
+        title: 'Client Focus',
+        body: "Every client's circumstances are different. We listen, understand the individual situation and provide advice appropriate to the client's needs.",
+      },
+      {
+        title: 'Confidentiality',
+        body: 'We recognise the sensitive nature of immigration matters and treat client information with appropriate care and confidentiality.',
+      },
+      {
+        title: 'Continuous Development',
+        body: 'Immigration law and policy continually evolve. We are committed to maintaining professional competence and keeping our knowledge and practices up to date.',
       },
     ],
   },

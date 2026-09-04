@@ -64,9 +64,13 @@ export const LEGAL_PAGES: readonly LegalPage[] = [
     title: 'Regulatory information',
     summary: 'Details of our regulatory status and the advice we are authorised to give.',
     sections: [
-      { heading: 'Our regulatory status', body: PENDING },
-      { heading: 'The level at which our advisers are authorised', body: PENDING },
-      { heading: 'Company information', body: PENDING },
+      { heading: 'Our IAA registration number', body: PENDING },
+      { heading: 'The level and scope of advice we are authorised to provide', body: PENDING },
+      { heading: 'Our advisers', body: PENDING },
+      { heading: 'Official IAA registration mark', body: PENDING },
+      { heading: 'IAA digital verification badge', body: PENDING },
+      { heading: 'Professional indemnity insurance', body: PENDING },
+      { heading: 'Contacting the Immigration Advice Authority (IAA)', body: PENDING },
     ],
   },
   {

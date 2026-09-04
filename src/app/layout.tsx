@@ -3,6 +3,7 @@ import { Fraunces, Inter } from 'next/font/google';
 import { SITE } from '@/content/site';
 import { THEME_ATTRIBUTE, themeInitScript } from '@/lib/theme';
 import { env } from '@/lib/env';
+import { isSiteLaunched } from '@/lib/flags';
 import './globals.css';
 
 /**
@@ -26,63 +27,68 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
-  title: {
-    default: `${SITE.name} | ${SITE.tagline}`,
-    template: `%s | ${SITE.shortName}`,
-  },
-  description: SITE.description,
-  applicationName: SITE.shortName,
-  authors: [{ name: SITE.name, url: SITE.url }],
-  creator: SITE.name,
-  publisher: SITE.name,
-  keywords: [
-    'UK immigration advice',
-    'immigration adviser',
-    'spouse visa',
-    'skilled worker visa',
-    'settlement and ILR',
-    'British citizenship',
-    'EU Settlement Scheme',
-  ],
-  alternates: { canonical: '/' },
-  formatDetection: { telephone: true, address: false, email: true },
-  openGraph: {
-    type: 'website',
-    locale: SITE.locale,
-    url: SITE.url,
-    siteName: SITE.name,
-    title: `${SITE.name} | ${SITE.tagline}`,
-    description: SITE.description,
-    images: [
-      {
-        url: SITE.ogImage.path,
-        width: SITE.ogImage.width,
-        height: SITE.ogImage.height,
-        alt: SITE.ogImage.alt,
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: `${SITE.name} | ${SITE.tagline}`,
-    description: SITE.description,
-    images: [{ url: SITE.ogImage.path, alt: SITE.ogImage.alt }],
-  },
-  robots: {
-    // Nothing is indexed until the client approves launch (README rule 3).
-    index: env.SITE_LAUNCHED,
-    follow: env.SITE_LAUNCHED,
-    googleBot: {
-      index: env.SITE_LAUNCHED,
-      follow: env.SITE_LAUNCHED,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-      'max-video-preview': -1,
+export async function generateMetadata(): Promise<Metadata> {
+  // Nothing is indexed until the client approves launch (README rule 3),
+  // whether that approval came from an env var or the CMS settings toggle.
+  const launched = await isSiteLaunched();
+
+  return {
+    metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
+    title: {
+      default: `${SITE.name} | ${SITE.tagline}`,
+      template: `%s | ${SITE.shortName}`,
     },
-  },
-};
+    description: SITE.description,
+    applicationName: SITE.shortName,
+    authors: [{ name: SITE.name, url: SITE.url }],
+    creator: SITE.name,
+    publisher: SITE.name,
+    keywords: [
+      'UK immigration advice',
+      'immigration adviser',
+      'spouse visa',
+      'skilled worker visa',
+      'settlement and ILR',
+      'British citizenship',
+      'EU Settlement Scheme',
+    ],
+    alternates: { canonical: '/' },
+    formatDetection: { telephone: true, address: false, email: true },
+    openGraph: {
+      type: 'website',
+      locale: SITE.locale,
+      url: SITE.url,
+      siteName: SITE.name,
+      title: `${SITE.name} | ${SITE.tagline}`,
+      description: SITE.description,
+      images: [
+        {
+          url: SITE.ogImage.path,
+          width: SITE.ogImage.width,
+          height: SITE.ogImage.height,
+          alt: SITE.ogImage.alt,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${SITE.name} | ${SITE.tagline}`,
+      description: SITE.description,
+      images: [{ url: SITE.ogImage.path, alt: SITE.ogImage.alt }],
+    },
+    robots: {
+      index: launched,
+      follow: launched,
+      googleBot: {
+        index: launched,
+        follow: launched,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+        'max-video-preview': -1,
+      },
+    },
+  };
+}
 
 export const viewport: Viewport = {
   width: 'device-width',

@@ -1,17 +1,22 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi, afterEach } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { TestimonialSlider } from '@/components/blocks/TestimonialSlider';
-import { DEV_TESTIMONIAL_SEEDS, HOME } from '@/content/pages';
+import { DEV_TESTIMONIAL_SEEDS } from '@/content/pages';
+
+vi.mock('next/cache', () => ({
+  unstable_cache: (fn: (...args: unknown[]) => unknown) => fn,
+  revalidateTag: vi.fn(),
+}));
 
 /**
  * Testimonial slider.
  *
- * Exercised against `DEV_TESTIMONIAL_SEEDS` rather than `HOME.testimonials`:
- * the live content ships with no testimonials at all until the practice has
- * real, consented ones (see the compliance check below), so the seeds are
- * what stand in for "a populated slider" here.
+ * Exercised against `DEV_TESTIMONIAL_SEEDS` rather than real content: the
+ * site ships with no testimonials at all until the practice adds real,
+ * consented ones through /cms/testimonials (see the compliance check below),
+ * so the seeds are what stand in for "a populated slider" here.
  *
  * The compliance checks matter as much as the behavioural ones: a quote
  * saying an application succeeded would breach the outcome rule just as surely
@@ -19,12 +24,22 @@ import { DEV_TESTIMONIAL_SEEDS, HOME } from '@/content/pages';
  * replaced later by someone not thinking about that.
  */
 
+const ORIGINAL_ENV = { ...process.env };
+
+afterEach(() => {
+  process.env = { ...ORIGINAL_ENV };
+});
+
 describe('live content', () => {
-  it('ships no testimonials until the practice supplies real, consented ones', () => {
+  it('ships no testimonials outside development, so the layout seeds cannot leak', async () => {
     // A fabricated testimonial attributed to a real-sounding client is a
     // serious problem for a regulated advice practice, not a copy nitpick
     // (README rule 6) — mirrors the equivalent check on ADVISERS.
-    expect(HOME.testimonials.items).toHaveLength(0);
+    vi.resetModules();
+    process.env = { ...ORIGINAL_ENV, NODE_ENV: 'production', KV_REST_API_URL: '', KV_REST_API_TOKEN: '' };
+
+    const { listPublishedTestimonials } = await import('@/lib/cms/testimonials');
+    expect(await listPublishedTestimonials()).toHaveLength(0);
   });
 });
 

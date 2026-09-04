@@ -12,30 +12,26 @@ import { ImageCluster } from '@/components/blocks/ImageCluster';
 import { CredentialCard } from '@/components/blocks/CredentialCard';
 import { RibbonBand } from '@/components/blocks/RibbonBand';
 import { TestimonialSlider } from '@/components/blocks/TestimonialSlider';
+import { AdviserCard } from '@/components/blocks/AdviserCard';
 import { StampBadge } from '@/components/ui/StampBadge';
 import { CtaBand } from '@/components/blocks/CtaBand';
 import { DisclaimerBlock } from '@/components/blocks/DisclaimerBlock';
 import { Card, CardHeading } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { getArticles, getStats, getVisibleServices } from '@/lib/content';
+import { getAdvisers, getArticles, getStats, getTestimonials, getVisibleServices } from '@/lib/content';
 import { CTA_LABELS } from '@/content/site';
-import { DEV_TESTIMONIAL_SEEDS, HOME } from '@/content/pages';
+import { HOME } from '@/content/pages';
 
 export default async function HomePage() {
-  const [services, articles, stats] = await Promise.all([
+  const [services, articles, stats, testimonials, advisers] = await Promise.all([
     getVisibleServices(),
     getArticles(),
     getStats(),
+    getTestimonials(),
+    getAdvisers(),
   ]);
   const featuredArticles = articles.slice(0, 3);
-
-  // No real testimonials yet (see HOME.testimonials). The dev seeds are
-  // gated on NODE_ENV, the same way DEV_ADVISER_SEEDS is, so they can never
-  // reach staging or production.
-  const testimonials =
-    HOME.testimonials.items.length === 0 && process.env.NODE_ENV === 'development'
-      ? DEV_TESTIMONIAL_SEEDS
-      : HOME.testimonials.items;
+  const featuredAdvisers = advisers.slice(0, 3);
 
   return (
     <>
@@ -152,6 +148,30 @@ export default async function HomePage() {
           />
           <Reveal className="mt-10">
             <TestimonialSlider items={testimonials} />
+          </Reveal>
+        </Section>
+      ) : null}
+
+      {featuredAdvisers.length > 0 ? (
+        <Section tone="canvas" labelledBy="home-team">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <SectionHeading
+              id="home-team"
+              eyebrow={HOME.team.eyebrow}
+              lead={HOME.team.lead}
+              emphasis={HOME.team.emphasis}
+              standfirst={HOME.team.standfirst}
+            />
+            <Button href="/team" variant="secondary" className="shrink-0">
+              Meet the team
+            </Button>
+          </div>
+          <Reveal className="mt-10">
+            <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {featuredAdvisers.map((adviser) => (
+                <AdviserCard key={adviser.slug} adviser={adviser} />
+              ))}
+            </ul>
           </Reveal>
         </Section>
       ) : null}

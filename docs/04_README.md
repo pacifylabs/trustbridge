@@ -1,6 +1,6 @@
 # TrustBridge Immigration Services Ltd: Website
 
-A modern, premium website for a UK immigration services practice. Built with Next.js, with enquiries emailed directly to the shared inbox (no database) and a launch gate that keeps the full site private until the client approves go-live.
+A modern, premium website for a UK immigration services practice. Built with Next.js, with enquiries emailed directly to the shared inbox (no database involved in that path), a lightweight self-service CMS for Resources articles, and a launch gate that keeps the full site private until the client approves go-live.
 
 > **Trust · Clarity · Professionalism**
 
@@ -20,7 +20,8 @@ A modern, premium website for a UK immigration services practice. Built with Nex
 ## Tech Stack
 
 - **Frontend:** Next.js (App Router) + TypeScript + Tailwind CSS
-- **Content:** Bundled with the repository (`src/content`), edited as code. No CMS, no database — see Open Decisions.
+- **Content:** Services, adviser profiles and legal pages are bundled with the repository (`src/content`), edited as code. Articles have their own lightweight CMS instead — see Resources CMS below.
+- **Resources CMS:** `/cms`, a password-gated CMS area backed by Upstash Redis (article data) and Vercel Blob (uploaded images)
 - **Email:** Resend (transactional) → Google Workspace / M365 shared mailbox (`info@`), which the client manages directly
 - **Spam protection:** Honeypot field + Google reCAPTCHA v2 (checkbox)
 - **Booking:** Calendly, embedded on `/book` behind a click-to-load gate (see below)
@@ -33,14 +34,18 @@ A modern, premium website for a UK immigration services practice. Built with Nex
   /(marketing)        Home, About, Contact
   /services           Index + [slug] modular route pages
   /team               Adviser profiles
-  /resources          Articles (bundled content)
+  /resources          Articles (read from the Resources CMS)
   /legal              Privacy, Cookies, T&Cs, Complaints, Regulatory, Accessibility
   /book               Consultation booking
   /coming-soon        Public placeholder (prod default until launch)
+  /cms                Resources CMS: login + article list/editor, password-gated
   /api/enquiry        Validates, checks reCAPTCHA, emails the enquiry via Resend
+  /api/cms            Article CRUD, image upload, login/logout — all session-gated
 /components           CTA, ServiceCard, AdviserCard, ArticleCard, DisclaimerBlock, EnquiryForm, Recaptcha
+/components/cms       ArticleForm, ArticlesList, LoginForm
 /lib                  email, recaptcha, validation, feature-flags
-/content              Bundled site content (services, articles, advisers, legal, pages)
+/lib/cms              Redis-backed article storage, Blob uploads, admin session signing
+/content              Bundled site content (services, advisers, legal, pages; article samples for seeding)
 /styles               design tokens
 ```
 
@@ -54,6 +59,12 @@ RESEND_API_KEY=
 NEXT_PUBLIC_RECAPTCHA_SITE_KEY=
 RECAPTCHA_SECRET_KEY=
 NEXT_PUBLIC_CALENDLY_URL=      # e.g. https://calendly.com/trustbridge/consultation
+KV_REST_API_URL=               # Upstash Redis, via Vercel Storage
+KV_REST_API_TOKEN=
+BLOB_READ_WRITE_TOKEN=         # Vercel Blob, via Vercel Storage
+ADMIN_PASSWORD=                # shared /cms editor password
+ADMIN_SESSION_SECRET=          # e.g. `openssl rand -base64 32`
+RESOURCES_DATA_SOURCE=demo     # demo | cms — see Content Editing
 FEATURE_COMPLEX_MATTERS=false
 FEATURE_BUSINESS_IMMIGRATION=false
 ```
@@ -83,7 +94,11 @@ pnpm dev                       # http://localhost:3000
 
 ## Content Editing
 
-There is no CMS. Articles, service pages and adviser profiles live in `src/content` as TypeScript and are edited by a developer, then published through the normal deploy process.
+Service pages, adviser profiles and legal pages live in `src/content` as TypeScript and are edited by a developer, then published through the normal deploy process.
+
+Articles are different: staff sign in at `/cms` (shared password) to add, edit and remove Resources articles themselves, no developer or deploy required. A save calls `revalidatePath`, so the change is live within seconds rather than waiting on a rebuild. Uploaded images go to Vercel Blob; article data is stored in Upstash Redis. Until both are provisioned (see Environment Variables), `/cms` shows a clear "not configured" message and the public Resources page falls back to the three sample articles bundled in `src/content/articles.ts`, read-only. Once Redis is live and empty, the CMS's "Import starter content" button loads those same three samples as real, editable articles.
+
+**Demo vs live content.** `RESOURCES_DATA_SOURCE` decides what the public Resources page actually shows, independent of what is sitting in the CMS: `demo` (the default) always shows the three bundled sample articles, even in production, so the site can be reviewed and previewed while real articles are still being drafted in `/cms` — visitors never see half-finished content. Setting it to `cms` switches the public page over to whatever is published in Redis. The admin article list shows a banner whenever it is not `cms`, so it is never a surprise that an edit made in `/cms` is not appearing on the live page.
 
 ## Launch Checklist
 
@@ -92,15 +107,15 @@ There is no CMS. Articles, service pages and adviser profiles live in `src/conte
 - [ ] Legal pages finalised
 - [ ] `RESEND_API_KEY`, `ENQUIRY_FROM_EMAIL` domain verification, and both reCAPTCHA keys are set in production
 - [ ] A real enquiry has been sent end-to-end and arrived in `info@trustbridgeimmigration.co.uk`
+- [ ] Redis and Blob provisioned, `ADMIN_PASSWORD`/`ADMIN_SESSION_SECRET` set, and a real article created and edited end-to-end through `/cms`
 - [ ] Lighthouse ≥ 90, WCAG 2.1 AA checks pass
 - [ ] Client approval received → set `SITE_LAUNCHED=true`
 
 ## Handover Deliverables
 
-Admin credentials · hosting/DNS access · email admin access (client-managed) · Resend account access · reCAPTCHA account access · paid licences list · recurring costs · renewal schedule.
+Admin credentials · hosting/DNS access · email admin access (client-managed) · Resend account access · reCAPTCHA account access · Vercel Storage (Redis + Blob) access · `/cms` password · paid licences list · recurring costs · renewal schedule.
 
 ## Open Decisions
 
-1. Booking: Cal.com vs Calendly vs SimplyBook.me.
-2. Whether a CMS (e.g. Payload) is worth adding later — it would let staff edit content without a developer, but needs a database and the hosting/backup/auth work that comes with one. Deferred for now.
-3. Email platform for the mailboxes themselves: Google Workspace vs Microsoft 365 (client-managed, outside this repository).
+1. Email platform for the mailboxes themselves: Google Workspace vs Microsoft 365 (client-managed, outside this repository).
+2. Whether the Resources CMS should grow beyond articles (e.g. adviser profiles) — deliberately kept narrow for now, since regulatory wording and adviser credentials arguably should not be freely editable without review.

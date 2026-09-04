@@ -165,4 +165,20 @@ describe('genuinely invalid values still fail', () => {
       /Invalid environment configuration/,
     );
   });
+
+  it('rejects a RESOURCES_DATA_SOURCE outside demo/cms', async () => {
+    await expect(loadEnv({ RESOURCES_DATA_SOURCE: 'live' })).rejects.toThrow(
+      /Invalid environment configuration/,
+    );
+  });
+});
+
+describe('Resources data source', () => {
+  it('defaults to demo', async () => {
+    const { env } = await loadEnv({ RESOURCES_DATA_SOURCE: '' });
+    expect(env.RESOURCES_DATA_SOURCE).toBe('demo');
+  });
+
+  // isResourcesLiveFromCms itself (the Redis-aware version) lives in
+  // lib/cms/settings.ts and is covered in tests/unit/cms-settings.test.ts.
 });

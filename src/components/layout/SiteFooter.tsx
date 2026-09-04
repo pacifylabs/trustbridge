@@ -57,9 +57,9 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
               <Image
                 src="/logo.png"
                 alt={SITE.name}
-                width={2172}
-                height={724}
-                className="site-logo h-10 w-auto sm:h-11"
+                width={727}
+                height={614}
+                className="site-logo h-12 w-auto sm:h-14"
               />
             </Link>
 

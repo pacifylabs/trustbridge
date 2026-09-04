@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { env } from '@/lib/env';
+import { isSiteLaunched } from '@/lib/flags';
 import { getArticles, getLegalPages, getVisibleServices } from '@/lib/content';
 
 /**
@@ -12,7 +13,7 @@ import { getArticles, getLegalPages, getVisibleServices } from '@/lib/content';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '');
 
-  if (env.NEXT_PUBLIC_APP_ENV === 'production' && !env.SITE_LAUNCHED) {
+  if (!(await isSiteLaunched())) {
     return [];
   }
 

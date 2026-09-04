@@ -26,6 +26,7 @@ export const SERVICES: readonly Service[] = [
       'Advice for couples applying to live together in the UK, including first applications, extensions and switching from another visa.',
     icon: 'users',
     order: 1,
+    status: 'published',
     intro: [
       'Partner applications turn on evidence. The Home Office needs to see a genuine relationship, that you meet the financial requirement, and that your accommodation is in order.',
       'We work through each requirement with you, tell you what the caseworker expects, and help assemble a clear, focused bundle.',
@@ -102,6 +103,7 @@ export const SERVICES: readonly Service[] = [
       'Support for standard visitor applications, including visits to family, short business trips and applications following a previous refusal.',
     icon: 'plane',
     order: 2,
+    status: 'published',
     intro: [
       'Visitor applications are refused more often than people expect. The decision rests entirely on whether the caseworker believes you will leave at the end of your stay.',
       'That judgement is made on the papers without an interview, so the application must answer the obvious questions before they are asked.',
@@ -166,6 +168,7 @@ export const SERVICES: readonly Service[] = [
       'Advice for workers holding a certificate of sponsorship, covering first applications, extensions, changing employer and dependants.',
     icon: 'briefcase',
     order: 3,
+    status: 'published',
     intro: [
       'The Skilled Worker route requires a sponsoring employer, a job at an eligible skill level, and a salary that meets the threshold and occupation code going rate.',
       'Most problems arise from the detail: the wrong occupation code, an incorrectly calculated salary, or a mismatched certificate of sponsorship.',
@@ -236,6 +239,7 @@ export const SERVICES: readonly Service[] = [
       'Advice for eligible health and care professionals sponsored by an approved employer, including dependants and settlement.',
     icon: 'award',
     order: 4,
+    status: 'published',
     intro: [
       'The Health and Care Worker route is a distinct visa for medical and care professionals sponsored by an approved employer.',
       'Eligibility turns on your occupation code, your employer’s approval to sponsor on this route, and any necessary professional registration.',
@@ -299,6 +303,7 @@ export const SERVICES: readonly Service[] = [
       'Advice on qualifying for indefinite leave to remain, including continuous residence, absences and the Life in the UK requirement.',
     icon: 'home',
     order: 5,
+    status: 'published',
     intro: [
       'Settlement is the point at which your right to live in the UK stops depending on a time-limited visa.',
       'The detail matters more here than almost anywhere else. Most difficulties come down to continuous residence rules, absences, or gaps between visas.',
@@ -369,6 +374,7 @@ export const SERVICES: readonly Service[] = [
       'Advice on naturalisation and registration, including the residence requirements, good character and applications for children.',
     icon: 'globe',
     order: 6,
+    status: 'published',
     intro: [
       'Citizenship is usually the final step after settlement. Naturalisation has its own distinct residence requirements, which are calculated differently from those for ILR.',
       'The good character requirement applies throughout and covers more than just criminal convictions, making full disclosure essential.',
@@ -439,6 +445,7 @@ export const SERVICES: readonly Service[] = [
       'Advice on pre-settled and settled status, late applications, upgrading status and applications for family members.',
     icon: 'file-text',
     order: 7,
+    status: 'published',
     intro: [
       'The EU Settlement Scheme remains vital for those holding pre-settled status, family members joining sponsors, and those with grounds for late applications.',
       'The evidence required is distinct from other routes, relying heavily on proving continuous residence in the UK over specific periods.',
@@ -499,9 +506,10 @@ export const SERVICES: readonly Service[] = [
     title: 'Immigration status and application support',
     shortTitle: 'Status and applications',
     summary:
-      'General immigration consultations, eligibility assessments, application preparation and supporting document reviews across all routes.',
+      'General immigration consultations, eligibility assessments, application preparation and supporting document reviews across the immigration routes and matters within our authorised scope.',
     icon: 'file-text',
     order: 8,
+    status: 'published',
     intro: [
       'Not every enquiry fits neatly into a single route. Sometimes you need a strategic overview of your options before deciding which path to take.',
       'We handle the practical side: assessing eligibility, preparing forms and evidence, drafting cover letters, and reviewing changed circumstances.',
@@ -585,8 +593,9 @@ export const SERVICES: readonly Service[] = [
       'Support for employers building a compliant approach to sponsoring overseas workers, and for individuals on business routes.',
     icon: 'building',
     order: 9,
+    status: 'published',
     intro: [
-      'Employers who sponsor overseas workers take on compliance duties that last as long as the sponsorship. Getting systems right early prevents serious issues later.',
+      'Employers who sponsor overseas workers take on compliance duties that last as long as the sponsorship. Getting systems right early reduces the risk of serious issues later.',
       'We advise employers on practical sponsorship management, and guide individuals through specific business and investment routes.',
     ],
     audience: [
@@ -618,7 +627,7 @@ export const SERVICES: readonly Service[] = [
       {
         heading: 'Sponsor licence applications',
         body: [
-          'We guide you through the process of applying for a sponsor licence, assigning certificates of sponsorship, and managing the sponsor management system to ensure compliance from day one.',
+          'We guide you through the process of applying for a sponsor licence, assigning certificates of sponsorship, and managing the sponsor management system, helping you meet your sponsor compliance duties from day one.',
         ],
         requiresFeature: 'businessImmigration',
       },
@@ -663,6 +672,7 @@ export const SERVICES: readonly Service[] = [
       'Advice on cases involving refusals, previous breaches and other circumstances requiring detailed consideration.',
     icon: 'scale',
     order: 10,
+    status: 'published',
     requiresFeature: 'complexMatters',
     intro: [
       'Some cases require more than just meeting standard requirements. Previous refusals, breaches of conditions, and interrupted histories all need highly careful handling.',

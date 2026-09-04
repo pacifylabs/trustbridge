@@ -6,6 +6,13 @@ import Script from 'next/script';
 declare global {
   interface Window {
     grecaptcha?: {
+      /**
+       * Queues a callback for once the library has finished its own async
+       * init, or runs it immediately if that has already happened. Required:
+       * the script's `onLoad` event fires once the file has executed, which
+       * is earlier than `render` actually being callable.
+       */
+      ready: (callback: () => void) => void;
       render: (container: HTMLElement, params: Record<string, unknown>) => number;
       reset: (widgetId?: number) => void;
     };
@@ -43,12 +50,15 @@ export const Recaptcha = forwardRef<RecaptchaHandle, RecaptchaProps>(function Re
   const widgetId = useRef<number | null>(null);
 
   const render = useCallback(() => {
-    if (!containerRef.current || !window.grecaptcha || widgetId.current !== null) return;
-    widgetId.current = window.grecaptcha.render(containerRef.current, {
-      sitekey: siteKey,
-      callback: (token: string) => onChange(token),
-      'expired-callback': () => onChange(null),
-      'error-callback': () => onChange(null),
+    if (!window.grecaptcha) return;
+    window.grecaptcha.ready(() => {
+      if (!containerRef.current || !window.grecaptcha || widgetId.current !== null) return;
+      widgetId.current = window.grecaptcha.render(containerRef.current, {
+        sitekey: siteKey,
+        callback: (token: string) => onChange(token),
+        'expired-callback': () => onChange(null),
+        'error-callback': () => onChange(null),
+      });
     });
   }, [siteKey, onChange]);
 

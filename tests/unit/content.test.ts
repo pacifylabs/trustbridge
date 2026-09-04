@@ -6,7 +6,15 @@ import { describe, expect, it, vi, afterEach } from 'vitest';
  * The gating lives in the content layer rather than in each page, so these
  * tests are what guarantee a gated service cannot reach a navigation menu, a
  * services index or a sitemap.
+ *
+ * `next/cache`'s `unstable_cache` (used by lib/cms/settings.ts, which feature
+ * gating reads through) needs the real Next.js server runtime that Vitest
+ * never provides, so it is mocked to a plain pass-through.
  */
+vi.mock('next/cache', () => ({
+  unstable_cache: (fn: (...args: unknown[]) => unknown) => fn,
+  revalidateTag: vi.fn(),
+}));
 
 const ORIGINAL_ENV = { ...process.env };
 
@@ -65,7 +73,7 @@ describe('business immigration section gating', () => {
     const service = await getVisibleServiceBySlug('business-immigration');
     expect(service).not.toBeNull();
 
-    const sections = getVisibleSections(service!);
+    const sections = await getVisibleSections(service!);
     expect(sections.some((section) => section.heading === 'Sponsor licence applications')).toBe(false);
     expect(sections.some((section) => section.heading === 'Sponsorship duties in practice')).toBe(true);
   });
@@ -76,7 +84,7 @@ describe('business immigration section gating', () => {
     });
 
     const service = await getVisibleServiceBySlug('business-immigration');
-    const sections = getVisibleSections(service!);
+    const sections = await getVisibleSections(service!);
 
     expect(sections.some((section) => section.heading === 'Sponsor licence applications')).toBe(true);
   });
@@ -94,16 +102,31 @@ describe('articles', () => {
     expect(dates).toStrictEqual([...dates].sort().reverse());
   });
 
-  it('excludes sample articles in production', async () => {
+  it('shows the demo set in production when RESOURCES_DATA_SOURCE is demo (the default)', async () => {
     const { getArticles } = await loadContent({ NEXT_PUBLIC_APP_ENV: 'production' });
     const articles = await getArticles();
 
-    expect(articles.every((article) => !article.isSample)).toBe(true);
+    // Demo mode is a deliberate preview of the bundled samples, including in
+    // production — unlike the old isProduction()-based hiding this replaced.
+    expect(articles.length).toBeGreaterThan(0);
+    expect(articles.every((article) => article.isSample)).toBe(true);
   });
 
-  it('does not resolve a sample article by slug in production', async () => {
+  it('resolves a demo article by slug in production while in demo mode', async () => {
     const { getArticleBySlug } = await loadContent({ NEXT_PUBLIC_APP_ENV: 'production' });
-    expect(await getArticleBySlug('how-we-handle-your-documents')).toBeNull();
+    expect(await getArticleBySlug('how-we-handle-your-documents')).not.toBeNull();
+  });
+
+  it('falls back to the demo set when cms mode is selected but Redis is not configured', async () => {
+    const { getArticles } = await loadContent({
+      RESOURCES_DATA_SOURCE: 'cms',
+      KV_REST_API_URL: '',
+      KV_REST_API_TOKEN: '',
+    });
+    const articles = await getArticles();
+
+    expect(articles.length).toBeGreaterThan(0);
+    expect(articles.every((article) => article.isSample)).toBe(true);
   });
 });
 

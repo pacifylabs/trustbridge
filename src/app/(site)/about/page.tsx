@@ -105,6 +105,26 @@ export default function AboutPage() {
         </div>
       </Section>
 
+      <Section tone="canvas" labelledBy="about-mission">
+        <h2 id="about-mission" className="sr-only">
+          Our mission and vision
+        </h2>
+        <div className="grid gap-5 md:grid-cols-2">
+          <Card>
+            <CardHeading>{ABOUT.missionVision.mission.title}</CardHeading>
+            <p className="mt-3 text-small leading-relaxed text-muted">
+              {ABOUT.missionVision.mission.body}
+            </p>
+          </Card>
+          <Card>
+            <CardHeading>{ABOUT.missionVision.vision.title}</CardHeading>
+            <p className="mt-3 text-small leading-relaxed text-muted">
+              {ABOUT.missionVision.vision.body}
+            </p>
+          </Card>
+        </div>
+      </Section>
+
       <Section tone="mist" labelledBy="about-values">
         <SectionHeading
           id="about-values"

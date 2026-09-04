@@ -76,10 +76,10 @@ export function SiteHeader({ services }: { services: readonly HeaderService[] })
             <Image
               src="/logo.png"
               alt={SITE.name}
-              width={2172}
-              height={724}
+              width={727}
+              height={614}
               priority
-              className="site-logo h-10 w-auto sm:h-11 lg:h-14"
+              className="site-logo h-12 w-auto sm:h-14 lg:h-16"
             />
           </Link>
 

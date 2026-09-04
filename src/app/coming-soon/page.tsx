@@ -52,8 +52,8 @@ export default function ComingSoonPage() {
         <Image
           src="/logo.png"
           alt={SITE.name}
-          width={2172}
-          height={724}
+          width={727}
+          height={614}
           priority
           className="site-logo-inverse h-10 w-auto sm:h-12"
         />
