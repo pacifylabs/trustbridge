@@ -8,7 +8,7 @@ import { NextResponse, type NextRequest } from 'next/server';
  * deployment nobody configured stays behind the gate rather than publishing
  * the site. Development and staging always serve the full site;
  * staging is protected at the hosting layer instead, which handles credentials
- * far more safely than middleware can.
+ * far more safely than proxy can.
  *
  * "Launched" can be set two ways, checked in this order:
  *   1. SITE_LAUNCHED=true (env var, requires a redeploy) — the permanent,
@@ -17,11 +17,11 @@ import { NextResponse, type NextRequest } from 'next/server';
  *
  * Environment variables are read directly here rather than through the typed
  * config module, and the Redis check below is a minimal hand-rolled fetch
- * rather than importing lib/cms/settings.ts: the proxy runs on the edge
- * runtime, where a throwing module-level validation (env.ts parses and
- * throws at import time) would take the whole site down on every request
- * rather than failing one. Both reads are deliberately closed by default: a
- * malformed env var or an unreachable Redis both keep the gate shut.
+ * rather than importing lib/cms/settings.ts: a throwing module-level
+ * validation (env.ts parses and throws at import time) would take the whole
+ * site down on every request rather than failing one. Both reads are
+ * deliberately closed by default: a malformed env var or an unreachable
+ * Redis both keep the gate shut.
  */
 /*
   /cms is allowed through so the practice can draft and manage Resources
@@ -78,7 +78,7 @@ async function isLaunchedInSettings(): Promise<boolean> {
   }
 }
 
-export async function middleware(request: NextRequest): Promise<NextResponse> {
+export async function proxy(request: NextRequest): Promise<NextResponse> {
   /*
     Fail-closed. A blank or missing value used to leave `appEnv` as
     'development', which opened the gate and would have published an

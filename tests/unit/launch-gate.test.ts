@@ -15,7 +15,7 @@ import { NextRequest } from 'next/server';
  * tests from depending on whatever happens to be in the environment they run
  * in, and guarantees the "env var only" cases never hit the network at all.
  */
-import { middleware } from '@/middleware';
+import { proxy } from '@/proxy';
 
 const ORIGINAL_ENV = { ...process.env };
 
@@ -52,21 +52,21 @@ describe('production, before launch', () => {
     '/legal/privacy-policy',
   ])('rewrites %s to the Coming Soon page', async (path) => {
     setEnv(env);
-    const response = await middleware(request(path));
+    const response = await proxy(request(path));
 
     expect(response.headers.get('x-middleware-rewrite')).toContain('/coming-soon');
   });
 
   it('marks the rewritten response as not indexable', async () => {
     setEnv(env);
-    const response = await middleware(request('/'));
+    const response = await proxy(request('/'));
 
     expect(response.headers.get('x-robots-tag')).toBe('noindex, nofollow');
   });
 
   it('drops the query string, so no parameter reaches the gated page', async () => {
     setEnv(env);
-    const response = await middleware(request('/services?utm_source=email&id=42'));
+    const response = await proxy(request('/services?utm_source=email&id=42'));
     const rewrite = response.headers.get('x-middleware-rewrite') ?? '';
 
     expect(rewrite).toContain('/coming-soon');
@@ -76,27 +76,27 @@ describe('production, before launch', () => {
 
   it('serves the Coming Soon page itself without rewriting', async () => {
     setEnv(env);
-    expect((await middleware(request('/coming-soon'))).headers.get('x-middleware-rewrite')).toBeNull();
+    expect((await proxy(request('/coming-soon'))).headers.get('x-middleware-rewrite')).toBeNull();
   });
 
   it.each(['/_next/static/chunk.js', '/api/enquiry', '/cms/articles', '/favicon.ico', '/logo.png', '/robots.txt'])(
     'lets %s through so the gated page still renders',
     async (path) => {
       setEnv(env);
-      expect((await middleware(request(path))).headers.get('x-middleware-rewrite')).toBeNull();
+      expect((await proxy(request(path))).headers.get('x-middleware-rewrite')).toBeNull();
     },
   );
 
   it('keeps the gate shut when SITE_LAUNCHED is missing', async () => {
     setEnv({ NEXT_PUBLIC_APP_ENV: 'production', SITE_LAUNCHED: undefined });
-    expect((await middleware(request('/'))).headers.get('x-middleware-rewrite')).toContain('/coming-soon');
+    expect((await proxy(request('/'))).headers.get('x-middleware-rewrite')).toContain('/coming-soon');
   });
 
   it.each(['True', 'yes', '1', 'on', 'launched', ''])(
     'keeps the gate shut for the near-miss value %o',
     async (value) => {
       setEnv({ NEXT_PUBLIC_APP_ENV: 'production', SITE_LAUNCHED: value });
-      const rewritten = (await middleware(request('/'))).headers.get('x-middleware-rewrite');
+      const rewritten = (await proxy(request('/'))).headers.get('x-middleware-rewrite');
 
       // Only the exact string 'true', case-insensitively and trimmed, opens it.
       const shouldOpen = value.trim().toLowerCase() === 'true';
@@ -110,7 +110,7 @@ describe('production, after launch (env var)', () => {
     setEnv({ NEXT_PUBLIC_APP_ENV: 'production', SITE_LAUNCHED: 'true' });
 
     for (const path of ['/', '/services', '/contact']) {
-      expect((await middleware(request(path))).headers.get('x-middleware-rewrite')).toBeNull();
+      expect((await proxy(request(path))).headers.get('x-middleware-rewrite')).toBeNull();
     }
   });
 });
@@ -137,14 +137,14 @@ describe('production, after launch (CMS settings toggle)', () => {
     setEnv(KV_ENV);
     mockUpstash({ siteLaunched: true });
 
-    expect((await middleware(request('/'))).headers.get('x-middleware-rewrite')).toBeNull();
+    expect((await proxy(request('/'))).headers.get('x-middleware-rewrite')).toBeNull();
   });
 
   it('keeps the gate shut when Redis reports siteLaunched: false', async () => {
     setEnv(KV_ENV);
     mockUpstash({ siteLaunched: false });
 
-    expect((await middleware(request('/'))).headers.get('x-middleware-rewrite')).toContain(
+    expect((await proxy(request('/'))).headers.get('x-middleware-rewrite')).toContain(
       '/coming-soon',
     );
   });
@@ -153,7 +153,7 @@ describe('production, after launch (CMS settings toggle)', () => {
     setEnv(KV_ENV);
     mockUpstash(undefined);
 
-    expect((await middleware(request('/'))).headers.get('x-middleware-rewrite')).toContain(
+    expect((await proxy(request('/'))).headers.get('x-middleware-rewrite')).toContain(
       '/coming-soon',
     );
   });
@@ -162,7 +162,7 @@ describe('production, after launch (CMS settings toggle)', () => {
     setEnv(KV_ENV);
     mockUpstash({ siteLaunched: true }, false);
 
-    expect((await middleware(request('/'))).headers.get('x-middleware-rewrite')).toContain(
+    expect((await proxy(request('/'))).headers.get('x-middleware-rewrite')).toContain(
       '/coming-soon',
     );
   });
@@ -171,7 +171,7 @@ describe('production, after launch (CMS settings toggle)', () => {
     setEnv(KV_ENV);
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network error')));
 
-    expect((await middleware(request('/'))).headers.get('x-middleware-rewrite')).toContain(
+    expect((await proxy(request('/'))).headers.get('x-middleware-rewrite')).toContain(
       '/coming-soon',
     );
   });
@@ -181,7 +181,7 @@ describe('production, after launch (CMS settings toggle)', () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
 
-    expect((await middleware(request('/'))).headers.get('x-middleware-rewrite')).toBeNull();
+    expect((await proxy(request('/'))).headers.get('x-middleware-rewrite')).toBeNull();
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });
@@ -189,12 +189,12 @@ describe('production, after launch (CMS settings toggle)', () => {
 describe('non-production environments', () => {
   it.each(['development', 'staging'])('serves the full site on %s', async (appEnv) => {
     setEnv({ NEXT_PUBLIC_APP_ENV: appEnv, SITE_LAUNCHED: 'false' });
-    expect((await middleware(request('/'))).headers.get('x-middleware-rewrite')).toBeNull();
+    expect((await proxy(request('/'))).headers.get('x-middleware-rewrite')).toBeNull();
   });
 
   it('defaults to development when the environment is unset', async () => {
     setEnv({ NEXT_PUBLIC_APP_ENV: undefined, SITE_LAUNCHED: undefined });
-    expect((await middleware(request('/'))).headers.get('x-middleware-rewrite')).toBeNull();
+    expect((await proxy(request('/'))).headers.get('x-middleware-rewrite')).toBeNull();
   });
 });
 
@@ -217,25 +217,25 @@ describe('an unconfigured deployment', () => {
       SITE_LAUNCHED: undefined,
     });
 
-    expect((await middleware(request('/'))).headers.get('x-middleware-rewrite')).toContain(
+    expect((await proxy(request('/'))).headers.get('x-middleware-rewrite')).toContain(
       '/coming-soon',
     );
   });
 
   it('keeps a local development build open', async () => {
     setEnv({ NODE_ENV: 'development', NEXT_PUBLIC_APP_ENV: undefined });
-    expect((await middleware(request('/'))).headers.get('x-middleware-rewrite')).toBeNull();
+    expect((await proxy(request('/'))).headers.get('x-middleware-rewrite')).toBeNull();
   });
 
   it('still opens on an explicit non-production environment', async () => {
     for (const appEnv of ['development', 'staging']) {
       setEnv({ NODE_ENV: 'production', NEXT_PUBLIC_APP_ENV: appEnv });
-      expect((await middleware(request('/'))).headers.get('x-middleware-rewrite'), appEnv).toBeNull();
+      expect((await proxy(request('/'))).headers.get('x-middleware-rewrite'), appEnv).toBeNull();
     }
   });
 
   it('opens a production build only once launch is explicitly confirmed', async () => {
     setEnv({ NODE_ENV: 'production', NEXT_PUBLIC_APP_ENV: undefined, SITE_LAUNCHED: 'true' });
-    expect((await middleware(request('/'))).headers.get('x-middleware-rewrite')).toBeNull();
+    expect((await proxy(request('/'))).headers.get('x-middleware-rewrite')).toBeNull();
   });
 });
