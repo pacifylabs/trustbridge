@@ -1,6 +1,19 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { axe } from 'jest-axe';
+
+/**
+ * CtaBand is an async Server Component (it reads contact details from the
+ * CMS) — `render()` cannot await that itself in a jsdom unit test, so its
+ * tests call the component function directly and await the JSX it returns,
+ * a standard pattern for testing async Server Components outside Next's own
+ * runtime. `unstable_cache` needs that runtime too, so it is mocked to a
+ * plain pass-through — see cms-settings.test.ts for the same reasoning.
+ */
+vi.mock('next/cache', () => ({
+  unstable_cache: (fn: (...args: unknown[]) => unknown) => fn,
+  revalidateTag: vi.fn(),
+}));
 
 import { Button } from '@/components/ui/Button';
 import { Card, CardFooter } from '@/components/ui/Card';
@@ -236,14 +249,14 @@ describe('FaqList', () => {
 });
 
 describe('CtaBand', () => {
-  it('uses the approved call to action labels', () => {
-    render(<CtaBand />);
+  it('uses the approved call to action labels', async () => {
+    render(await CtaBand({}));
     expect(screen.getByRole('link', { name: 'Book a consultation' })).toHaveAttribute('href', '/book');
     expect(screen.getByRole('link', { name: 'Make an enquiry' })).toHaveAttribute('href', '/contact');
   });
 
-  it('makes no promise about the outcome of an application', () => {
-    render(<CtaBand />);
+  it('makes no promise about the outcome of an application', async () => {
+    render(await CtaBand({}));
     const text = screen.getByTestId('cta-band').textContent ?? '';
 
     expect(text).not.toMatch(/guarantee/i);

@@ -3,7 +3,7 @@ import { isBlobConfigured } from '@/lib/env';
 import { hasAdminSessionFromRequest } from '@/lib/cms/auth';
 import { BlobUploadError, uploadImage, type UploadFolder } from '@/lib/cms/blob';
 
-const FOLDERS: readonly UploadFolder[] = ['articles', 'advisers', 'services'];
+const FOLDERS: readonly UploadFolder[] = ['articles', 'advisers', 'services', 'legal'];
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   if (!hasAdminSessionFromRequest(request)) {

@@ -49,7 +49,7 @@ export const ARTICLES: readonly Article[] = [
       '<li>What the process would cost and roughly how long it takes</li>' +
       '</ul>' +
       '<h2>Afterwards</h2>' +
-      '<p>You will receive a written summary of what we discussed and the options identified. You are under no obligation to instruct us further. If you decide to proceed, that summary becomes the starting point for the work.</p>' +
+      '<p>Where appropriate, you will receive confirmation of the key advice, options or next steps discussed. You are under no obligation to instruct us further. If you decide to proceed, that becomes the starting point for the work.</p>' +
       '<p>What we will not do is tell you an application is certain to succeed. Decisions rest with the Home Office, and any adviser who promises otherwise is not being straight with you.</p>',
     seo: {
       title: 'What to expect at your first consultation',

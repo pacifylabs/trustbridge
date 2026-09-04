@@ -10,8 +10,8 @@ import { CalendlyEmbed } from '@/components/blocks/CalendlyEmbed';
 import { CtaBand } from '@/components/blocks/CtaBand';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { CONTACT } from '@/content/site';
 import { BOOK_PAGE, HOME } from '@/content/pages';
+import { getContact } from '@/lib/content';
 import { env } from '@/lib/env';
 
 const CONFIGURED_STANDFIRST =
@@ -37,8 +37,9 @@ export function generateMetadata(): Metadata {
  * honest explanation of how to arrange a consultation instead, because a
  * booking widget that cannot take a booking would be worse than no widget.
  */
-export default function BookPage() {
+export default async function BookPage() {
   const calendlyUrl = env.NEXT_PUBLIC_CALENDLY_URL;
+  const contact = await getContact();
 
   return (
     <>
@@ -74,13 +75,13 @@ export default function BookPage() {
                 </p>
 
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                  <Button href={`mailto:${CONTACT.email}`} variant="accent">
+                  <Button href={`mailto:${contact.email}`} variant="accent">
                     <Mail className="h-4 w-4" aria-hidden="true" />
                     Email us
                   </Button>
-                  <Button href={`tel:${CONTACT.phoneHref}`} variant="secondary">
+                  <Button href={`tel:${contact.phoneHref}`} variant="secondary">
                     <Phone className="h-4 w-4" aria-hidden="true" />
-                    {CONTACT.phone}
+                    {contact.phone}
                   </Button>
                 </div>
               </Card>

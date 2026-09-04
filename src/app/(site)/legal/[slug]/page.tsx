@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 import { buildMetadata } from '@/lib/seo';
 import { Section } from '@/components/layout/Section';
@@ -69,6 +70,20 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
             <h1 className="text-[1.875rem] text-headline sm:text-[2rem] lg:text-h1">{page.title}</h1>
             <p className="measure mt-4 text-body-lg leading-relaxed text-muted">{page.summary}</p>
 
+            {page.logos && page.logos.length > 0 ? (
+              <div className="mt-8 flex flex-wrap items-center gap-6">
+                {page.logos.map((logo) => (
+                  <Image
+                    key={logo.src}
+                    src={logo.src}
+                    alt={logo.alt}
+                    width={logo.width}
+                    height={logo.height}
+                    className="h-16 w-auto object-contain"
+                  />
+                ))}
+              </div>
+            ) : null}
 
             <div className="mt-10 space-y-8">
               {page.sections.map((section) => (

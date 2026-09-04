@@ -143,15 +143,11 @@ export interface LegalPage {
   readonly summary: string;
   /** Sections are structural until the client supplies final wording. */
   readonly sections: readonly { readonly heading: string; readonly body: string }[];
-}
-
-/**
- * The interface the content source implements. Kept as an interface, rather
- * than inlining the local adapter's shape, so a future source would be a new
- * file satisfying this contract rather than a change to every page.
- */
-export interface ContentSource {
-  readonly name: 'local';
-  getLegalPages(): Promise<readonly LegalPage[]>;
-  getLegalPageBySlug(slug: string): Promise<LegalPage | null>;
+  /**
+   * Official marks the page needs to display verbatim — an IAA registration
+   * mark or digital verification badge, supplied as images rather than
+   * recreated, per README rule 2's ban on an unofficial regulatory badge.
+   * Empty on every page except Regulatory information, where it applies.
+   */
+  readonly logos?: readonly ContentImage[];
 }

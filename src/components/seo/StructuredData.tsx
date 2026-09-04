@@ -1,5 +1,6 @@
-import { CONTACT, SITE } from '@/content/site';
+import { SITE } from '@/content/site';
 import type { Article, Service } from '@/lib/content/types';
+import type { ContactInfo } from '@/lib/cms/contact';
 
 /**
  * JSON-LD structured data.
@@ -26,7 +27,7 @@ function JsonLd({ data }: { data: Record<string, unknown> }) {
 }
 
 /** Identity of the practice. Emitted once, from the site shell. */
-export function OrganisationSchema() {
+export function OrganisationSchema({ contact }: { contact: ContactInfo }) {
   return (
     <JsonLd
       data={{
@@ -39,8 +40,8 @@ export function OrganisationSchema() {
         url: SITE.url,
         image: `${SITE.url}${SITE.ogImage.path}`,
         logo: `${SITE.url}/logo.png`,
-        email: CONTACT.email,
-        telephone: CONTACT.phone,
+        email: contact.email,
+        telephone: contact.phone,
         areaServed: { '@type': 'Country', name: 'United Kingdom' },
         knowsLanguage: SITE.language,
         identifier: {

@@ -34,6 +34,7 @@ const ALLOWED_PREFIXES = [
   '/cms',
   '/favicon',
   '/logo.png',
+  '/logo-horizontal.png',
   '/robots.txt',
   '/sitemap.xml',
 ];

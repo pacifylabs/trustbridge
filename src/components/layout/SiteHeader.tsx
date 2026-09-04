@@ -7,8 +7,9 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { ChevronDown, Menu, Phone, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { ThemeToggle } from './ThemeToggle';
-import { CTA_LABELS, CONTACT, PRIMARY_NAV, SITE } from '@/content/site';
+import { CTA_LABELS, PRIMARY_NAV, SITE } from '@/content/site';
 import { cn } from '@/lib/utils';
+import type { ContactInfo } from '@/lib/cms/contact';
 
 export interface HeaderService {
   readonly slug: string;
@@ -24,7 +25,13 @@ export interface HeaderService {
  * Escape and on outside click, and collapses into the mobile panel below the
  * medium breakpoint.
  */
-export function SiteHeader({ services }: { services: readonly HeaderService[] }) {
+export function SiteHeader({
+  services,
+  contact,
+}: {
+  services: readonly HeaderService[];
+  contact: ContactInfo;
+}) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
@@ -74,12 +81,12 @@ export function SiteHeader({ services }: { services: readonly HeaderService[] })
             aria-label={`${SITE.shortName} home`}
           >
             <Image
-              src="/logo.png"
+              src="/logo-horizontal.png"
               alt={SITE.name}
-              width={727}
-              height={614}
+              width={1001}
+              height={240}
               priority
-              className="site-logo h-12 w-auto sm:h-14 lg:h-16"
+              className="site-logo h-10 w-auto sm:h-11 lg:h-12"
             />
           </Link>
 
@@ -175,12 +182,12 @@ export function SiteHeader({ services }: { services: readonly HeaderService[] })
               button and the theme control, and three items crowd at that width.
             */}
             <a
-              href={`tel:${CONTACT.phoneHref}`}
+              href={`tel:${contact.phoneHref}`}
               className="hidden items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-strong transition-colors hover:text-accent-ink xl:inline-flex"
             >
               <Phone className="h-4 w-4 shrink-0 text-accent-ink" aria-hidden="true" />
               <span className="sr-only">Telephone </span>
-              {CONTACT.phone}
+              {contact.phone}
             </a>
 
             <Button href="/book" variant="accent" size="sm" className="hidden lg:inline-flex">

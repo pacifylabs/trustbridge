@@ -3,8 +3,9 @@ import Image from 'next/image';
 import { ArrowUpRight, Mail, Phone } from 'lucide-react';
 import { TwoToneHeading } from '@/components/ui/TwoToneHeading';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
-import { CONTACT, SITE } from '@/content/site';
+import { SITE } from '@/content/site';
 import { COMING_SOON, HOME } from '@/content/pages';
+import { getContact } from '@/lib/content';
 
 export const metadata: Metadata = {
   title: `${SITE.name} | ${SITE.tagline}`,
@@ -23,8 +24,9 @@ export const metadata: Metadata = {
  * It is a self-contained page, not the site shell. There is no navigation,
  * because every route it could link to is behind the same gate.
  */
-export default function ComingSoonPage() {
+export default async function ComingSoonPage() {
   const [backdrop] = HOME.heroBackdrop;
+  const contact = await getContact();
 
   return (
     <div className="relative isolate flex min-h-svh flex-col overflow-hidden bg-navy-950">
@@ -50,12 +52,12 @@ export default function ComingSoonPage() {
 
       <header className="container-site flex shrink-0 items-center justify-between gap-4 pt-6 sm:pt-8">
         <Image
-          src="/logo.png"
+          src="/logo-horizontal.png"
           alt={SITE.name}
-          width={727}
-          height={614}
+          width={1001}
+          height={240}
           priority
-          className="site-logo-inverse h-10 w-auto sm:h-12"
+          className="site-logo-inverse h-9 w-auto sm:h-10"
         />
         <ThemeToggle className="border-white/20 bg-white/10 text-on-photo hover:border-accent" />
       </header>
@@ -103,11 +105,11 @@ export default function ComingSoonPage() {
               <ul className="mt-6 space-y-3">
                 <li>
                   <a
-                    href={`mailto:${CONTACT.email}`}
+                    href={`mailto:${contact.email}`}
                     className="group flex min-h-12 items-center gap-3 rounded-lg border border-white/15 bg-white/5 px-4 text-sm font-medium text-on-photo transition-colors hover:border-accent"
                   >
                     <Mail className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                    <span className="min-w-0 flex-1 break-words">{CONTACT.email}</span>
+                    <span className="min-w-0 flex-1 break-words">{contact.email}</span>
                     <ArrowUpRight
                       className="h-4 w-4 shrink-0 text-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                       aria-hidden="true"
@@ -116,11 +118,11 @@ export default function ComingSoonPage() {
                 </li>
                 <li>
                   <a
-                    href={`tel:${CONTACT.phoneHref}`}
+                    href={`tel:${contact.phoneHref}`}
                     className="group flex min-h-12 items-center gap-3 rounded-lg border border-white/15 bg-white/5 px-4 text-sm font-medium text-on-photo transition-colors hover:border-accent"
                   >
                     <Phone className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                    <span className="min-w-0 flex-1">{CONTACT.phone}</span>
+                    <span className="min-w-0 flex-1">{contact.phone}</span>
                     <ArrowUpRight
                       className="h-4 w-4 shrink-0 text-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                       aria-hidden="true"

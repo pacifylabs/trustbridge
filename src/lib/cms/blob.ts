@@ -4,7 +4,7 @@ import { env, isBlobConfigured } from '@/lib/env';
 const MAX_BYTES = 5 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
-export type UploadFolder = 'articles' | 'advisers' | 'services';
+export type UploadFolder = 'articles' | 'advisers' | 'services' | 'legal';
 
 export interface UploadedImage {
   readonly url: string;

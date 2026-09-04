@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Briefcase, FileText, Settings, Star, Users } from 'lucide-react';
+import { Briefcase, FileText, Phone, Scale, Settings, Star, Users } from 'lucide-react';
 import { LogoutButton } from './LogoutButton';
 import { cn } from '@/lib/utils';
 
@@ -17,6 +17,8 @@ const NAV_ITEMS: readonly NavItem[] = [
   { label: 'Services', href: '/cms/services', icon: Briefcase },
   { label: 'Team', href: '/cms/team', icon: Users },
   { label: 'Testimonials', href: '/cms/testimonials', icon: Star },
+  { label: 'Legal pages', href: '/cms/legal', icon: Scale },
+  { label: 'Contact details', href: '/cms/contact', icon: Phone },
   { label: 'Settings', href: '/cms/settings', icon: Settings },
 ];
 

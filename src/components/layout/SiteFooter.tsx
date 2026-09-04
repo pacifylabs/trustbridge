@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Mail, Phone } from 'lucide-react';
-import { CONTACT, LEGAL_NAV, PRIMARY_NAV, SITE } from '@/content/site';
+import { LEGAL_NAV, PRIMARY_NAV, SITE } from '@/content/site';
+import type { ContactInfo } from '@/lib/cms/contact';
 
 export interface FooterService {
   readonly slug: string;
@@ -22,7 +23,13 @@ export interface FooterService {
  * authorisation (README rule 2). The dedicated legal page is where that
  * information will live once the practice supplies it.
  */
-export function SiteFooter({ services }: { services: readonly FooterService[] }) {
+export function SiteFooter({
+  services,
+  contact,
+}: {
+  services: readonly FooterService[];
+  contact: ContactInfo;
+}) {
   const year = new Date().getFullYear();
 
   const columns = [
@@ -55,11 +62,11 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
           <div className="flex flex-col gap-4">
             <Link href="/" aria-label={`${SITE.name} home`} className="self-start">
               <Image
-                src="/logo.png"
+                src="/logo-horizontal.png"
                 alt={SITE.name}
-                width={727}
-                height={614}
-                className="site-logo h-12 w-auto sm:h-14"
+                width={1001}
+                height={240}
+                className="site-logo h-10 w-auto sm:h-11"
               />
             </Link>
 
@@ -70,20 +77,20 @@ export function SiteFooter({ services }: { services: readonly FooterService[] })
             <ul className="flex flex-col gap-1">
               <li>
                 <a
-                  href={`mailto:${CONTACT.email}`}
+                  href={`mailto:${contact.email}`}
                   className="inline-flex min-h-9 items-center gap-2.5 text-small text-strong transition-colors hover:text-accent"
                 >
                   <Mail className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                  {CONTACT.email}
+                  {contact.email}
                 </a>
               </li>
               <li>
                 <a
-                  href={`tel:${CONTACT.phoneHref}`}
+                  href={`tel:${contact.phoneHref}`}
                   className="inline-flex min-h-9 items-center gap-2.5 text-small text-strong transition-colors hover:text-accent"
                 >
                   <Phone className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
-                  {CONTACT.phone}
+                  {contact.phone}
                 </a>
               </li>
             </ul>

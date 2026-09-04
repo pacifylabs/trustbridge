@@ -531,7 +531,7 @@ export const SERVICES: readonly Service[] = [
         heading: 'Immigration consultations and route assessments',
         body: [
           'A consultation is the starting point for most instructions. We go through your history, your current status and what you are trying to achieve, then set out which routes are realistically open to you and what each requires.',
-          'You receive a written summary of the options discussed. You are under no obligation to proceed further.',
+          'Where appropriate, you will receive confirmation of the key options discussed. You are under no obligation to proceed further.',
         ],
       },
       {

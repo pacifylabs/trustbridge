@@ -2,7 +2,7 @@ import { SiteHeader } from '@/components/layout/SiteHeader';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 
 import { OrganisationSchema, WebSiteSchema } from '@/components/seo/StructuredData';
-import { getVisibleServices } from '@/lib/content';
+import { getContact, getVisibleServices } from '@/lib/content';
 
 /**
  * Shell for every public page.
@@ -12,7 +12,7 @@ import { getVisibleServices } from '@/lib/content';
  * page returns a 404.
  */
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
-  const services = await getVisibleServices();
+  const [services, contact] = await Promise.all([getVisibleServices(), getContact()]);
 
   return (
     <>
@@ -22,11 +22,11 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       >
         Skip to content
       </a>
-      <OrganisationSchema />
+      <OrganisationSchema contact={contact} />
       <WebSiteSchema />
-      <SiteHeader services={services} />
+      <SiteHeader services={services} contact={contact} />
       <main id="main">{children}</main>
-      <SiteFooter services={services} />
+      <SiteFooter services={services} contact={contact} />
 
     </>
   );

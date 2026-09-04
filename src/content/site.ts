@@ -90,7 +90,7 @@ export const STATS: readonly StatItem[] = [
   {
     value: 'Written',
     label: 'Advice you can keep',
-    detail: 'A note of the options discussed and what each one requires, after every consultation.',
+    detail: 'Where appropriate, confirmation of the key advice, options or next steps discussed.',
   },
 ];
 

@@ -7,8 +7,9 @@ import { SectionHeading } from '@/components/layout/SectionHeading';
 import { EnquiryForm } from '@/components/blocks/EnquiryForm';
 import { CtaBand } from '@/components/blocks/CtaBand';
 import { Card } from '@/components/ui/Card';
-import { CONTACT, SITE } from '@/content/site';
+import { SITE } from '@/content/site';
 import { CONTACT_PAGE } from '@/content/pages';
+import { getContact } from '@/lib/content';
 import { env } from '@/lib/env';
 
 export const metadata: Metadata = buildMetadata({
@@ -18,7 +19,9 @@ export const metadata: Metadata = buildMetadata({
   path: '/contact',
 });
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const contact = await getContact();
+
   return (
     <>
       <Hero
@@ -45,10 +48,10 @@ export default function ContactPage() {
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-strong">Email</p>
                       <a
-                        href={`mailto:${CONTACT.email}`}
+                        href={`mailto:${contact.email}`}
                         className="mt-0.5 block text-sm break-words text-link underline underline-offset-2"
                       >
-                        {CONTACT.email}
+                        {contact.email}
                       </a>
                     </div>
                   </li>
@@ -63,10 +66,10 @@ export default function ContactPage() {
                     <div>
                       <p className="text-sm font-semibold text-strong">Telephone</p>
                       <a
-                        href={`tel:${CONTACT.phoneHref}`}
+                        href={`tel:${contact.phoneHref}`}
                         className="mt-0.5 block text-sm text-link underline underline-offset-2"
                       >
-                        {CONTACT.phone}
+                        {contact.phone}
                       </a>
                     </div>
                   </li>
@@ -80,9 +83,9 @@ export default function ContactPage() {
                     </span>
                     <div>
                       <p className="text-sm font-semibold text-strong">Registered office</p>
-                      {CONTACT.address.lines.length > 0 ? (
+                      {contact.addressLines.length > 0 ? (
                         <address className="mt-0.5 text-sm not-italic text-muted">
-                          {CONTACT.address.lines.map((line) => (
+                          {contact.addressLines.map((line) => (
                             <span key={line} className="block">
                               {line}
                             </span>
@@ -107,7 +110,7 @@ export default function ContactPage() {
                     <div>
                       <p className="text-sm font-semibold text-strong">Office hours</p>
                       <p className="mt-0.5 text-sm text-muted">
-                        {CONTACT.hours.value || 'Please call or email and we will come back to you.'}
+                        {contact.hours || 'Please call or email and we will come back to you.'}
                       </p>
                     </div>
                   </li>

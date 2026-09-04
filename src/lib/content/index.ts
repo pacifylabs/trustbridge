@@ -1,35 +1,22 @@
 import { isFeatureEnabled, type FlagContext } from '../flags';
-import { localContentSource } from './local-source';
 import { listPublishedArticles, getPublishedArticle } from '@/lib/cms/articles';
 import { listPublishedAdvisers } from '@/lib/cms/advisers';
 import { listPublishedTestimonials } from '@/lib/cms/testimonials';
 import { listPublishedServices, getPublishedServiceBySlug } from '@/lib/cms/services';
+import { getPublishedLegalPages, getPublishedLegalPageBySlug } from '@/lib/cms/legal';
+import { getContactInfo, type ContactInfo } from '@/lib/cms/contact';
 import { STATS, type StatItem } from '@/content/site';
-import type {
-  Adviser,
-  Article,
-  ContentSource,
-  LegalPage,
-  Service,
-  ServiceSection,
-  Testimonial,
-} from './types';
+import type { Adviser, Article, LegalPage, Service, ServiceSection, Testimonial } from './types';
 
 export type * from './types';
 
 /**
- * The single place the rest of the application asks for content.
- *
- * Pages call these functions and never touch a source directly. Services,
- * adviser profiles and legal pages are bundled with the repository and edited
- * by a developer; articles go through the lightweight Resources CMS instead
- * (`lib/cms/articles.ts`). Feature gating is applied here rather than in each
- * page, which is what stops a gated service leaking through a route that
- * forgot to check.
+ * The single place the rest of the application asks for content. Pages call
+ * these functions and never read a Redis-backed lib/cms/* module or a
+ * bundled src/content file directly. Feature gating is applied here rather
+ * than in each page, which is what stops a gated service leaking through a
+ * route that forgot to check.
  */
-function getSource(): ContentSource {
-  return localContentSource;
-}
 
 /** Services the visitor is permitted to see, in display order. Backed by the Services CMS (Redis). */
 export async function getVisibleServices(context?: FlagContext): Promise<readonly Service[]> {
@@ -91,16 +78,18 @@ export async function getTestimonials(): Promise<readonly Testimonial[]> {
   return listPublishedTestimonials();
 }
 
+/** Legal and regulatory pages. Backed by the Legal Pages CMS (Redis). */
 export async function getLegalPages(): Promise<readonly LegalPage[]> {
-  return getSource().getLegalPages();
+  return getPublishedLegalPages();
 }
 
 export async function getLegalPageBySlug(slug: string): Promise<LegalPage | null> {
-  return getSource().getLegalPageBySlug(slug);
+  return getPublishedLegalPageBySlug(slug);
 }
 
-export function getContentSourceName(): ContentSource['name'] {
-  return getSource().name;
+/** Contact details shown across the site. Backed by the Contact CMS (Redis). */
+export async function getContact(): Promise<ContactInfo> {
+  return getContactInfo();
 }
 
 /**

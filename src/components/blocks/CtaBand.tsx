@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/Button';
 import { TwoToneHeading } from '@/components/ui/TwoToneHeading';
-import { CONTACT, CTA_LABELS } from '@/content/site';
+import { CTA_LABELS } from '@/content/site';
+import { getContact } from '@/lib/content';
 import { cn } from '@/lib/utils';
 
 /**
@@ -21,7 +22,7 @@ export interface CtaBandProps {
   readonly className?: string;
 }
 
-export function CtaBand({
+export async function CtaBand({
   lead = 'Talk it through with',
   emphasis = 'an adviser',
   body = 'A first consultation gives you a clear view of the routes open to you and what each one would involve. You are under no obligation to go further.',
@@ -31,6 +32,8 @@ export function CtaBand({
   secondaryHref = '/contact',
   className,
 }: CtaBandProps) {
+  const contact = await getContact();
+
   return (
     <section
       className={cn('relative isolate overflow-hidden bg-surface-inverse', className)}
@@ -68,8 +71,8 @@ export function CtaBand({
             </Button>
             <p className="text-sm text-inverse-muted lg:mt-1">
               Or call{' '}
-              <a href={`tel:${CONTACT.phoneHref}`} className="font-semibold text-accent">
-                {CONTACT.phone}
+              <a href={`tel:${contact.phoneHref}`} className="font-semibold text-accent">
+                {contact.phone}
               </a>
             </p>
           </div>
